@@ -705,6 +705,85 @@
             cursor: pointer;
             margin-top: 8px;
         }
+
+        /* Bildergalerie */
+        .gallery-wrap {
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 4px;
+            position: relative;
+            background: #e8f5e9;
+        }
+
+        .gallery-track {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .gallery-track::-webkit-scrollbar { display: none; }
+
+        .gallery-img {
+            min-width: 100%;
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            scroll-snap-align: start;
+            flex-shrink: 0;
+            display: block;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        }
+
+        .gallery-counter {
+            position: absolute;
+            bottom: 8px;
+            right: 10px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 20px;
+            pointer-events: none;
+            letter-spacing: 0.3px;
+        }
+
+        .gallery-dots {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            padding: 7px 0 0;
+            margin-bottom: 10px;
+        }
+
+        .g-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #ddd;
+            transition: all 0.25s;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .g-dot.active {
+            background: #2ecc71;
+            width: 14px;
+            border-radius: 3px;
+        }
+
+        .gallery-empty {
+            height: 140px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 52px;
+            margin-bottom: 14px;
+        }
     </style>
 </head>
 <body>
@@ -1032,7 +1111,21 @@
             const stars  = '⭐'.repeat(Math.min(5, Math.round(a.sustainability)));
             const feats  = (a.features||[]).map(f => `<div class="feature-item"><div class="feature-icon">✅</div><div>${f}</div></div>`).join('');
 
+            const imgs = a.images || [];
+            const galleryHtml = imgs.length
+                ? `<div class="gallery-wrap">
+                       <div class="gallery-track" id="galleryTrack" onscroll="onGalleryScroll()">
+                           ${imgs.map((src, i) => `<img class="gallery-img" src="${src}" alt="Foto ${i+1}" loading="lazy">`).join('')}
+                       </div>
+                       <div class="gallery-counter" id="galleryCounter">1 / ${imgs.length}</div>
+                   </div>
+                   <div class="gallery-dots" id="galleryDots">
+                       ${imgs.map((_, i) => `<div class="g-dot ${i===0?'active':''}" onclick="scrollGalleryTo(${i})"></div>`).join('')}
+                   </div>`
+                : `<div class="gallery-empty">${a.image}</div>`;
+
             document.getElementById('detail-content').innerHTML = `
+                ${galleryHtml}
                 <div class="card">
                     <div class="card-title">${a.image} ${a.title}</div>
                     <div style="font-size:12px;color:#666">${a.location} · ${a.size}m² · ${a.rooms} Zi.</div>
@@ -1141,6 +1234,25 @@
             reviewCount++;
             localStorage.setItem('cb-reviews', reviewCount);
             showToast('Bewertung eingereicht! Danke ✅');
+        }
+
+        /* ---- Galerie ---- */
+        function onGalleryScroll() {
+            const track = document.getElementById('galleryTrack');
+            if (!track) return;
+            const idx = Math.round(track.scrollLeft / track.clientWidth);
+            const total = track.children.length;
+            const counter = document.getElementById('galleryCounter');
+            if (counter) counter.textContent = (idx + 1) + ' / ' + total;
+            document.querySelectorAll('#galleryDots .g-dot').forEach((d, i) => {
+                d.classList.toggle('active', i === idx);
+            });
+        }
+
+        function scrollGalleryTo(idx) {
+            const track = document.getElementById('galleryTrack');
+            if (!track) return;
+            track.scrollTo({ left: idx * track.clientWidth, behavior: 'smooth' });
         }
 
         /* ---- Profil ---- */

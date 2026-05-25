@@ -21,7 +21,12 @@
         "reviews": 8
       },
       "description": "Schöne WG in ruhiger Lage mit grünem Hof. Nachhaltig ausgestattet.",
-      "highlights": ["Solar auf Dach", "Regenwassernutzung", "Bio-Gemüsegarten"]
+      "highlights": ["Solar auf Dach", "Regenwassernutzung", "Bio-Gemüsegarten"],
+      "images": [
+        "https://picsum.photos/seed/cb1-kitchen/350/200",
+        "https://picsum.photos/seed/cb1-balcony/350/200",
+        "https://picsum.photos/seed/cb1-garden/350/200"
+      ]
     },
     {
       "id": 2,
@@ -44,7 +49,12 @@
         "reviews": 15
       },
       "description": "Moderne Einzimmerwohnung mit hochwertiger Ausstattung.",
-      "highlights": ["Smart Home", "Gym im Haus", "Hausmeister"]
+      "highlights": ["Smart Home", "Gym im Haus", "Hausmeister"],
+      "images": [
+        "https://picsum.photos/seed/cb2-living/350/200",
+        "https://picsum.photos/seed/cb2-kitchen/350/200",
+        "https://picsum.photos/seed/cb2-modern/350/200"
+      ]
     },
     {
       "id": 3,
@@ -67,7 +77,12 @@
         "reviews": 42
       },
       "description": "Nachhaltige Genossenschaftswohnung mit fairer Miete und starker Community.",
-      "highlights": ["Fair Trade", "Community Events", "Nachhaltige Materialien"]
+      "highlights": ["Fair Trade", "Community Events", "Nachhaltige Materialien"],
+      "images": [
+        "https://picsum.photos/seed/cb3-community/350/200",
+        "https://picsum.photos/seed/cb3-room/350/200",
+        "https://picsum.photos/seed/cb3-hof/350/200"
+      ]
     },
     {
       "id": 4,
@@ -90,7 +105,12 @@
         "reviews": 23
       },
       "description": "Modernes Co-Living mit jungen, nachhaltigen Menschen.",
-      "highlights": ["Social Events", "Nachbarschaft", "Flexible Verträge"]
+      "highlights": ["Social Events", "Nachbarschaft", "Flexible Verträge"],
+      "images": [
+        "https://picsum.photos/seed/cb4-coworking/350/200",
+        "https://picsum.photos/seed/cb4-lounge/350/200",
+        "https://picsum.photos/seed/cb4-kitchen/350/200"
+      ]
     },
     {
       "id": 5,
@@ -113,7 +133,12 @@
         "reviews": 12
       },
       "description": "Günstige WG ideal für Studierende mit besonderem Charakter.",
-      "highlights": ["Günstig", "Gemütlich", "Studierendenfreundlich"]
+      "highlights": ["Günstig", "Gemütlich", "Studierendenfreundlich"],
+      "images": [
+        "https://picsum.photos/seed/cb5-room/350/200",
+        "https://picsum.photos/seed/cb5-balcony/350/200",
+        "https://picsum.photos/seed/cb5-altbau/350/200"
+      ]
     },
     {
       "id": 6,
@@ -136,7 +161,12 @@
         "reviews": 31
       },
       "description": "Modernes Loft mit vollständig grüner Energieversorgung und nachhaltiger Gemeinschaft.",
-      "highlights": ["100% Ökostrom", "Zero Waste Haus", "Repair Café"]
+      "highlights": ["100% Ökostrom", "Zero Waste Haus", "Repair Café"],
+      "images": [
+        "https://picsum.photos/seed/cb6-rooftop/350/200",
+        "https://picsum.photos/seed/cb6-loft/350/200",
+        "https://picsum.photos/seed/cb6-solar/350/200"
+      ]
     },
     {
       "id": 7,
@@ -159,7 +189,12 @@
         "reviews": 9
       },
       "description": "Charmante Altbauwohnung in bester Lage – perfekt für kulturell Interessierte.",
-      "highlights": ["Historisches Gebäude", "Ruhige Lage", "Tolle Nachbarn"]
+      "highlights": ["Historisches Gebäude", "Ruhige Lage", "Tolle Nachbarn"],
+      "images": [
+        "https://picsum.photos/seed/cb7-stucco/350/200",
+        "https://picsum.photos/seed/cb7-parquet/350/200",
+        "https://picsum.photos/seed/cb7-facade/350/200"
+      ]
     },
     {
       "id": 8,
@@ -182,7 +217,12 @@
         "reviews": 18
       },
       "description": "Nachhaltiges Tiny House in einem einzigartigen Urban-Farming-Projekt.",
-      "highlights": ["Selbstversorgung möglich", "Starke Community", "Minimalistisch"]
+      "highlights": ["Selbstversorgung möglich", "Starke Community", "Minimalistisch"],
+      "images": [
+        "https://picsum.photos/seed/cb8-tinyhouse/350/200",
+        "https://picsum.photos/seed/cb8-urbangarden/350/200",
+        "https://picsum.photos/seed/cb8-interior/350/200"
+      ]
     },
     {
       "id": 9,
@@ -205,7 +245,12 @@
         "reviews": 27
       },
       "description": "Bezahlbare Wohnung im angesagtesten Viertel Leipzigs mit toller Atmosphäre.",
-      "highlights": ["Kulturszene", "Günstigste Metropole", "Wachsende Community"]
+      "highlights": ["Kulturszene", "Günstigste Metropole", "Wachsende Community"],
+      "images": [
+        "https://picsum.photos/seed/cb9-connewitz/350/200",
+        "https://picsum.photos/seed/cb9-room/350/200",
+        "https://picsum.photos/seed/cb9-street/350/200"
+      ]
     },
     {
       "id": 10,
@@ -228,7 +273,13 @@
         "reviews": 19
       },
       "description": "Exklusives Penthouse mit Blick über Frankfurt – für alle, die Premium wollen.",
-      "highlights": ["Beste Lage", "Luxusausstattung", "Sicherheit 24/7"]
+      "highlights": ["Beste Lage", "Luxusausstattung", "Sicherheit 24/7"],
+      "images": [
+        "https://picsum.photos/seed/cb10-skyline/350/200",
+        "https://picsum.photos/seed/cb10-penthouse/350/200",
+        "https://picsum.photos/seed/cb10-terrace/350/200",
+        "https://picsum.photos/seed/cb10-living/350/200"
+      ]
     },
     {
       "id": 11,
@@ -251,7 +302,12 @@
         "reviews": 34
       },
       "description": "Leben im Grünen – direkt am Waldrand mit maximaler Nachhaltigkeit.",
-      "highlights": ["Wald direkt vor der Tür", "Ökologisches Bauen", "Selbstversorgung"]
+      "highlights": ["Wald direkt vor der Tür", "Ökologisches Bauen", "Selbstversorgung"],
+      "images": [
+        "https://picsum.photos/seed/cb11-forest/350/200",
+        "https://picsum.photos/seed/cb11-garden/350/200",
+        "https://picsum.photos/seed/cb11-holzhaus/350/200"
+      ]
     },
     {
       "id": 12,
@@ -274,7 +330,12 @@
         "reviews": 88
       },
       "description": "Günstiges Einzelzimmer im zentralen Wohnheim – ideal für Studienanfänger.",
-      "highlights": ["Sehr günstig", "Alles inklusive", "Viele Mitbewohner"]
+      "highlights": ["Sehr günstig", "Alles inklusive", "Viele Mitbewohner"],
+      "images": [
+        "https://picsum.photos/seed/cb12-room/350/200",
+        "https://picsum.photos/seed/cb12-kitchen/350/200",
+        "https://picsum.photos/seed/cb12-common/350/200"
+      ]
     }
   ],
   "wgProfiles": [
