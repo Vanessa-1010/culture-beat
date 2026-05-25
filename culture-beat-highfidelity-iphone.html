@@ -512,8 +512,51 @@
             border-radius: 3px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #999;
+        ::-webkit-scrollbar-thumb:hover { background: #999; }
+
+        .listing-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .fav-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 6px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            transition: transform 0.15s;
+        }
+
+        .fav-btn:active { transform: scale(1.3); }
+
+        .toast {
+            position: fixed;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a2e;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 9999;
+            transition: bottom 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .toast.show { bottom: 36px; }
+
+        .section-count {
+            font-size: 11px;
+            color: #aaa;
+            font-weight: 400;
         }
     </style>
 </head>
@@ -533,13 +576,14 @@
                         <button class="nav-btn" data-screen="screen2">🏠</button>
                         <button class="nav-btn" data-screen="screen3">👥</button>
                         <button class="nav-btn" data-screen="screen4">💬</button>
+                        <button class="nav-btn" data-screen="screen5">❤️</button>
                     </nav>
 
-                    <!-- SCREEN 1: Startseite -->
+                    <!-- SCREEN 1: Suche & Filter -->
                     <div id="screen1" class="screen active">
                         <div class="search-box">
-                            <input type="text" placeholder="Berlin, Wien...">
-                            <button class="primary" style="width: 40px; padding: 10px; margin: 0;">🔍</button>
+                            <input type="text" id="searchInput" placeholder="Stadt oder Stichwort..." oninput="filterListings()">
+                            <button class="primary" style="width:40px;padding:10px;margin:0" onclick="filterListings()">🔍</button>
                         </div>
 
                         <div class="section">
@@ -547,168 +591,76 @@
 
                             <div class="filter-group">
                                 <label>Miete (€/Monat)</label>
-                                <input type="range" min="300" max="2000" value="1000" id="priceSlider" oninput="document.getElementById('priceDisplay').textContent = 'bis ' + Number(this.value).toLocaleString('de-DE') + '€'">
-                                <div style="font-size: 11px; color: #666; text-align: right; margin-top: 3px;" id="priceDisplay">bis 1.000€</div>
+                                <input type="range" min="300" max="2000" value="2000" id="priceSlider"
+                                    oninput="document.getElementById('priceDisplay').textContent='bis '+Number(this.value).toLocaleString('de-DE')+'€';filterListings()">
+                                <div style="font-size:11px;color:#666;text-align:right;margin-top:3px" id="priceDisplay">bis 2.000€</div>
                             </div>
 
                             <div class="filter-group">
                                 <label>Nachhaltigkeit</label>
-                                <select>
-                                    <option>🌟 Alle</option>
-                                    <option>⭐⭐⭐ Sehr Nachhaltig</option>
-                                    <option>⭐⭐ Nachhaltig</option>
+                                <select id="sustainSelect" onchange="filterListings()">
+                                    <option value="all">🌟 Alle</option>
+                                    <option value="high">⭐⭐⭐ Sehr Nachhaltig (4+)</option>
+                                    <option value="mid">⭐⭐ Nachhaltig (3+)</option>
                                 </select>
                             </div>
 
                             <div class="filter-group">
                                 <label>Wohntyp</label>
-                                <select>
-                                    <option>Alle Typen</option>
-                                    <option>👥 WG</option>
-                                    <option>🏠 Einzelwohnung</option>
-                                    <option>🏢 Genossenschaft</option>
+                                <select id="wohntypSelect" onchange="filterListings()">
+                                    <option value="all">Alle Typen</option>
+                                    <option value="wg">👥 WG (2+ Zimmer)</option>
+                                    <option value="single">🏠 Einzelwohnung</option>
+                                    <option value="gen">🏢 Genossenschaft</option>
                                 </select>
                             </div>
 
-                            <button class="primary">Wohnungen finden</button>
+                            <button class="primary" onclick="filterListings()">Wohnungen finden</button>
                         </div>
 
                         <div class="section">
-                            <div class="section-title">Top Angebote</div>
-
-                            <div class="listing" onclick="switchScreen('screen2')">
-                                <div class="listing-title">🏠 2er WG - Kreuzberg</div>
-                                <div class="listing-meta">
-                                    <span class="meta-badge">💰 580€</span>
-                                    <span class="meta-badge">⭐⭐⭐</span>
-                                    <span class="meta-badge">✓ Verified</span>
-                                </div>
+                            <div class="section-title">
+                                Angebote <span class="section-count" id="listing-count"></span>
                             </div>
-
-                            <div class="listing">
-                                <div class="listing-title">🏠 1er Wohnung - Neukölln</div>
-                                <div class="listing-meta">
-                                    <span class="meta-badge">💰 650€</span>
-                                    <span class="meta-badge">⭐⭐</span>
-                                    <span class="meta-badge">✓ Verified</span>
-                                </div>
-                            </div>
-
-                            <div class="listing">
-                                <div class="listing-title">🏢 Genossenschaft - Friedrichshain</div>
-                                <div class="listing-meta">
-                                    <span class="meta-badge">💰 520€</span>
-                                    <span class="meta-badge">⭐⭐⭐</span>
-                                    <span class="meta-badge">✓ Verified</span>
-                                </div>
-                            </div>
+                            <div id="listings-container"></div>
                         </div>
                     </div>
 
-                    <!-- SCREEN 2: Wohnungsprofil -->
+                    <!-- SCREEN 2: Wohnungsdetail (dynamisch) -->
                     <div id="screen2" class="screen">
-                        <div class="card">
-                            <div class="card-title">🏠 2er WG - Kreuzberg</div>
-                            <div style="font-size: 12px; color: #666;">65 m² | 580€ | 2 Zimmer</div>
-                        </div>
-
-                        <div class="card">
-                            <div style="font-size: 11px; font-weight: 600; color: #2ecc71; margin-bottom: 8px; text-transform: uppercase;">Scores</div>
-                            <div class="score-row">
-                                <span class="score-label">Transparenz</span>
-                                <span class="score-badge">4,5/5 ⭐</span>
-                            </div>
-                            <div class="score-row">
-                                <span class="score-label">Nachhaltigkeit</span>
-                                <span class="score-badge">⭐⭐⭐</span>
-                            </div>
-                            <div class="score-row">
-                                <span class="score-label">Energie</span>
-                                <span class="score-badge">Klasse A</span>
-                            </div>
-                            <div class="score-row">
-                                <span class="score-label">Lage</span>
-                                <span class="score-badge">4,2/5 ⭐</span>
-                            </div>
-                            <div class="score-row">
-                                <span class="score-label">Scam-Schutz</span>
-                                <span class="score-badge">✓</span>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div style="font-size: 11px; font-weight: 600; color: #2ecc71; margin-bottom: 8px; text-transform: uppercase;">Besonderheiten</div>
-                            <div class="features-list">
-                                <div class="feature-item">
-                                    <div class="feature-icon">🌿</div>
-                                    <div>Garten</div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">🚴</div>
-                                    <div>Fahrradfreundlich</div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">🚇</div>
-                                    <div>ÖPNV (5 Min)</div>
-                                </div>
-                                <div class="feature-item">
-                                    <div class="feature-icon">☀️</div>
-                                    <div>Solar</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button class="primary">Interesse anzeigen</button>
-                        <button class="secondary">👥 WG-Match</button>
+                        <div id="detail-content"></div>
+                        <button class="primary" onclick="showToast('Interesse gesendet! Der Vermieter meldet sich ✅')">✉️ Interesse anzeigen</button>
+                        <button id="detail-fav-btn" class="secondary" onclick="currentApartment && toggleFavorite(currentApartment.id)">🤍 Merken</button>
+                        <button class="secondary" onclick="switchScreen('screen3')">👥 WG-Match finden</button>
                     </div>
 
                     <!-- SCREEN 3: WG-Matching -->
                     <div id="screen3" class="screen">
                         <div class="card">
-                            <div class="card-title">👥 Finde deine WG</div>
+                            <div class="card-title">👥 Finde dein WG-Match</div>
 
                             <div class="filter-group">
-                                <label>Budget</label>
-                                <input type="range" min="400" max="800" value="600">
+                                <label>Mein Budget</label>
+                                <input type="range" min="300" max="1500" value="600" id="wgBudgetSlider"
+                                    oninput="document.getElementById('wgBudgetDisplay').textContent=Number(this.value).toLocaleString('de-DE')+'€'">
+                                <div style="font-size:11px;color:#666;text-align:right;margin-top:3px" id="wgBudgetDisplay">600€</div>
                             </div>
 
                             <div class="filter-group">
                                 <label>Nachhaltigkeit</label>
-                                <select>
-                                    <option>🌱 Sehr wichtig</option>
-                                    <option>Wichtig</option>
+                                <select id="wgSustainSelect">
+                                    <option value="all">🌟 Egal</option>
+                                    <option value="high">🌱 Sehr wichtig</option>
+                                    <option value="mid">Wichtig</option>
                                 </select>
                             </div>
 
-                            <button class="primary">Matching starten 🔥</button>
+                            <button class="primary" onclick="runWGMatching()">Matching starten 🔥</button>
                         </div>
 
                         <div class="section">
                             <div class="section-title">Top Matches</div>
-
-                            <div class="user-card">
-                                <div class="user-header">
-                                    <div class="user-name">👤 Alex, 26</div>
-                                    <span class="match-score">92%</span>
-                                </div>
-                                <div class="user-info">
-                                    <div><strong>Budget:</strong> 580€</div>
-                                    <div><strong>Stil:</strong> Sozial, grün</div>
-                                </div>
-                                <button class="primary" style="margin-top: 8px;">💬 Nachricht</button>
-                            </div>
-
-                            <div class="user-card">
-                                <div class="user-header">
-                                    <div class="user-name">👤 Marius, 22</div>
-                                    <span class="match-score">87%</span>
-                                </div>
-                                <div class="user-info">
-                                    <div><strong>Budget:</strong> 550€</div>
-                                    <div><strong>Stil:</strong> Ruhig, grün</div>
-                                </div>
-                                <button class="primary" style="margin-top: 8px;">💬 Nachricht</button>
-                            </div>
+                            <div id="wg-matches-container"></div>
                         </div>
                     </div>
 
@@ -736,7 +688,7 @@
                         <div class="section">
                             <div class="section-title">Deine Erfahrung</div>
                             <textarea placeholder="Deine Erfahrung..."></textarea>
-                            <button class="primary">📤 Absenden</button>
+                            <button class="primary" onclick="submitReview()">📤 Absenden</button>
                         </div>
 
                         <div class="card">
@@ -744,34 +696,223 @@
                             <div style="font-size: 12px; color: #666; margin-top: 5px;">Diese Wohnung ist sicher!</div>
                         </div>
                     </div>
+                    <!-- SCREEN 5: Merkliste -->
+                    <div id="screen5" class="screen">
+                        <div class="section">
+                            <div class="section-title">❤️ Meine Merkliste</div>
+                            <div id="favorites-container"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <div id="toast" class="toast"></div>
             <div class="home-indicator"></div>
         </div>
     </div>
 
     <script>
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        let allApartments = [];
+        let favorites = JSON.parse(localStorage.getItem('cb-favorites') || '[]');
+        let currentApartment = null;
+        let wgProfiles = [];
 
-                this.classList.add('active');
-                document.getElementById(this.dataset.screen).classList.add('active');
-            });
-        });
-
-        function switchScreen(screenId) {
-            document.querySelectorAll('.nav-btn').forEach(b => {
-                b.classList.remove('active');
-                if(b.dataset.screen === screenId) {
-                    b.classList.add('active');
-                }
-            });
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
+        async function loadData() {
+            try {
+                const res = await fetch('data.json');
+                const data = await res.json();
+                allApartments = data.apartments;
+                wgProfiles = data.wgProfiles || [];
+            } catch {
+                allApartments = [
+                    {id:1,title:"2er WG - Kreuzberg",location:"Berlin, Kreuzberg",price:580,size:65,rooms:2,image:"🏠",sustainability:5,transparency:4.5,safety:4.2,energyClass:"A",features:["Balkon","Gemeinschaftsgarten","ÖPNV","Fahrradfreundlich"],landlord:{name:"Sarah M.",type:"Privat",verified:true,rating:4.8,reviews:8},description:"Schöne WG in ruhiger Lage mit grünem Hof."},
+                    {id:2,title:"1er Wohnung - Neukölln",location:"Berlin, Neukölln",price:650,size:45,rooms:1,image:"🏢",sustainability:3,transparency:4.0,safety:3.8,energyClass:"B",features:["Neugebaut","Fahrstuhl","Tiefgarage"],landlord:{name:"Thomas B.",type:"Immobilienfirma",verified:true,rating:4.2,reviews:15},description:"Moderne Einzimmerwohnung mit hochwertiger Ausstattung."},
+                    {id:3,title:"Genossenschaft - Friedrichshain",location:"Berlin, Friedrichshain",price:520,size:70,rooms:2,image:"🏛️",sustainability:5,transparency:5.0,safety:4.5,energyClass:"A",features:["Gemeinschaftsräume","Kinderbereich","Fahrradkeller"],landlord:{name:"Wohngenossenschaft",type:"Genossenschaft",verified:true,rating:4.9,reviews:42},description:"Nachhaltige Genossenschaftswohnung mit fairer Miete."}
+                ];
+            }
+            renderListings(allApartments);
+            renderWGList(wgProfiles);
+            updateFavorites();
         }
+
+        function renderListings(apartments) {
+            const container = document.getElementById('listings-container');
+            const countEl   = document.getElementById('listing-count');
+            if (!container) return;
+            countEl.textContent = '(' + apartments.length + ')';
+
+            if (!apartments.length) {
+                container.innerHTML = '<div style="text-align:center;padding:20px;color:#aaa;font-size:13px">😕 Keine Ergebnisse</div>';
+                return;
+            }
+            container.innerHTML = apartments.map(a => {
+                const isFav = favorites.includes(a.id);
+                const stars = '⭐'.repeat(Math.min(5, Math.round(a.sustainability)));
+                return `<div class="listing-row">
+                    <div class="listing" style="flex:1;margin-bottom:0" onclick="showDetail(${a.id})">
+                        <div class="listing-title">${a.image} ${a.title}</div>
+                        <div class="listing-meta">
+                            <span class="meta-badge">💰 ${a.price}€</span>
+                            <span class="meta-badge">${stars}</span>
+                            ${a.landlord?.verified ? '<span class="meta-badge" style="color:#27ae60;border-color:#c8f0d8">✓</span>' : ''}
+                            <span class="meta-badge">${a.size}m²</span>
+                        </div>
+                    </div>
+                    <button class="fav-btn" onclick="toggleFavorite(${a.id})" id="fav-${a.id}">${isFav ? '❤️' : '🤍'}</button>
+                </div>`;
+            }).join('');
+        }
+
+        function filterListings() {
+            const search   = (document.getElementById('searchInput')?.value || '').toLowerCase();
+            const maxPrice = parseInt(document.getElementById('priceSlider').value);
+            const sustain  = document.getElementById('sustainSelect').value;
+            const wohntyp  = document.getElementById('wohntypSelect').value;
+
+            const filtered = allApartments.filter(a => {
+                const s = !search || a.title.toLowerCase().includes(search) || a.location.toLowerCase().includes(search);
+                const p = a.price <= maxPrice;
+                const n = sustain === 'all' || (sustain === 'high' && a.sustainability >= 4) || (sustain === 'mid' && a.sustainability >= 3);
+                const t = wohntyp === 'all' || (wohntyp === 'wg' && a.rooms >= 2) || (wohntyp === 'single' && a.rooms === 1) || (wohntyp === 'gen' && a.landlord?.type === 'Genossenschaft');
+                return s && p && n && t;
+            });
+            renderListings(filtered);
+        }
+
+        function showDetail(id) {
+            const a = allApartments.find(x => x.id === id);
+            if (!a) return;
+            currentApartment = a;
+            const isFav  = favorites.includes(a.id);
+            const stars  = '⭐'.repeat(Math.min(5, Math.round(a.sustainability)));
+            const feats  = (a.features||[]).map(f => `<div class="feature-item"><div class="feature-icon">✅</div><div>${f}</div></div>`).join('');
+
+            document.getElementById('detail-content').innerHTML = `
+                <div class="card">
+                    <div class="card-title">${a.image} ${a.title}</div>
+                    <div style="font-size:12px;color:#666">${a.location} · ${a.size}m² · ${a.rooms} Zi.</div>
+                    <div style="font-size:20px;font-weight:800;color:#27ae60;margin:6px 0">${a.price}€<span style="font-size:12px;font-weight:400;color:#888">/Monat</span></div>
+                    <div style="font-size:12px;color:#666">${a.description||''}</div>
+                </div>
+                <div class="card">
+                    <div style="font-size:11px;font-weight:600;color:#2ecc71;margin-bottom:8px;text-transform:uppercase">Scores</div>
+                    <div class="score-row"><span class="score-label">Nachhaltigkeit</span><span class="score-badge">${a.sustainability}/5 ${stars}</span></div>
+                    <div class="score-row"><span class="score-label">Transparenz</span><span class="score-badge">${a.transparency}/5</span></div>
+                    <div class="score-row"><span class="score-label">Sicherheit</span><span class="score-badge">${a.safety}/5</span></div>
+                    <div class="score-row"><span class="score-label">Energieklasse</span><span class="score-badge">${a.energyClass}</span></div>
+                    <div class="score-row"><span class="score-label">Scam-Schutz</span><span class="score-badge">✓</span></div>
+                </div>
+                <div class="card">
+                    <div style="font-size:11px;font-weight:600;color:#2ecc71;margin-bottom:8px;text-transform:uppercase">Besonderheiten</div>
+                    <div class="features-list">${feats}</div>
+                </div>
+                <div class="card">
+                    <div style="font-size:11px;font-weight:600;color:#2ecc71;margin-bottom:8px;text-transform:uppercase">Vermieter</div>
+                    <div style="font-size:13px;font-weight:700">${a.landlord?.name||'–'}</div>
+                    <div style="font-size:11px;color:#666">${a.landlord?.type||''} · ⭐ ${a.landlord?.rating||'–'} (${a.landlord?.reviews||0} Bew.)</div>
+                    ${a.landlord?.verified ? '<div style="font-size:11px;color:#27ae60;margin-top:4px">✅ Verifiziert</div>' : ''}
+                </div>`;
+
+            const favBtn = document.getElementById('detail-fav-btn');
+            favBtn.textContent = isFav ? '❤️ Gemerkt' : '🤍 Merken';
+            switchScreen('screen2');
+        }
+
+        function toggleFavorite(id) {
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(f => f !== id);
+            } else {
+                favorites.push(id);
+                showToast('Zur Merkliste hinzugefügt ❤️');
+            }
+            localStorage.setItem('cb-favorites', JSON.stringify(favorites));
+            const btn = document.getElementById('fav-' + id);
+            if (btn) btn.textContent = favorites.includes(id) ? '❤️' : '🤍';
+            if (currentApartment?.id === id) {
+                document.getElementById('detail-fav-btn').textContent = favorites.includes(id) ? '❤️ Gemerkt' : '🤍 Merken';
+            }
+            updateFavorites();
+        }
+
+        function updateFavorites() {
+            const container = document.getElementById('favorites-container');
+            if (!container) return;
+            const favs = allApartments.filter(a => favorites.includes(a.id));
+            if (!favs.length) {
+                container.innerHTML = `<div style="text-align:center;padding:30px;color:#aaa">
+                    <div style="font-size:44px;margin-bottom:12px">🤍</div>
+                    <div style="font-size:13px">Noch keine gemerkten Wohnungen.<br>Tippe auf 🤍 um eine zu speichern.</div></div>`;
+                return;
+            }
+            container.innerHTML = favs.map(a => {
+                const stars = '⭐'.repeat(Math.min(5, Math.round(a.sustainability)));
+                return `<div class="listing-row">
+                    <div class="listing" style="flex:1;margin-bottom:0" onclick="showDetail(${a.id})">
+                        <div class="listing-title">${a.image} ${a.title}</div>
+                        <div class="listing-meta">
+                            <span class="meta-badge">💰 ${a.price}€</span>
+                            <span class="meta-badge">${stars}</span>
+                        </div>
+                    </div>
+                    <button class="fav-btn" onclick="toggleFavorite(${a.id})">❤️</button>
+                </div>`;
+            }).join('');
+        }
+
+        function renderWGList(profiles) {
+            const container = document.getElementById('wg-matches-container');
+            if (!container || !profiles.length) return;
+            container.innerHTML = profiles.map(p => `
+                <div class="user-card">
+                    <div class="user-header">
+                        <div class="user-name">👤 ${p.name}, ${p.age}</div>
+                        <span class="match-score">${p.matchScore}%</span>
+                    </div>
+                    <div class="user-info">
+                        <div><strong>Budget:</strong> ${p.budget}€ · <strong>Stadt:</strong> ${p.city||'–'}</div>
+                        <div><strong>Stil:</strong> ${p.lifestyle}</div>
+                        <div><strong>Beruf:</strong> ${p.profession||'–'}</div>
+                    </div>
+                    <button class="primary" style="margin-top:8px" onclick="showToast('Nachricht an ${p.name} gesendet! 💬')">💬 Nachricht senden</button>
+                </div>`).join('');
+        }
+
+        function runWGMatching() {
+            const budget  = parseInt(document.getElementById('wgBudgetSlider').value);
+            const sustain = document.getElementById('wgSustainSelect').value;
+            const result  = wgProfiles.filter(p => {
+                const b = p.budget <= budget + 150;
+                const n = sustain === 'all' || (sustain === 'high' && p.sustainability === 'Sehr wichtig') || (sustain === 'mid' && ['Sehr wichtig','Wichtig'].includes(p.sustainability));
+                return b && n;
+            }).sort((a,b) => b.matchScore - a.matchScore);
+            renderWGList(result.length ? result : wgProfiles);
+            showToast((result.length || wgProfiles.length) + ' Matches gefunden! 🔥');
+        }
+
+        function submitReview() {
+            const ta = document.querySelector('#screen4 textarea');
+            if (!ta?.value.trim()) { showToast('Bitte schreibe etwas ✍️'); return; }
+            ta.value = '';
+            showToast('Bewertung eingereicht! Danke ✅');
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2800);
+        }
+
+        function switchScreen(id) {
+            document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('active'); if (b.dataset.screen === id) b.classList.add('active'); });
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if (id === 'screen5') updateFavorites();
+        }
+
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', function() { switchScreen(this.dataset.screen); }));
+
+        loadData();
     </script>
 </body>
 </html>
