@@ -347,10 +347,36 @@
             font-size: 14px;
         }
 
+        .map-layout {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+        #germanyMap {
+            background: #f0f4f8;
+            border-radius: 10px;
+        }
+
+        .map-tooltip {
+            position: fixed;
+            background: rgba(26,26,46,0.95);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            line-height: 1.8;
+        }
+
         @media (max-width: 1100px) {
             .kpi-grid { grid-template-columns: repeat(2, 1fr); }
             .charts-row { grid-template-columns: 1fr; }
             .city-grid { grid-template-columns: repeat(2, 1fr); }
+            .map-layout { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -447,12 +473,23 @@
         <div id="noResults" class="no-results" style="display:none">Keine Ergebnisse gefunden.</div>
     </div>
 
-    <!-- City Overview -->
+    <!-- City Map + Overview -->
     <div class="table-card">
         <div class="table-header">
             <h2>🏙️ Übersicht nach Stadt</h2>
         </div>
-        <div class="city-grid" id="cityGrid"></div>
+        <div class="map-layout">
+            <div>
+                <p style="font-size:12px;color:#888;margin-bottom:10px">📍 Standorte der Wohnungsangebote</p>
+                <svg id="germanyMap" viewBox="0 0 325 400" width="270">
+                    <path d="M 99,17 L 142,20 L 149,46 L 173,66 L 215,57 L 246,47 L 285,65 L 295,130 L 294,157 L 297,185 L 309,212 L 296,243 L 243,246 L 213,251 L 229,280 L 248,310 L 258,334 L 248,348 L 214,362 L 197,367 L 191,377 L 168,382 L 137,377 L 118,369 L 79,369 L 66,373 L 69,324 L 73,301 L 46,295 L 26,251 L 14,235 L 10,206 L 41,130 L 47,98 L 54,90 L 96,74 L 102,66 L 112,64 Z"
+                          fill="#e8f5e9" stroke="#27ae60" stroke-width="1.5" stroke-linejoin="round"/>
+                    <g id="cityDots"></g>
+                </svg>
+                <div id="mapTooltip" class="map-tooltip" style="display:none"></div>
+            </div>
+            <div class="city-grid" id="cityGrid"></div>
+        </div>
     </div>
 </div>
 
@@ -516,6 +553,7 @@
         renderPriceChart();
         renderSustainChart();
         renderCityGrid(data.cities);
+        renderMap(allApartments);
         renderTable(allApartments);
     }
 
@@ -563,6 +601,87 @@
             </div>
         `).join('');
         document.getElementById('cityGrid').innerHTML = html;
+    }
+
+    function renderMap(apartments) {
+        const cityCoords = {
+            'Berlin':    { x: 256, y: 134 },
+            'Hamburg':   { x: 145, y: 81  },
+            'München':   { x: 197, y: 347 },
+            'Köln':      { x: 46,  y: 211 },
+            'Leipzig':   { x: 223, y: 193 },
+            'Frankfurt': { x: 102, y: 251 },
+            'Freiburg':  { x: 75,  y: 354 },
+            'Stuttgart': { x: 118, y: 316 }
+        };
+
+        const byCityMap = {};
+        apartments.forEach(a => {
+            const city = a.location.split(',')[0].trim();
+            if (!byCityMap[city]) byCityMap[city] = { count: 0, prices: [], avgSustain: 0 };
+            byCityMap[city].count++;
+            byCityMap[city].prices.push(a.price);
+            byCityMap[city].avgSustain += a.sustainability;
+        });
+        Object.values(byCityMap).forEach(d => d.avgSustain = (d.avgSustain / d.count).toFixed(1));
+
+        const g = document.getElementById('cityDots');
+        const tooltip = document.getElementById('mapTooltip');
+        g.innerHTML = '';
+        const ns = 'http://www.w3.org/2000/svg';
+
+        Object.entries(cityCoords).forEach(([city, pos]) => {
+            const d = byCityMap[city];
+            if (!d) return;
+            const avgPrice = Math.round(d.prices.reduce((s,p) => s+p, 0) / d.prices.length);
+            const r = 6 + d.count * 2;
+
+            const group = document.createElementNS(ns, 'g');
+            group.style.cursor = 'pointer';
+
+            const ring = document.createElementNS(ns, 'circle');
+            ring.setAttribute('cx', pos.x); ring.setAttribute('cy', pos.y);
+            ring.setAttribute('r', r);
+            ring.setAttribute('fill', 'rgba(46,204,113,0.18)');
+            ring.setAttribute('stroke', '#27ae60'); ring.setAttribute('stroke-width', '1.5');
+
+            const dot = document.createElementNS(ns, 'circle');
+            dot.setAttribute('cx', pos.x); dot.setAttribute('cy', pos.y);
+            dot.setAttribute('r', 5); dot.setAttribute('fill', '#27ae60');
+
+            const num = document.createElementNS(ns, 'text');
+            num.setAttribute('x', pos.x); num.setAttribute('y', pos.y + 4);
+            num.setAttribute('text-anchor', 'middle');
+            num.setAttribute('font-size', '8'); num.setAttribute('font-weight', '700');
+            num.setAttribute('fill', 'white'); num.textContent = d.count;
+
+            const label = document.createElementNS(ns, 'text');
+            label.setAttribute('x', pos.x + r + 3); label.setAttribute('y', pos.y + 4);
+            label.setAttribute('font-size', '9'); label.setAttribute('font-weight', '600');
+            label.setAttribute('fill', '#1a1a2e'); label.textContent = city;
+
+            group.append(ring, dot, num, label);
+
+            group.addEventListener('mouseenter', e => {
+                tooltip.innerHTML = `<strong>${city}</strong><br>🏠 ${d.count} Wohnung${d.count>1?'en':''}<br>💰 Ø ${avgPrice}€/Mo<br>🌱 Nachh. Ø ${d.avgSustain}/5`;
+                tooltip.style.display = 'block';
+                tooltip.style.left = (e.clientX + 14) + 'px';
+                tooltip.style.top  = (e.clientY - 10) + 'px';
+                dot.setAttribute('fill', '#1a7f4b');
+                ring.setAttribute('fill', 'rgba(46,204,113,0.35)');
+            });
+            group.addEventListener('mousemove', e => {
+                tooltip.style.left = (e.clientX + 14) + 'px';
+                tooltip.style.top  = (e.clientY - 10) + 'px';
+            });
+            group.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+                dot.setAttribute('fill', '#27ae60');
+                ring.setAttribute('fill', 'rgba(46,204,113,0.18)');
+            });
+
+            g.appendChild(group);
+        });
     }
 
     function renderTable(data) {
