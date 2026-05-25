@@ -1219,10 +1219,17 @@
             validApts.forEach(a => {
                 const coords = aptCoords[a.id];
                 const stars  = '🌱'.repeat(Math.min(5, Math.round(a.sustainability)));
+                const priceStr = a.price.toLocaleString('de-DE') + ' €';
                 const icon   = L.divIcon({
-                    html: `<div style="background:#27ae60;color:white;border-radius:14px;padding:4px 8px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.28);border:2px solid white">${a.price}€</div>`,
+                    html: `<div style="position:relative;display:inline-block">
+  <div style="background:white;border:2.5px solid #27ae60;border-radius:22px;padding:5px 13px;font-size:12px;font-weight:800;color:#1a7f4b;white-space:nowrap;box-shadow:0 3px 12px rgba(0,0,0,0.18);letter-spacing:-0.2px;line-height:1.2">
+    ${priceStr}
+  </div>
+  <div style="position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:10px solid #27ae60"></div>
+  <div style="position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:7px solid white"></div>
+</div>`,
                     className: '',
-                    iconAnchor: [24, 14]
+                    iconAnchor: [30, 42]
                 });
                 const popup = `
                     <div style="font-family:'Segoe UI',sans-serif;min-width:190px">
