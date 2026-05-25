@@ -103,7 +103,7 @@
       "sustainability": 2,
       "transparency": 3.8,
       "safety": 3.5,
-      "features": ["Günstiger", "Alt-Bau Charme", "Nah bei Uni", "Großer Balkon"],
+      "features": ["Günstig", "Alt-Bau Charme", "Nah bei Uni", "Großer Balkon"],
       "energyClass": "C",
       "landlord": {
         "name": "Petra K.",
@@ -114,6 +114,167 @@
       },
       "description": "Günstige WG ideal für Studierende mit besonderem Charakter.",
       "highlights": ["Günstig", "Gemütlich", "Studierendenfreundlich"]
+    },
+    {
+      "id": 6,
+      "title": "Öko-Loft - Hamburg Altona",
+      "location": "Hamburg, Altona",
+      "price": 890,
+      "size": 80,
+      "rooms": 3,
+      "image": "🌊",
+      "sustainability": 5,
+      "transparency": 4.8,
+      "safety": 4.6,
+      "features": ["Dachterrasse", "Photovoltaik", "E-Bike Ladestation", "Bio-Supermarkt (2 min)"],
+      "energyClass": "A+",
+      "landlord": {
+        "name": "GreenLiving Hamburg",
+        "type": "Genossenschaft",
+        "verified": true,
+        "rating": 4.9,
+        "reviews": 31
+      },
+      "description": "Modernes Loft mit vollständig grüner Energieversorgung und nachhaltiger Gemeinschaft.",
+      "highlights": ["100% Ökostrom", "Zero Waste Haus", "Repair Café"]
+    },
+    {
+      "id": 7,
+      "title": "Altbau WG - München Schwabing",
+      "location": "München, Schwabing",
+      "price": 780,
+      "size": 75,
+      "rooms": 3,
+      "image": "🏰",
+      "sustainability": 3,
+      "transparency": 4.1,
+      "safety": 4.3,
+      "features": ["Stuckdecken", "Parkettboden", "Englischer Garten (10 min)", "Gründerzeit"],
+      "energyClass": "C",
+      "landlord": {
+        "name": "Familie Huber",
+        "type": "Privat",
+        "verified": true,
+        "rating": 4.5,
+        "reviews": 9
+      },
+      "description": "Charmante Altbauwohnung in bester Lage – perfekt für kulturell Interessierte.",
+      "highlights": ["Historisches Gebäude", "Ruhige Lage", "Tolle Nachbarn"]
+    },
+    {
+      "id": 8,
+      "title": "Tiny House - Köln Ehrenfeld",
+      "location": "Köln, Ehrenfeld",
+      "price": 490,
+      "size": 30,
+      "rooms": 1,
+      "image": "🏡",
+      "sustainability": 5,
+      "transparency": 4.7,
+      "safety": 4.4,
+      "features": ["Tiny Living", "Komposttoilette", "Regenwasseranlage", "Gemeinschaftsgarten"],
+      "energyClass": "A+",
+      "landlord": {
+        "name": "Urban Farming Köln e.V.",
+        "type": "Verein",
+        "verified": true,
+        "rating": 4.7,
+        "reviews": 18
+      },
+      "description": "Nachhaltiges Tiny House in einem einzigartigen Urban-Farming-Projekt.",
+      "highlights": ["Selbstversorgung möglich", "Starke Community", "Minimalistisch"]
+    },
+    {
+      "id": 9,
+      "title": "2-Zimmer Wohnung - Leipzig Connewitz",
+      "location": "Leipzig, Connewitz",
+      "price": 420,
+      "size": 58,
+      "rooms": 2,
+      "image": "🌻",
+      "sustainability": 4,
+      "transparency": 4.5,
+      "safety": 4.0,
+      "features": ["Günstiger", "Kreatives Viertel", "Café-Dichte", "Fahrradstadt"],
+      "energyClass": "B",
+      "landlord": {
+        "name": "Mietergenossenschaft Leipzig",
+        "type": "Genossenschaft",
+        "verified": true,
+        "rating": 4.8,
+        "reviews": 27
+      },
+      "description": "Bezahlbare Wohnung im angesagtesten Viertel Leipzigs mit toller Atmosphäre.",
+      "highlights": ["Kulturszene", "Günstigste Metropole", "Wachsende Community"]
+    },
+    {
+      "id": 10,
+      "title": "Penthouse WG - Frankfurt Sachsenhausen",
+      "location": "Frankfurt, Sachsenhausen",
+      "price": 1100,
+      "size": 120,
+      "rooms": 4,
+      "image": "🌆",
+      "sustainability": 4,
+      "transparency": 3.9,
+      "safety": 4.7,
+      "features": ["Dachterrasse", "Skyline View", "Concierge", "Tiefgarage"],
+      "energyClass": "A",
+      "landlord": {
+        "name": "Skyline Living GmbH",
+        "type": "Immobilienfirma",
+        "verified": true,
+        "rating": 4.4,
+        "reviews": 19
+      },
+      "description": "Exklusives Penthouse mit Blick über Frankfurt – für alle, die Premium wollen.",
+      "highlights": ["Beste Lage", "Luxusausstattung", "Sicherheit 24/7"]
+    },
+    {
+      "id": 11,
+      "title": "Waldhaus WG - Freiburg",
+      "location": "Freiburg, Günterstal",
+      "price": 560,
+      "size": 90,
+      "rooms": 3,
+      "image": "🌲",
+      "sustainability": 5,
+      "transparency": 5.0,
+      "safety": 4.3,
+      "features": ["Waldnähe", "Holzpellet-Heizung", "Eigener Gemüsegarten", "Bachzugang"],
+      "energyClass": "A",
+      "landlord": {
+        "name": "Ökodorf Freiburg",
+        "type": "Verein",
+        "verified": true,
+        "rating": 5.0,
+        "reviews": 34
+      },
+      "description": "Leben im Grünen – direkt am Waldrand mit maximaler Nachhaltigkeit.",
+      "highlights": ["Wald direkt vor der Tür", "Ökologisches Bauen", "Selbstversorgung"]
+    },
+    {
+      "id": 12,
+      "title": "Studentenwohnheim - Stuttgart Mitte",
+      "location": "Stuttgart, Mitte",
+      "price": 380,
+      "size": 20,
+      "rooms": 1,
+      "image": "🎒",
+      "sustainability": 3,
+      "transparency": 4.2,
+      "safety": 4.5,
+      "features": ["Möbliert", "Waschmaschine", "Gemeinschaftsküche", "WLAN inklusive"],
+      "energyClass": "B",
+      "landlord": {
+        "name": "Studentenwerk Stuttgart",
+        "type": "Studentenwerk",
+        "verified": true,
+        "rating": 4.1,
+        "reviews": 88
+      },
+      "description": "Günstiges Einzelzimmer im zentralen Wohnheim – ideal für Studienanfänger.",
+      "highlights": ["Sehr günstig", "Alles inklusive", "Viele Mitbewohner"]
     }
   ],
   "wgProfiles": [
@@ -122,55 +283,104 @@
       "name": "Alex",
       "age": 26,
       "budget": 580,
+      "city": "Berlin",
       "sustainability": "Sehr wichtig",
       "lifestyle": "Sozial & grün",
       "profession": "Nachhaltigkeitsfachperson",
       "interests": ["Yoga", "Bio-Essen", "Aktivismus"],
-      "matchScore": 92
+      "matchScore": 92,
+      "verified": true
     },
     {
       "id": 2,
       "name": "Marius",
       "age": 22,
       "budget": 550,
+      "city": "Berlin",
       "sustainability": "Wichtig",
       "lifestyle": "Ruhig & zuhause",
       "profession": "Student Umweltwissenschaften",
       "interests": ["Lesen", "Gaming", "Nachhaltigkeit"],
-      "matchScore": 87
+      "matchScore": 87,
+      "verified": true
     },
     {
       "id": 3,
       "name": "Jana",
       "age": 24,
       "budget": 600,
+      "city": "Hamburg",
       "sustainability": "Sehr wichtig",
       "lifestyle": "Aktiv & sozial",
-      "profession": "Designer",
+      "profession": "Designerin",
       "interests": ["Kunst", "Sport", "Nachhaltigkeit"],
-      "matchScore": 85
+      "matchScore": 85,
+      "verified": true
     },
     {
       "id": 4,
       "name": "Tom",
       "age": 28,
       "budget": 650,
+      "city": "München",
       "sustainability": "Eher unwichtig",
       "lifestyle": "Party & Freunde",
       "profession": "Software Developer",
       "interests": ["Musik", "Partys", "Coding"],
-      "matchScore": 65
+      "matchScore": 65,
+      "verified": false
     },
     {
       "id": 5,
       "name": "Sofia",
       "age": 25,
       "budget": 570,
+      "city": "Leipzig",
       "sustainability": "Sehr wichtig",
       "lifestyle": "Balance",
       "profession": "Architektin",
       "interests": ["Design", "Natur", "Reisen"],
-      "matchScore": 88
+      "matchScore": 88,
+      "verified": true
+    },
+    {
+      "id": 6,
+      "name": "Lena",
+      "age": 23,
+      "budget": 490,
+      "city": "Köln",
+      "sustainability": "Sehr wichtig",
+      "lifestyle": "Minimalistisch",
+      "profession": "Studentin Umwelttechnik",
+      "interests": ["Zero Waste", "Fahrradfahren", "Kochen"],
+      "matchScore": 94,
+      "verified": true
+    },
+    {
+      "id": 7,
+      "name": "Kevin",
+      "age": 30,
+      "budget": 700,
+      "city": "Frankfurt",
+      "sustainability": "Neutral",
+      "lifestyle": "Berufsorientiert",
+      "profession": "Finanzberater",
+      "interests": ["Sport", "Reisen", "Networking"],
+      "matchScore": 70,
+      "verified": true
+    },
+    {
+      "id": 8,
+      "name": "Nina",
+      "age": 27,
+      "budget": 560,
+      "city": "Freiburg",
+      "sustainability": "Sehr wichtig",
+      "lifestyle": "Naturverbunden",
+      "profession": "Biologin",
+      "interests": ["Wandern", "Bio-Gärtnern", "Yoga"],
+      "matchScore": 96,
+      "verified": true
     }
   ],
   "reviews": [
@@ -179,14 +389,16 @@
       "author": "Jana",
       "rating": 5,
       "text": "Super transparente Vermieterin! Alle Infos waren akkurat. Wohnung ist toll, Nachbarschaft super freundlich.",
-      "verified": true
+      "verified": true,
+      "date": "2025-11-14"
     },
     {
       "apartment_id": 1,
       "author": "Tim",
       "rating": 5,
       "text": "Wirklich nachhaltig wie versprochen. ÖPNV ist perfekt. Gutes Preis-Leistungs-Verhältnis!",
-      "verified": true
+      "verified": true,
+      "date": "2025-10-03"
     },
     {
       "apartment_id": 1,
@@ -194,21 +406,133 @@
       "rating": 4,
       "text": "Nebenkosten könnten unerwartet höher sein. Wichtig: Abrechnungen vorher ansehen!",
       "verified": false,
-      "warning": true
+      "warning": true,
+      "date": "2025-09-20"
     },
     {
       "apartment_id": 2,
       "author": "Klaus",
       "rating": 4,
       "text": "Modern und sauber, aber etwas laut wegen Straße.",
-      "verified": true
+      "verified": true,
+      "date": "2025-12-01"
+    },
+    {
+      "apartment_id": 2,
+      "author": "Monika",
+      "rating": 3,
+      "text": "Gut ausgestattet, aber der Vermieter reagiert manchmal langsam auf Anfragen.",
+      "verified": true,
+      "date": "2025-11-05"
     },
     {
       "apartment_id": 3,
       "author": "Community",
       "rating": 5,
       "text": "Genossenschaft ist klasse! Faire Miete, tolle Community, echte Nachhaltigkeit.",
-      "verified": true
+      "verified": true,
+      "date": "2025-12-10"
+    },
+    {
+      "apartment_id": 3,
+      "author": "Franziska",
+      "rating": 5,
+      "text": "Das beste Wohnerlebnis meines Lebens. Alle helfen einander, Events sind toll.",
+      "verified": true,
+      "date": "2025-10-28"
+    },
+    {
+      "apartment_id": 4,
+      "author": "Jonas",
+      "rating": 4,
+      "text": "Co-Living macht Spaß, tolle Leute kennengelernt. Coworking Space ist super.",
+      "verified": true,
+      "date": "2025-11-22"
+    },
+    {
+      "apartment_id": 5,
+      "author": "Studierende_1",
+      "rating": 4,
+      "text": "Günstigste Option in Berlin! Altbau-Charme, aber manchmal Heizprobleme im Winter.",
+      "verified": true,
+      "warning": true,
+      "date": "2025-09-15"
+    },
+    {
+      "apartment_id": 6,
+      "author": "Hannah",
+      "rating": 5,
+      "text": "Traumhaft! Die Dachterrasse ist einfach unschlagbar und 100% Ökostrom inklusive.",
+      "verified": true,
+      "date": "2026-01-08"
+    },
+    {
+      "apartment_id": 7,
+      "author": "Max",
+      "rating": 4,
+      "text": "Wunderschöner Altbau, aber Energiekosten im Winter sind spürbar.",
+      "verified": true,
+      "warning": true,
+      "date": "2025-12-20"
+    },
+    {
+      "apartment_id": 8,
+      "author": "Lena",
+      "rating": 5,
+      "text": "Tiny Living verändert den Blick auf das Wesentliche. Community-Garten ist ein Traum!",
+      "verified": true,
+      "date": "2026-02-14"
+    },
+    {
+      "apartment_id": 9,
+      "author": "Paul",
+      "rating": 5,
+      "text": "Leipzig ist günstig und belebt! Connewitz ist das beste Viertel Deutschlands.",
+      "verified": true,
+      "date": "2026-01-30"
+    },
+    {
+      "apartment_id": 10,
+      "author": "Business_Traveler",
+      "rating": 4,
+      "text": "Premium-Lage und Ausstattung, aber der Preis ist natürlich entsprechend.",
+      "verified": true,
+      "date": "2025-11-11"
+    },
+    {
+      "apartment_id": 11,
+      "author": "Nina",
+      "rating": 5,
+      "text": "Der Wald morgens – unbeschreiblich. Ökodorf-Atmosphäre ist einzigartig, sehr empfehlenswert!",
+      "verified": true,
+      "date": "2026-03-05"
+    },
+    {
+      "apartment_id": 12,
+      "author": "Ersti2024",
+      "rating": 4,
+      "text": "Für Studienanfänger perfekt. Günstig, sicher, viele Kontakte. Zimmer ist klein, aber ausreichend.",
+      "verified": true,
+      "date": "2025-10-10"
     }
-  ]
+  ],
+  "cities": [
+    { "name": "Berlin", "apartments": 5, "avgPrice": 560 },
+    { "name": "Hamburg", "apartments": 1, "avgPrice": 890 },
+    { "name": "München", "apartments": 1, "avgPrice": 780 },
+    { "name": "Köln", "apartments": 1, "avgPrice": 490 },
+    { "name": "Leipzig", "apartments": 1, "avgPrice": 420 },
+    { "name": "Frankfurt", "apartments": 1, "avgPrice": 1100 },
+    { "name": "Freiburg", "apartments": 1, "avgPrice": 560 },
+    { "name": "Stuttgart", "apartments": 1, "avgPrice": 380 }
+  ],
+  "stats": {
+    "totalApartments": 12,
+    "totalProfiles": 8,
+    "totalReviews": 16,
+    "avgSustainabilityScore": 4.0,
+    "avgTransparencyScore": 4.4,
+    "avgPrice": 635,
+    "verifiedLandlords": 12
+  }
 }
