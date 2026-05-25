@@ -558,6 +558,153 @@
             color: #aaa;
             font-weight: 400;
         }
+
+        /* Profil */
+        .profile-header {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .profile-avatar {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #2ecc71;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0; left: 0;
+        }
+
+        .avatar-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(0,0,0,0.45);
+            color: white;
+            font-size: 10px;
+            text-align: center;
+            padding: 3px 0;
+            letter-spacing: 0.3px;
+        }
+
+        .profile-info { flex: 1; }
+
+        .profile-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .profile-sub {
+            font-size: 11px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 14px;
+            margin-top: 8px;
+        }
+
+        .stat-item { text-align: center; }
+
+        .stat-num {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2ecc71;
+            display: block;
+        }
+
+        .stat-lbl {
+            font-size: 9px;
+            color: #aaa;
+            text-transform: uppercase;
+        }
+
+        .profile-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .profile-badge {
+            background: #e8f5e9;
+            color: #27ae60;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .profile-field {
+            margin-bottom: 10px;
+        }
+
+        .profile-field label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #2ecc71;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .profile-field input[type="text"],
+        .profile-field input[type="number"],
+        .profile-field select,
+        .profile-field textarea {
+            width: 100%;
+            padding: 9px 11px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 13px;
+            color: #2c3e50;
+            background: #fff;
+        }
+
+        .profile-field input:focus,
+        .profile-field select:focus,
+        .profile-field textarea:focus {
+            border-color: #2ecc71;
+            outline: none;
+        }
+
+        .profile-field textarea {
+            resize: vertical;
+            min-height: 64px;
+        }
+
+        .btn-danger {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
@@ -577,6 +724,7 @@
                         <button class="nav-btn" data-screen="screen3">👥</button>
                         <button class="nav-btn" data-screen="screen4">💬</button>
                         <button class="nav-btn" data-screen="screen5">❤️</button>
+                        <button class="nav-btn" data-screen="screen6">👤</button>
                     </nav>
 
                     <!-- SCREEN 1: Suche & Filter -->
@@ -703,6 +851,97 @@
                             <div id="favorites-container"></div>
                         </div>
                     </div>
+
+                    <!-- SCREEN 6: Profil -->
+                    <div id="screen6" class="screen">
+                        <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)">
+
+                        <div class="profile-header">
+                            <div class="profile-avatar" onclick="document.getElementById('avatarInput').click()" title="Foto hochladen">
+                                <span id="profileAvatarEmoji">👤</span>
+                                <img id="profileAvatarImg" src="" alt="Profilbild" style="display:none">
+                                <div class="avatar-overlay">📷 Ändern</div>
+                            </div>
+                            <div class="profile-info">
+                                <div class="profile-name" id="profileDisplayName">Mein Profil</div>
+                                <div class="profile-sub" id="profileDisplaySub">Stadt · Beruf</div>
+                                <div class="profile-stats">
+                                    <div class="stat-item">
+                                        <span class="stat-num" id="statFavs">0</span>
+                                        <span class="stat-lbl">Gemerkt</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-num" id="statReviews">0</span>
+                                        <span class="stat-lbl">Bewertungen</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-num" id="statViews">0</span>
+                                        <span class="stat-lbl">Gesehen</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="profile-badges">
+                            <span class="profile-badge">✅ Verifiziert</span>
+                            <span class="profile-badge" id="profNachBadge">🌱 Nachhaltig</span>
+                            <span class="profile-badge">⭐ Aktiv</span>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Persönliche Daten</div>
+                            <div class="profile-field">
+                                <label>Name</label>
+                                <input type="text" id="profName" placeholder="Dein Name">
+                            </div>
+                            <div class="profile-field">
+                                <label>Alter</label>
+                                <input type="number" id="profAge" placeholder="z.B. 24" min="18" max="99">
+                            </div>
+                            <div class="profile-field">
+                                <label>Stadt</label>
+                                <input type="text" id="profCity" placeholder="z.B. Berlin">
+                            </div>
+                            <div class="profile-field">
+                                <label>Beruf</label>
+                                <input type="text" id="profJob" placeholder="z.B. Student, Freelancer...">
+                            </div>
+                            <div class="profile-field">
+                                <label>Über mich</label>
+                                <textarea id="profBio" placeholder="Erzähl etwas über dich..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Wohnpräferenzen</div>
+                            <div class="profile-field">
+                                <label>Max. Budget</label>
+                                <input type="range" min="300" max="2000" value="800" id="profBudget"
+                                    oninput="document.getElementById('profBudgetDisplay').textContent=Number(this.value).toLocaleString('de-DE')+'€'">
+                                <div style="font-size:11px;color:#666;text-align:right;margin-top:3px" id="profBudgetDisplay">800€</div>
+                            </div>
+                            <div class="profile-field">
+                                <label>Wohntyp</label>
+                                <select id="profWohntyp">
+                                    <option value="all">Egal</option>
+                                    <option value="wg">👥 WG</option>
+                                    <option value="single">🏠 Einzelwohnung</option>
+                                    <option value="gen">🏢 Genossenschaft</option>
+                                </select>
+                            </div>
+                            <div class="profile-field">
+                                <label>Nachhaltigkeit</label>
+                                <select id="profNach">
+                                    <option value="all">Egal</option>
+                                    <option value="high">🌱 Sehr wichtig</option>
+                                    <option value="mid">Wichtig</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button class="primary" onclick="saveProfile()">💾 Profil speichern</button>
+                        <button class="btn-danger" onclick="logoutProfile()">🚪 Abmelden</button>
+                    </div>
                 </div>
             </div>
 
@@ -716,6 +955,9 @@
         let favorites = JSON.parse(localStorage.getItem('cb-favorites') || '[]');
         let currentApartment = null;
         let wgProfiles = [];
+        let userProfile = JSON.parse(localStorage.getItem('cb-profile') || '{}');
+        let viewedCount = parseInt(localStorage.getItem('cb-viewed') || '0');
+        let reviewCount = parseInt(localStorage.getItem('cb-reviews') || '0');
 
         async function loadData() {
             try {
@@ -733,6 +975,7 @@
             renderListings(allApartments);
             renderWGList(wgProfiles);
             updateFavorites();
+            loadProfile();
         }
 
         function renderListings(apartments) {
@@ -780,6 +1023,8 @@
         }
 
         function showDetail(id) {
+            viewedCount++;
+            localStorage.setItem('cb-viewed', viewedCount);
             const a = allApartments.find(x => x.id === id);
             if (!a) return;
             currentApartment = a;
@@ -893,7 +1138,87 @@
             const ta = document.querySelector('#screen4 textarea');
             if (!ta?.value.trim()) { showToast('Bitte schreibe etwas ✍️'); return; }
             ta.value = '';
+            reviewCount++;
+            localStorage.setItem('cb-reviews', reviewCount);
             showToast('Bewertung eingereicht! Danke ✅');
+        }
+
+        /* ---- Profil ---- */
+        function loadProfile() {
+            if (userProfile.name) document.getElementById('profName').value = userProfile.name;
+            if (userProfile.age)  document.getElementById('profAge').value  = userProfile.age;
+            if (userProfile.city) document.getElementById('profCity').value = userProfile.city;
+            if (userProfile.job)  document.getElementById('profJob').value  = userProfile.job;
+            if (userProfile.bio)  document.getElementById('profBio').value  = userProfile.bio;
+            if (userProfile.budget) {
+                document.getElementById('profBudget').value = userProfile.budget;
+                document.getElementById('profBudgetDisplay').textContent = Number(userProfile.budget).toLocaleString('de-DE') + '€';
+            }
+            if (userProfile.wohntyp) document.getElementById('profWohntyp').value = userProfile.wohntyp;
+            if (userProfile.nach)    document.getElementById('profNach').value    = userProfile.nach;
+            if (userProfile.avatar) {
+                const img = document.getElementById('profileAvatarImg');
+                img.src = userProfile.avatar;
+                img.style.display = 'block';
+                document.getElementById('profileAvatarEmoji').style.display = 'none';
+            }
+            refreshProfileHeader();
+        }
+
+        function refreshProfileHeader() {
+            const name = userProfile.name || 'Mein Profil';
+            const city = userProfile.city || 'Stadt';
+            const job  = userProfile.job  || 'Beruf';
+            document.getElementById('profileDisplayName').textContent = name;
+            document.getElementById('profileDisplaySub').textContent  = city + ' · ' + job;
+            document.getElementById('statFavs').textContent    = favorites.length;
+            document.getElementById('statReviews').textContent = reviewCount;
+            document.getElementById('statViews').textContent   = viewedCount;
+            const nach = userProfile.nach;
+            const badge = document.getElementById('profNachBadge');
+            if (nach === 'high') { badge.textContent = '🌱 Sehr nachhaltig'; }
+            else if (nach === 'mid') { badge.textContent = '🌿 Nachhaltig'; }
+            else { badge.textContent = '♻️ Offen für alles'; }
+        }
+
+        function saveProfile() {
+            userProfile.name     = document.getElementById('profName').value.trim();
+            userProfile.age      = document.getElementById('profAge').value;
+            userProfile.city     = document.getElementById('profCity').value.trim();
+            userProfile.job      = document.getElementById('profJob').value.trim();
+            userProfile.bio      = document.getElementById('profBio').value.trim();
+            userProfile.budget   = document.getElementById('profBudget').value;
+            userProfile.wohntyp  = document.getElementById('profWohntyp').value;
+            userProfile.nach     = document.getElementById('profNach').value;
+            localStorage.setItem('cb-profile', JSON.stringify(userProfile));
+            refreshProfileHeader();
+            showToast('Profil gespeichert ✅');
+        }
+
+        function handleAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                userProfile.avatar = e.target.result;
+                localStorage.setItem('cb-profile', JSON.stringify(userProfile));
+                const img = document.getElementById('profileAvatarImg');
+                img.src = e.target.result;
+                img.style.display = 'block';
+                document.getElementById('profileAvatarEmoji').style.display = 'none';
+                showToast('Profilbild aktualisiert 📷');
+            };
+            reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
+        function logoutProfile() {
+            localStorage.removeItem('cb-profile');
+            localStorage.removeItem('cb-favorites');
+            localStorage.removeItem('cb-viewed');
+            localStorage.removeItem('cb-reviews');
+            showToast('Erfolgreich abgemeldet 👋');
+            setTimeout(() => location.reload(), 1500);
         }
 
         function showToast(msg) {
@@ -908,6 +1233,7 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if (id === 'screen5') updateFavorites();
+            if (id === 'screen6') refreshProfileHeader();
         }
 
         document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', function() { switchScreen(this.dataset.screen); }));
