@@ -383,28 +383,153 @@
             .kpi-grid { grid-template-columns: repeat(2, 1fr); }
             .charts-row { grid-template-columns: 1fr; }
             .city-grid { grid-template-columns: repeat(2, 1fr); }
-            .map-layout { grid-template-columns: 1fr; }
+        }
+
+        /* Hamburger – nur auf Mobil sichtbar */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2.5px;
+            background: #1a1a2e;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.52);
+            z-index: 99;
+        }
+        .sidebar-overlay.show { display: block; }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+
+            .sidebar {
+                transform: translateX(-240px);
+                transition: transform 0.3s ease;
+                z-index: 200;
+            }
+            .sidebar.open { transform: translateX(0); }
+
+            .main {
+                margin-left: 0;
+                padding: 16px 12px 32px;
+            }
+
+            .topbar { margin-bottom: 16px; flex-wrap: wrap; gap: 6px; }
+            .topbar h1 { font-size: 17px; }
+            .topbar > div { display: flex; align-items: center; gap: 10px; }
+
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+            .kpi-card { padding: 14px 12px; }
+            .kpi-value { font-size: 22px; }
+
+            .charts-row { grid-template-columns: 1fr; margin-bottom: 16px; }
+            .chart-card { padding: 14px; }
+
+            .bar-label { width: 72px; font-size: 10px; }
+            .dot-label { width: 90px; font-size: 10px; }
+
+            .table-card { padding: 14px 12px; margin-bottom: 16px; }
+
+            .table-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .search-bar { flex-direction: column; width: 100%; }
+            .search-bar input,
+            .filter-select { width: 100%; }
+
+            /* Tabelle → Karten-Layout */
+            table { display: block; }
+            thead { display: none; }
+            tbody { display: block; }
+
+            tbody tr {
+                display: block;
+                background: #f8f9fa;
+                border-radius: 10px;
+                padding: 12px;
+                margin-bottom: 10px;
+                border-bottom: none;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            }
+            tbody tr:hover { background: #f0faf5; }
+
+            tbody td {
+                display: flex;
+                gap: 8px;
+                padding: 5px 0;
+                border: none;
+                font-size: 12px;
+                align-items: flex-start;
+            }
+            tbody td::before {
+                content: attr(data-label);
+                font-size: 10px;
+                font-weight: 700;
+                color: #aaa;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+                width: 76px;
+                flex-shrink: 0;
+                padding-top: 1px;
+            }
+            tbody td[data-label="#"] { display: none; }
+
+            .score-mini-track { width: 48px; }
+
+            .city-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .city-tile { padding: 10px 8px; }
+            .city-tile .city-count { font-size: 18px; }
+
+            #leafletMap { height: 280px; }
+            .map-btn { font-size: 11px; padding: 6px 10px; }
+        }
+
+        @media (max-width: 420px) {
+            .kpi-value { font-size: 19px; }
+            .kpi-card { padding: 10px; }
+            .kpi-badge { font-size: 10px; }
         }
     </style>
 </head>
 <body>
 
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 <div class="sidebar">
     <div class="sidebar-logo">🌱 Culture Beat</div>
     <div class="sidebar-sub">Admin Dashboard</div>
     <nav class="sidebar-nav">
-        <a class="active">📊 Übersicht</a>
-        <a>🏠 Wohnungen</a>
-        <a>👥 Profile</a>
-        <a>⭐ Bewertungen</a>
-        <a>🏙️ Städte</a>
+        <a class="active" onclick="closeSidebar()">📊 Übersicht</a>
+        <a onclick="closeSidebar()">🏠 Wohnungen</a>
+        <a onclick="closeSidebar()">👥 Profile</a>
+        <a onclick="closeSidebar()">⭐ Bewertungen</a>
+        <a onclick="closeSidebar()">🏙️ Städte</a>
         <a href="index.html" style="margin-top:auto;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px;">← Startseite</a>
     </nav>
 </div>
 
 <div class="main">
     <div class="topbar">
-        <h1>Wohnungsübersicht</h1>
+        <div>
+            <button class="hamburger" onclick="toggleSidebar()" aria-label="Menü">
+                <span></span><span></span><span></span>
+            </button>
+            <h1>Wohnungsübersicht</h1>
+        </div>
         <span id="lastUpdated">Geladen: –</span>
     </div>
 
@@ -730,22 +855,22 @@
 
             return `
                 <tr>
-                    <td style="color:#aaa;font-size:11px">${a.id}</td>
-                    <td><strong>${a.title}</strong><br><span style="font-size:11px;color:#888">${a.description?.substring(0,50)}...</span></td>
-                    <td>📍 ${a.location}</td>
-                    <td><strong style="color:#27ae60">${a.price}€</strong>/Mo</td>
-                    <td>${a.size} m²</td>
-                    <td style="text-align:center">${a.rooms}</td>
-                    <td><span class="energy-badge" style="background:${eColor}">${a.energyClass}</span></td>
-                    <td>${scoreBar(a.sustainability)}</td>
-                    <td>${scoreBar(a.transparency)}</td>
-                    <td>
+                    <td data-label="#" style="color:#aaa;font-size:11px">${a.id}</td>
+                    <td data-label="Titel"><strong>${a.title}</strong><br><span style="font-size:11px;color:#888">${a.description?.substring(0,50)}...</span></td>
+                    <td data-label="Stadt">📍 ${a.location}</td>
+                    <td data-label="Preis"><strong style="color:#27ae60">${a.price}€</strong>/Mo</td>
+                    <td data-label="Größe">${a.size} m²</td>
+                    <td data-label="Zimmer" style="text-align:center">${a.rooms}</td>
+                    <td data-label="Energie"><span class="energy-badge" style="background:${eColor}">${a.energyClass}</span></td>
+                    <td data-label="Nachh.">${scoreBar(a.sustainability)}</td>
+                    <td data-label="Transp.">${scoreBar(a.transparency)}</td>
+                    <td data-label="Vermieter">
                         <strong>${a.landlord?.name || '–'}</strong><br>
                         <span class="stars">${stars}</span>
                         <span style="font-size:11px;color:#888"> (${a.landlord?.reviews || 0})</span>
                     </td>
-                    <td><span class="badge ${tClass}">${a.landlord?.type || '–'}</span></td>
-                    <td style="text-align:center">
+                    <td data-label="Typ"><span class="badge ${tClass}">${a.landlord?.type || '–'}</span></td>
+                    <td data-label="Verifiziert" style="text-align:center">
                         ${a.landlord?.verified
                             ? '<span class="verified-icon" title="Verifiziert">✅</span>'
                             : '<span class="unverified-icon" title="Nicht verifiziert">○</span>'}
@@ -790,6 +915,17 @@
     }
 
     loadData();
+
+    function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('open');
+        document.getElementById('sidebarOverlay').classList.toggle('show');
+    }
+    function closeSidebar() {
+        if (window.innerWidth <= 768) {
+            document.querySelector('.sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('show');
+        }
+    }
 </script>
 </body>
 </html>
