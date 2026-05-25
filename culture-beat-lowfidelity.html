@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Culture Beat - Low Fidelity Prototyp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            border: 1px solid #ddd;
+            padding: 15px;
+        }
+
+        header {
+            border-bottom: 2px solid #000;
+            padding: 10px 0 15px 0;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            padding: 8px 12px;
+            border: 1px solid #000;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        nav button.active {
+            background: #000;
+            color: white;
+        }
+
+        /* Wireframe Elements */
+        .wireframe-box {
+            border: 2px dashed #999;
+            padding: 15px;
+            margin: 15px 0;
+            background: #f9f9f9;
+        }
+
+        .wireframe-label {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        input[type="text"],
+        input[type="range"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            border: 1px solid #000;
+            background: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button.primary {
+            background: #000;
+            color: white;
+        }
+
+        .score {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .score-label {
+            font-weight: bold;
+        }
+
+        .score-value {
+            background: #f0f0f0;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+
+        .filter-group {
+            margin: 10px 0;
+        }
+
+        .filter-group label {
+            display: block;
+            margin: 10px 0 5px 0;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .listing {
+            border: 1px solid #ccc;
+            padding: 12px;
+            margin: 10px 0;
+            cursor: pointer;
+            background: #f9f9f9;
+        }
+
+        .listing:hover {
+            background: #f0f0f0;
+        }
+
+        .listing-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .listing-meta {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .user-card {
+            border: 1px solid #ccc;
+            padding: 12px;
+            margin: 10px 0;
+            background: #f9f9f9;
+        }
+
+        .user-header {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .user-info {
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .review {
+            border-left: 3px solid #999;
+            padding: 10px;
+            margin: 10px 0;
+            background: #f9f9f9;
+        }
+
+        .review-author {
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .review-text {
+            font-size: 13px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CULTURE BEAT</h1>
+            <p style="font-size: 12px; color: #666;">Low-Fidelity Prototyp</p>
+        </header>
+
+        <nav>
+            <button class="nav-btn active" data-screen="screen1">Startseite</button>
+            <button class="nav-btn" data-screen="screen2">Wohnungsprofil</button>
+            <button class="nav-btn" data-screen="screen3">WG-Matching</button>
+            <button class="nav-btn" data-screen="screen4">Community</button>
+        </nav>
+
+        <!-- SCREEN 1: Startseite -->
+        <div id="screen1" class="screen active">
+            <div class="wireframe-box">
+                <div class="wireframe-label">Suchfeld</div>
+                <input type="text" placeholder="Stadt, Bezirk, Stadtteil...">
+            </div>
+
+            <div class="wireframe-box">
+                <div class="wireframe-label">Filter</div>
+
+                <div class="filter-group">
+                    <label>Preis (€/Monat)</label>
+                    <input type="range" min="300" max="2000" value="1000">
+                    <span style="font-size: 12px; color: #666;">bis 1.000€</span>
+                </div>
+
+                <div class="filter-group">
+                    <label>Nachhaltigkeitslevel</label>
+                    <select>
+                        <option>- Alle -</option>
+                        <option>⭐ Sehr Nachhaltig</option>
+                        <option>⭐⭐ Nachhaltig</option>
+                        <option>⭐⭐⭐ Wenig Nachhaltig</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Wohntyp</label>
+                    <select>
+                        <option>- Alle -</option>
+                        <option>WG</option>
+                        <option>Einzelwohnung</option>
+                        <option>Genossenschaft</option>
+                        <option>Co-Living</option>
+                    </select>
+                </div>
+
+                <button class="primary">Suchen</button>
+            </div>
+
+            <div class="wireframe-box">
+                <div class="wireframe-label">Ergebnisse</div>
+
+                <div class="listing" onclick="switchScreen('screen2')">
+                    <div class="listing-title">📍 Schöne 2er WG - Kreuzberg</div>
+                    <div class="listing-meta">💰 580€ | ⭐ Sehr Nachhaltig</div>
+                    <div class="listing-meta" style="margin-top: 5px;">Transparenz-Score: 4,5/5 | Scam-Sicher ✓</div>
+                </div>
+
+                <div class="listing">
+                    <div class="listing-title">📍 1er Wohnung - Neukölln</div>
+                    <div class="listing-meta">💰 650€ | ⭐⭐ Nachhaltig</div>
+                    <div class="listing-meta" style="margin-top: 5px;">Transparenz-Score: 4,0/5 | Scam-Sicher ✓</div>
+                </div>
+
+                <div class="listing">
+                    <div class="listing-title">📍 Genossenschaftswohnung - Friedrichshain</div>
+                    <div class="listing-meta">💰 520€ | ⭐ Sehr Nachhaltig</div>
+                    <div class="listing-meta" style="margin-top: 5px;">Transparenz-Score: 5,0/5 | Scam-Sicher ✓</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: Wohnungsprofil -->
+        <div id="screen2" class="screen">
+            <div class="wireframe-box">
+                <div class="wireframe-label">Wohnung</div>
+                <h2>Schöne 2er WG - Kreuzberg</h2>
+            </div>
+
+            <div class="wireframe-box">
+                <div class="wireframe-label">Grundinfos</div>
+                <div class="score">
+                    <span class="score-label">Miete:</span>
+                    <span class="score-value">580€/Monat</span>
+                </div>
+                <div class="score">
+                    <span class="score-label">Größe:</span>
+                    <span class="score-value">65 m²</span>
+                </div>
+                <div class="score">
+                    <span class="score-label">Zimmer:</span>
+                    <span class="score-value">2 + 1 Bad</span>
+                </div>
+            </div>
+
+            <div class="wireframe-box">
+                <div class="wireframe-label">Transparenz-Scores</div>
+                <div class="score">
+                    <span class="score-label">Transparenz:</span>
+                    <span class="score-value">4,5/5 ⭐</span>
+                </div>
+                <div class="score">
+                    <span class="score-label">Nachhaltigkeit:</span>
+                    <span class="score-value">⭐ Sehr Gut</span>
+                </div>
+                <div class="score">
+                    <span class="score-label">Energieverbrauch:</span>
+                    <span class="score-value">Klasse A</span>
+                </div>
+                <div class="score">
+                    <span class="score-label">Lage/Sicherheit:</span>
+                    <span class="score-value">4,2/5</span>
+                </div>
+                <div class="score">
+                    <span class="score-label">Scam-Sicherheit:</span>
+                    <span class="score-value">✓ Verifiziert</span>
+                </div>
+            </div>
+
+            <div class="wireframe-box">
+                <div class="wireframe-label">Besonderheiten</div>
+                <ul style="font-size: 13px; line-height: 1.8;">
+                    <li>✓ Balkon mit Grünflächen</li>
+                    <li>✓ ÖPNV: 5 Min zu U-Bahn</li>
+                    <li>✓ Fahrradfreundlich</li>
+                    <li>✓ Gemeinschaftsgarten</li>
+                </ul>
+            </div>
+
+            <div class="wireframe-box">
+                <div class="wireframe-label">Vermieterin</div>
+                <div class="listing">
+                    <div class="listing-title">Sarah M. (Privat)</div>
+                    <div class="listing-meta">Verifiziert seit 2022 | 8 erfolgreiche Vermietungen</div>
+                    <div class="listing-meta" style="margin-top: 8px;">Bewertung: 4,8/5 ⭐</div>
+                </div>
+            </div>
+
+            <button class="primary">Interesse anzeigen</button>
+            <button>Mit WG-Mitbewohner:innen matchen</button>
+        </div>
+
+        <!-- SCREEN 3: WG-Matching -->
+        <div id="screen3" class="screen">
+            <div class="wireframe-box">
+                <div class="wireframe-label">WG-Matching für Kreuzberg 2er WG</div>
+                <p style="font-size: 12px; margin-bottom: 15px;">Finde passende Mitbewohner:innen basierend auf:</p>
+
+                <div class="filter-group">
+                    <label>Dein Budget</label>
+                    <input type="range" min="400" max="800" value="600">
+                </div>
+
+                <div class="filter-group">
+                    <label>Nachhaltigkeitswerte</label>
+                    <select>
+                        <option>Sehr wichtig</option>
+                        <option>Wichtig</option>
+                        <option>Eher unwichtig</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Lebensstil</label>
+                    <select>
+                        <option>Ruhig & zuhause</option>
+                        <option>Sozial & Freunde</option>
+                        <option>Party & Events</option>
+                    </select>
+                </div>
+
+                <button class="primary">Matching starten</button>
+            </div>
+
+            <div class="wireframe-box">
+                <div class="wireframe-label">Potenzielle Matches</div>
+
+                <div class="user-card">
+                    <div class="user-header">👤 Alex, 26 (Matching: 92%)</div>
+                    <div class="user-info">
+                        <strong>Profil:</strong> Berufseinsteiger, nachhaltig orientiert<br>
+                        <strong>Budget:</strong> max. 580€<br>
+                        <strong>Lebensstil:</strong> Sozial, grüne Werte wichtig<br>
+                        <strong>Besonderheit:</strong> Arbeitet im Nachhaltigkeitssektor
+                    </div>
+                    <button style="margin-top: 8px;">Nachricht schreiben</button>
+                </div>
+
+                <div class="user-card">
+                    <div class="user-header">👤 Marius, 22 (Matching: 87%)</div>
+                    <div class="user-info">
+                        <strong>Profil:</strong> Student, grün interessiert<br>
+                        <strong>Budget:</strong> max. 550€<br>
+                        <strong>Lebensstil:</strong> Zuhause, gute Vibe<br>
+                        <strong>Besonderheit:</strong> Vegetarisch, Klimaaktiv
+                    </div>
+                    <button style="margin-top: 8px;">Nachricht schreiben</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: Community -->
+        <div id="screen4" class="screen">
+            <div class="wireframe-box">
+                <div class="wireframe-label">Community-Feedback & Warnungen</div>
+            </div>
+
+            <div class="wireframe-box">
+                <div class="wireframe-label">Positive Erfahrungen</div>
+
+                <div class="review">
+                    <div class="review-author">⭐⭐⭐⭐⭐ Jana (Verifiziert)</div>
+                    <div class="review-text">"Super transparente Vermieterin! Alle Infos waren akkurat. Wohnung ist toll, Nachbarschaft super freundlich."</div>
+                </div>
+
+                <div class="review">
+                    <div class="review-author">⭐⭐⭐⭐⭐ Tim (Verifiziert)</div>
+                    <div class="review-text">"Wirklich nachhaltig wie versprochen. ÖPNV ist perfekt. Gutes Preis-Leistungs-Verhältnis!"</div>
+                </div>
+            </div>
+
+            <div class="wireframe-box">
+                <div class="wireframe-label">Warnungen & Bedenken</div>
+                <div style="border-left: 3px solid #f00; padding: 10px; background: #fff9f9; margin: 10px 0;">
+                    <p style="font-size: 12px; color: #c00;"><strong>⚠️ Hinweis:</strong> Eine Nutzerin berichtet von unerwartet hohem Nebenkosten-Nachschlag. (1 Meldung)</p>
+                </div>
+            </div>
+
+            <div class="wireframe-box">
+                <div class="wireframe-label">Deine Erfahrung teilen</div>
+                <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; font-family: Arial; height: 80px;" placeholder="Deine Erfahrung mit dieser Wohnung..."></textarea>
+                <button class="primary" style="margin-top: 10px;">Feedback absenden</button>
+            </div>
+
+            <div class="wireframe-box">
+                <div class="wireframe-label">Scam-Meldungen in dieser Gegend</div>
+                <p style="font-size: 12px; color: #c00;">⚠️ 2 Scams gemeldet in Kreuzberg (letzte 3 Monate)</p>
+                <p style="font-size: 11px; color: #666; margin-top: 8px;">Diese Wohnung ist verifiziert und sicher! ✓</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+
+                this.classList.add('active');
+                document.getElementById(this.dataset.screen).classList.add('active');
+            });
+        });
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                if(b.dataset.screen === screenId) {
+                    b.classList.add('active');
+                } else {
+                    b.classList.remove('active');
+                }
+            });
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+    </script>
+</body>
+</html>

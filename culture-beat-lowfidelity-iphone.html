@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Culture Beat - Low Fidelity iPhone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* iPhone Frame */
+        .iphone-frame {
+            width: 375px;
+            height: 812px;
+            background: #000;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 0 0 8px #1a1a1a;
+            position: relative;
+        }
+
+        /* Notch */
+        .iphone-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 170px;
+            height: 28px;
+            background: #000;
+            border-radius: 0 0 35px 35px;
+            z-index: 100;
+        }
+
+        /* Screen */
+        .iphone-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 35px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 44px;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 12px;
+            color: #000;
+            border-bottom: 1px solid #eee;
+            margin-top: 8px;
+        }
+
+        .status-left {
+            display: flex;
+            gap: 5px;
+        }
+
+        .status-right {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            color: #333;
+        }
+
+        header {
+            border-bottom: 2px solid #000;
+            padding: 10px 0 15px 0;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            padding: 8px 12px;
+            border: 1px solid #000;
+            background: white;
+            cursor: pointer;
+            font-size: 11px;
+            flex: 1;
+            min-width: 80px;
+            border-radius: 4px;
+        }
+
+        nav button.active {
+            background: #000;
+            color: white;
+        }
+
+        /* Wireframe Elements */
+        .wireframe-box {
+            border: 2px dashed #999;
+            padding: 15px;
+            margin: 15px 0;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .wireframe-label {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        input[type="text"],
+        input[type="range"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            font-size: 13px;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            border: 1px solid #000;
+            background: white;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        button.primary {
+            background: #000;
+            color: white;
+        }
+
+        .score {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .score-label {
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .score-value {
+            background: #f0f0f0;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .filter-group {
+            margin: 10px 0;
+        }
+
+        .filter-group label {
+            display: block;
+            margin: 10px 0 5px 0;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .listing {
+            border: 1px solid #ccc;
+            padding: 12px;
+            margin: 10px 0;
+            cursor: pointer;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .listing:hover {
+            background: #f0f0f0;
+        }
+
+        .listing-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .listing-meta {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .user-card {
+            border: 1px solid #ccc;
+            padding: 12px;
+            margin: 10px 0;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .user-header {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .user-info {
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .review {
+            border-left: 3px solid #999;
+            padding: 10px;
+            margin: 10px 0;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .review-author {
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .review-text {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        /* Home Indicator */
+        .home-indicator {
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 8px;
+        }
+
+        .home-indicator::after {
+            content: '';
+            width: 120px;
+            height: 4px;
+            background: #000;
+            border-radius: 2px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-frame">
+        <div class="iphone-screen">
+            <div class="status-bar">
+                <div class="status-left">
+                    <span>9:41</span>
+                </div>
+                <div class="status-right">
+                    <span>📶</span>
+                    <span>📡</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+
+            <div class="content">
+                <header>
+                    <h1>CULTURE BEAT</h1>
+                    <p style="font-size: 11px; color: #666;">Low-Fidelity</p>
+                </header>
+
+                <nav>
+                    <button class="nav-btn active" data-screen="screen1">Startseite</button>
+                    <button class="nav-btn" data-screen="screen2">Details</button>
+                    <button class="nav-btn" data-screen="screen3">Match</button>
+                    <button class="nav-btn" data-screen="screen4">Community</button>
+                </nav>
+
+                <!-- SCREEN 1: Startseite -->
+                <div id="screen1" class="screen active">
+                    <div class="wireframe-box">
+                        <div class="wireframe-label">Suchfeld</div>
+                        <input type="text" placeholder="Stadt, Bezirk...">
+                    </div>
+
+                    <div class="wireframe-box">
+                        <div class="wireframe-label">Filter</div>
+
+                        <div class="filter-group">
+                            <label>Preis (€/Monat)</label>
+                            <input type="range" min="300" max="2000" value="1000">
+                            <span style="font-size: 11px; color: #666;">bis 1.000€</span>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Nachhaltigkeit</label>
+                            <select>
+                                <option>- Alle -</option>
+                                <option>⭐ Sehr Nachhaltig</option>
+                                <option>⭐⭐ Nachhaltig</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Wohntyp</label>
+                            <select>
+                                <option>- Alle -</option>
+                                <option>WG</option>
+                                <option>Einzelwohnung</option>
+                                <option>Genossenschaft</option>
+                            </select>
+                        </div>
+
+                        <button class="primary">Suchen</button>
+                    </div>
+
+                    <div class="wireframe-box">
+                        <div class="wireframe-label">Ergebnisse</div>
+
+                        <div class="listing" onclick="switchScreen('screen2')">
+                            <div class="listing-title">📍 2er WG - Kreuzberg</div>
+                            <div class="listing-meta">💰 580€ | ⭐ Nachhaltig | ✓ Sicher</div>
+                        </div>
+
+                        <div class="listing">
+                            <div class="listing-title">📍 1er Wohnung - Neukölln</div>
+                            <div class="listing-meta">💰 650€ | ⭐⭐ Nachhaltig | ✓ Sicher</div>
+                        </div>
+
+                        <div class="listing">
+                            <div class="listing-title">📍 Genossenschaft - Friedrichshain</div>
+                            <div class="listing-meta">💰 520€ | ⭐ Nachhaltig | ✓ Sicher</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCREEN 2: Wohnungsprofil -->
+                <div id="screen2" class="screen">
+                    <div class="wireframe-box">
+                        <div class="wireframe-label">Wohnung</div>
+                        <h2 style="font-size: 16px;">2er WG - Kreuzberg</h2>
+                    </div>
+
+                    <div class="wireframe-box">
+                        <div class="wireframe-label">Info</div>
+                        <div class="score">
+                            <span class="score-label">Miete:</span>
+                            <span class="score-value">580€</span>
+                        </div>
+                        <div class="score">
+                            <span class="score-label">Größe:</span>
+                            <span class="score-value">65 m²</span>
+                        </div>
+                    </div>
+
+                    <div class="wireframe-box">
+                        <div class="wireframe-label">Scores</div>
+                        <div class="score">
+                            <span class="score-label">Transparenz:</span>
+                            <span class="score-value">4,5/5</span>
+                        </div>
+                        <div class="score">
+                            <span class="score-label">Nachhaltigkeit:</span>
+                            <span class="score-value">⭐⭐⭐</span>
+                        </div>
+                        <div class="score">
+                            <span class="score-label">Lage:</span>
+                            <span class="score-value">4,2/5</span>
+                        </div>
+                        <div class="score">
+                            <span class="score-label">Scam-Sicher:</span>
+                            <span class="score-value">✓</span>
+                        </div>
+                    </div>
+
+                    <button class="primary">Interesse zeigen</button>
+                </div>
+
+                <!-- SCREEN 3: WG-Matching -->
+                <div id="screen3" class="screen">
+                    <div class="wireframe-box">
+                        <div class="wireframe-label">WG-Matching</div>
+
+                        <div class="filter-group">
+                            <label>Budget</label>
+                            <input type="range" min="400" max="800" value="600">
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Nachhaltigkeit</label>
+                            <select>
+                                <option>Sehr wichtig</option>
+                                <option>Wichtig</option>
+                            </select>
+                        </div>
+
+                        <button class="primary">Matching starten</button>
+                    </div>
+
+                    <div class="wireframe-box">
+                        <div class="wireframe-label">Top Matches</div>
+
+                        <div class="user-card">
+                            <div class="user-header">👤 Alex, 26 (92%)</div>
+                            <div class="user-info">
+                                Berufseinsteiger, nachhaltig<br>
+                                Budget: 580€<br>
+                                Lebensstil: Sozial
+                            </div>
+                            <button style="margin-top: 8px;">Nachricht</button>
+                        </div>
+
+                        <div class="user-card">
+                            <div class="user-header">👤 Marius, 22 (87%)</div>
+                            <div class="user-info">
+                                Student, grün<br>
+                                Budget: 550€<br>
+                                Lebensstil: Ruhig
+                            </div>
+                            <button style="margin-top: 8px;">Nachricht</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCREEN 4: Community -->
+                <div id="screen4" class="screen">
+                    <div class="wireframe-box">
+                        <div class="wireframe-label">Community</div>
+
+                        <div class="review">
+                            <div class="review-author">⭐⭐⭐⭐⭐ Jana</div>
+                            <div class="review-text">"Super transparent! Alles wie beschrieben. Top Wohnung!"</div>
+                        </div>
+
+                        <div class="review">
+                            <div class="review-author">⭐⭐⭐⭐⭐ Tim</div>
+                            <div class="review-text">"Nachhaltig wie versprochen. ÖPNV perfekt!"</div>
+                        </div>
+
+                        <div class="review">
+                            <div class="review-author">⚠️ Hinweis</div>
+                            <div class="review-text">Nebenkosten könnten höher sein. Vorher checken!</div>
+                        </div>
+                    </div>
+
+                    <div class="wireframe-box">
+                        <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; font-family: Arial; height: 60px;" placeholder="Deine Erfahrung..."></textarea>
+                        <button class="primary" style="margin-top: 10px;">Absenden</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+
+                this.classList.add('active');
+                document.getElementById(this.dataset.screen).classList.add('active');
+            });
+        });
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                if(b.dataset.screen === screenId) {
+                    b.classList.add('active');
+                } else {
+                    b.classList.remove('active');
+                }
+            });
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
