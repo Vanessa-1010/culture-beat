@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Culture Beat – Admin Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0; top: 0;
+            width: 220px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 24px 16px;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2ecc71;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-sub {
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+        }
+
+        /* Main */
+        .main {
+            margin-left: 220px;
+            padding: 28px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .topbar h1 {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .topbar span {
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .kpi-badge {
+            display: inline-block;
+            margin-top: 6px;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: #e8f5e9;
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .kpi-badge.warn { background: #fff3e0; color: #e67e22; }
+
+        /* Charts Row */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        /* Bar chart */
+        .bar-chart { display: flex; flex-direction: column; gap: 10px; }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .bar-label { width: 110px; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .bar-track {
+            flex: 1;
+            height: 12px;
+            background: #f0f0f0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #2ecc71, #27ae60);
+            transition: width 0.6s ease;
+        }
+
+        .bar-val { width: 48px; text-align: right; color: #333; font-weight: 600; }
+
+        /* Sustainability dots */
+        .dot-chart { display: flex; flex-direction: column; gap: 10px; }
+
+        .dot-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .dot-label { width: 140px; color: #555; }
+
+        .dots { display: flex; gap: 4px; }
+
+        .dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #e0e0e0;
+        }
+
+        .dot.filled { background: #2ecc71; }
+        .dot.half { background: linear-gradient(90deg, #2ecc71 50%, #e0e0e0 50%); }
+
+        /* Table */
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 28px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .table-header h2 { font-size: 15px; font-weight: 600; }
+
+        .search-bar {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-bar input {
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+            width: 180px;
+        }
+
+        .search-bar input:focus { border-color: #2ecc71; }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead th {
+            text-align: left;
+            padding: 10px 12px;
+            background: #f8f9fa;
+            color: #666;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        thead th:hover { background: #eef0f3; }
+
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover { background: #fafffe; }
+
+        tbody td { padding: 12px 12px; color: #333; }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-green { background: #e8f5e9; color: #27ae60; }
+        .badge-blue  { background: #e3f2fd; color: #1976d2; }
+        .badge-orange{ background: #fff3e0; color: #e67e22; }
+        .badge-red   { background: #fdecea; color: #c0392b; }
+        .badge-purple{ background: #f3e5f5; color: #7b1fa2; }
+
+        .energy-badge {
+            display: inline-block;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .stars { color: #f39c12; font-size: 12px; }
+
+        .verified-icon { color: #2ecc71; font-size: 14px; }
+        .unverified-icon { color: #ccc; font-size: 14px; }
+
+        .score-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .score-mini-track {
+            width: 60px;
+            height: 6px;
+            background: #f0f0f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .score-mini-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: #2ecc71;
+        }
+
+        /* City map placeholder */
+        .city-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .city-tile {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+            border: 1px solid #e8e8e8;
+            transition: box-shadow 0.2s;
+        }
+
+        .city-tile:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+
+        .city-tile .city-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+        .city-tile .city-count { font-size: 20px; font-weight: 700; color: #2ecc71; }
+        .city-tile .city-price { font-size: 11px; color: #888; margin-top: 2px; }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        @media (max-width: 1100px) {
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .charts-row { grid-template-columns: 1fr; }
+            .city-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-logo">🌱 Culture Beat</div>
+    <div class="sidebar-sub">Admin Dashboard</div>
+    <nav class="sidebar-nav">
+        <a class="active">📊 Übersicht</a>
+        <a>🏠 Wohnungen</a>
+        <a>👥 Profile</a>
+        <a>⭐ Bewertungen</a>
+        <a>🏙️ Städte</a>
+    </nav>
+</div>
+
+<div class="main">
+    <div class="topbar">
+        <h1>Wohnungsübersicht</h1>
+        <span id="lastUpdated">Geladen: –</span>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-label">Wohnungen gesamt</div>
+            <div class="kpi-value" id="kpiTotal">–</div>
+            <span class="kpi-badge">Aktiv</span>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Ø Mietpreis / Monat</div>
+            <div class="kpi-value" id="kpiAvgPrice">–</div>
+            <span class="kpi-badge">€</span>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Ø Nachhaltigkeitsscore</div>
+            <div class="kpi-value" id="kpiSustain">–</div>
+            <span class="kpi-badge">/ 5</span>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Verifizierte Vermieter</div>
+            <div class="kpi-value" id="kpiVerified">–</div>
+            <span class="kpi-badge warn" id="kpiUnverified">–</span>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-row">
+        <div class="chart-card">
+            <div class="chart-title">💰 Mietpreise nach Stadt</div>
+            <div class="bar-chart" id="priceChart"></div>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">🌱 Nachhaltigkeitsscore pro Wohnung</div>
+            <div class="dot-chart" id="sustainChart"></div>
+        </div>
+    </div>
+
+    <!-- Apartments Table -->
+    <div class="table-card">
+        <div class="table-header">
+            <h2>🏠 Alle Wohnungsangebote</h2>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Suche..." oninput="filterTable()">
+                <select class="filter-select" id="filterCity" onchange="filterTable()">
+                    <option value="">Alle Städte</option>
+                </select>
+                <select class="filter-select" id="filterType" onchange="filterTable()">
+                    <option value="">Alle Typen</option>
+                </select>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th onclick="sortTable('id')">#</th>
+                    <th onclick="sortTable('title')">Titel ↕</th>
+                    <th onclick="sortTable('location')">Stadt ↕</th>
+                    <th onclick="sortTable('price')">Preis ↕</th>
+                    <th onclick="sortTable('size')">Größe ↕</th>
+                    <th onclick="sortTable('rooms')">Zimmer</th>
+                    <th>Energie</th>
+                    <th onclick="sortTable('sustainability')">Nachh. ↕</th>
+                    <th onclick="sortTable('transparency')">Transp. ↕</th>
+                    <th>Vermieter</th>
+                    <th>Typ</th>
+                    <th>✓</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+        <div id="noResults" class="no-results" style="display:none">Keine Ergebnisse gefunden.</div>
+    </div>
+
+    <!-- City Overview -->
+    <div class="table-card">
+        <div class="table-header">
+            <h2>🏙️ Übersicht nach Stadt</h2>
+        </div>
+        <div class="city-grid" id="cityGrid"></div>
+    </div>
+</div>
+
+<script>
+    let allApartments = [];
+    let sortKey = 'id';
+    let sortAsc = true;
+
+    const energyColors = {
+        'A+': '#1a7f4b', 'A': '#27ae60', 'B': '#8bc34a',
+        'C': '#f39c12', 'D': '#e67e22', 'E': '#e74c3c'
+    };
+
+    const landlordTypeColors = {
+        'Genossenschaft': 'badge-green',
+        'Privat': 'badge-blue',
+        'Immobilienfirma': 'badge-orange',
+        'Startup': 'badge-purple',
+        'Verein': 'badge-green',
+        'Studentenwerk': 'badge-blue'
+    };
+
+    async function loadData() {
+        const res = await fetch('data.json');
+        const data = await res.json();
+        allApartments = data.apartments;
+
+        document.getElementById('lastUpdated').textContent =
+            'Geladen: ' + new Date().toLocaleString('de-DE');
+
+        // KPIs
+        const avgPrice = Math.round(allApartments.reduce((s, a) => s + a.price, 0) / allApartments.length);
+        const avgSustain = (allApartments.reduce((s, a) => s + a.sustainability, 0) / allApartments.length).toFixed(1);
+        const verified = allApartments.filter(a => a.landlord?.verified).length;
+        const unverified = allApartments.length - verified;
+
+        document.getElementById('kpiTotal').textContent = allApartments.length;
+        document.getElementById('kpiAvgPrice').textContent = avgPrice + '€';
+        document.getElementById('kpiSustain').textContent = avgSustain;
+        document.getElementById('kpiVerified').textContent = verified;
+        document.getElementById('kpiUnverified').textContent = unverified + ' nicht verifiziert';
+
+        // City filter
+        const cities = [...new Set(allApartments.map(a => a.location.split(',')[0].trim()))];
+        const citySelect = document.getElementById('filterCity');
+        cities.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c; opt.textContent = c;
+            citySelect.appendChild(opt);
+        });
+
+        // Type filter
+        const types = [...new Set(allApartments.map(a => a.landlord?.type).filter(Boolean))];
+        const typeSelect = document.getElementById('filterType');
+        types.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t; opt.textContent = t;
+            typeSelect.appendChild(opt);
+        });
+
+        renderPriceChart();
+        renderSustainChart();
+        renderCityGrid(data.cities);
+        renderTable(allApartments);
+    }
+
+    function renderPriceChart() {
+        const sorted = [...allApartments].sort((a, b) => b.price - a.price);
+        const max = Math.max(...sorted.map(a => a.price));
+        const html = sorted.map(a => `
+            <div class="bar-row">
+                <div class="bar-label" title="${a.title}">${a.location.split(',')[1]?.trim() || a.location}</div>
+                <div class="bar-track">
+                    <div class="bar-fill" style="width:${(a.price / max * 100).toFixed(1)}%"></div>
+                </div>
+                <div class="bar-val">${a.price}€</div>
+            </div>
+        `).join('');
+        document.getElementById('priceChart').innerHTML = html;
+    }
+
+    function renderSustainChart() {
+        const html = allApartments.map(a => {
+            const full = Math.floor(a.sustainability);
+            const half = a.sustainability % 1 >= 0.5 ? 1 : 0;
+            const empty = 5 - full - half;
+            const dots =
+                '<div class="dot filled"></div>'.repeat(full) +
+                (half ? '<div class="dot half"></div>' : '') +
+                '<div class="dot"></div>'.repeat(empty);
+            return `
+                <div class="dot-row">
+                    <div class="dot-label" title="${a.title}">${a.location.split(',')[1]?.trim() || a.location} – ${a.rooms}Zi</div>
+                    <div class="dots">${dots}</div>
+                    <span style="font-size:11px;color:#888;margin-left:4px">${a.sustainability}/5</span>
+                </div>`;
+        }).join('');
+        document.getElementById('sustainChart').innerHTML = html;
+    }
+
+    function renderCityGrid(cities) {
+        if (!cities) return;
+        const html = cities.map(c => `
+            <div class="city-tile">
+                <div class="city-name">📍 ${c.name}</div>
+                <div class="city-count">${c.apartments}</div>
+                <div class="city-price">Ø ${c.avgPrice}€/Monat</div>
+            </div>
+        `).join('');
+        document.getElementById('cityGrid').innerHTML = html;
+    }
+
+    function renderTable(data) {
+        const tbody = document.getElementById('tableBody');
+        const noRes = document.getElementById('noResults');
+
+        if (data.length === 0) {
+            tbody.innerHTML = '';
+            noRes.style.display = 'block';
+            return;
+        }
+        noRes.style.display = 'none';
+
+        tbody.innerHTML = data.map(a => {
+            const scoreBar = (val) => `
+                <div class="score-bar">
+                    <div class="score-mini-track">
+                        <div class="score-mini-fill" style="width:${val / 5 * 100}%"></div>
+                    </div>
+                    <span style="font-size:11px;color:#555">${val}</span>
+                </div>`;
+
+            const eColor = energyColors[a.energyClass] || '#999';
+            const tClass = landlordTypeColors[a.landlord?.type] || 'badge-blue';
+            const stars = '★'.repeat(Math.round(a.landlord?.rating || 0));
+
+            return `
+                <tr>
+                    <td style="color:#aaa;font-size:11px">${a.id}</td>
+                    <td><strong>${a.title}</strong><br><span style="font-size:11px;color:#888">${a.description?.substring(0,50)}...</span></td>
+                    <td>📍 ${a.location}</td>
+                    <td><strong style="color:#27ae60">${a.price}€</strong>/Mo</td>
+                    <td>${a.size} m²</td>
+                    <td style="text-align:center">${a.rooms}</td>
+                    <td><span class="energy-badge" style="background:${eColor}">${a.energyClass}</span></td>
+                    <td>${scoreBar(a.sustainability)}</td>
+                    <td>${scoreBar(a.transparency)}</td>
+                    <td>
+                        <strong>${a.landlord?.name || '–'}</strong><br>
+                        <span class="stars">${stars}</span>
+                        <span style="font-size:11px;color:#888"> (${a.landlord?.reviews || 0})</span>
+                    </td>
+                    <td><span class="badge ${tClass}">${a.landlord?.type || '–'}</span></td>
+                    <td style="text-align:center">
+                        ${a.landlord?.verified
+                            ? '<span class="verified-icon" title="Verifiziert">✅</span>'
+                            : '<span class="unverified-icon" title="Nicht verifiziert">○</span>'}
+                    </td>
+                </tr>`;
+        }).join('');
+    }
+
+    function filterTable() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const city = document.getElementById('filterCity').value;
+        const type = document.getElementById('filterType').value;
+
+        const filtered = allApartments.filter(a => {
+            const matchSearch =
+                a.title.toLowerCase().includes(search) ||
+                a.location.toLowerCase().includes(search) ||
+                (a.landlord?.name || '').toLowerCase().includes(search);
+            const matchCity = !city || a.location.startsWith(city);
+            const matchType = !type || a.landlord?.type === type;
+            return matchSearch && matchCity && matchType;
+        });
+
+        renderTable(getSorted(filtered));
+    }
+
+    function sortTable(key) {
+        if (sortKey === key) { sortAsc = !sortAsc; }
+        else { sortKey = key; sortAsc = true; }
+        filterTable();
+    }
+
+    function getSorted(data) {
+        return [...data].sort((a, b) => {
+            let va = a[sortKey], vb = b[sortKey];
+            if (typeof va === 'string') va = va.toLowerCase();
+            if (typeof vb === 'string') vb = vb.toLowerCase();
+            if (va < vb) return sortAsc ? -1 : 1;
+            if (va > vb) return sortAsc ? 1 : -1;
+            return 0;
+        });
+    }
+
+    loadData();
+</script>
+</body>
+</html>
