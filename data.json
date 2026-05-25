@@ -1,0 +1,214 @@
+{
+  "apartments": [
+    {
+      "id": 1,
+      "title": "Nachhaltige 2er WG - Kreuzberg",
+      "location": "Berlin, Kreuzberg",
+      "price": 580,
+      "size": 65,
+      "rooms": 2,
+      "image": "🏠",
+      "sustainability": 5,
+      "transparency": 4.5,
+      "safety": 4.2,
+      "features": ["Balkon", "Gemeinschaftsgarten", "ÖPNV (5 min)", "Fahrradfreundlich"],
+      "energyClass": "A",
+      "landlord": {
+        "name": "Sarah M.",
+        "type": "Privat",
+        "verified": true,
+        "rating": 4.8,
+        "reviews": 8
+      },
+      "description": "Schöne WG in ruhiger Lage mit grünem Hof. Nachhaltig ausgestattet.",
+      "highlights": ["Solar auf Dach", "Regenwassernutzung", "Bio-Gemüsegarten"]
+    },
+    {
+      "id": 2,
+      "title": "Moderne 1er Wohnung - Neukölln",
+      "location": "Berlin, Neukölln",
+      "price": 650,
+      "size": 45,
+      "rooms": 1,
+      "image": "🏢",
+      "sustainability": 3,
+      "transparency": 4.0,
+      "safety": 3.8,
+      "features": ["Neugebaut", "Fahrstuhl", "Tiefgarage", "Modern eingerichtet"],
+      "energyClass": "B",
+      "landlord": {
+        "name": "Thomas B.",
+        "type": "Immobilienfirma",
+        "verified": true,
+        "rating": 4.2,
+        "reviews": 15
+      },
+      "description": "Moderne Einzimmerwohnung mit hochwertiger Ausstattung.",
+      "highlights": ["Smart Home", "Gym im Haus", "Hausmeister"]
+    },
+    {
+      "id": 3,
+      "title": "Genossenschaftswohnung - Friedrichshain",
+      "location": "Berlin, Friedrichshain",
+      "price": 520,
+      "size": 70,
+      "rooms": 2,
+      "image": "🏛️",
+      "sustainability": 5,
+      "transparency": 5.0,
+      "safety": 4.5,
+      "features": ["Genossenschaft", "Gemeinschaftsräume", "Kinderbereich", "Fahrradkeller"],
+      "energyClass": "A",
+      "landlord": {
+        "name": "Wohngenossenschaft Friedrichshain",
+        "type": "Genossenschaft",
+        "verified": true,
+        "rating": 4.9,
+        "reviews": 42
+      },
+      "description": "Nachhaltige Genossenschaftswohnung mit fairer Miete und starker Community.",
+      "highlights": ["Fair Trade", "Community Events", "Nachhaltige Materialien"]
+    },
+    {
+      "id": 4,
+      "title": "Co-Living Space - Prenzlauer Berg",
+      "location": "Berlin, Prenzlauer Berg",
+      "price": 600,
+      "size": 60,
+      "rooms": 2,
+      "image": "🌿",
+      "sustainability": 4,
+      "transparency": 4.3,
+      "safety": 4.0,
+      "features": ["Shared Kitchen", "Coworking", "Lounge", "Nachhaltigkeit"],
+      "energyClass": "A",
+      "landlord": {
+        "name": "Co-Living Collective",
+        "type": "Startup",
+        "verified": true,
+        "rating": 4.6,
+        "reviews": 23
+      },
+      "description": "Modernes Co-Living mit jungen, nachhaltigen Menschen.",
+      "highlights": ["Social Events", "Nachbarschaft", "Flexible Verträge"]
+    },
+    {
+      "id": 5,
+      "title": "Student WG - Wedding",
+      "location": "Berlin, Wedding",
+      "price": 450,
+      "size": 55,
+      "rooms": 2,
+      "image": "🎓",
+      "sustainability": 2,
+      "transparency": 3.8,
+      "safety": 3.5,
+      "features": ["Günstiger", "Alt-Bau Charme", "Nah bei Uni", "Großer Balkon"],
+      "energyClass": "C",
+      "landlord": {
+        "name": "Petra K.",
+        "type": "Privat",
+        "verified": true,
+        "rating": 4.3,
+        "reviews": 12
+      },
+      "description": "Günstige WG ideal für Studierende mit besonderem Charakter.",
+      "highlights": ["Günstig", "Gemütlich", "Studierendenfreundlich"]
+    }
+  ],
+  "wgProfiles": [
+    {
+      "id": 1,
+      "name": "Alex",
+      "age": 26,
+      "budget": 580,
+      "sustainability": "Sehr wichtig",
+      "lifestyle": "Sozial & grün",
+      "profession": "Nachhaltigkeitsfachperson",
+      "interests": ["Yoga", "Bio-Essen", "Aktivismus"],
+      "matchScore": 92
+    },
+    {
+      "id": 2,
+      "name": "Marius",
+      "age": 22,
+      "budget": 550,
+      "sustainability": "Wichtig",
+      "lifestyle": "Ruhig & zuhause",
+      "profession": "Student Umweltwissenschaften",
+      "interests": ["Lesen", "Gaming", "Nachhaltigkeit"],
+      "matchScore": 87
+    },
+    {
+      "id": 3,
+      "name": "Jana",
+      "age": 24,
+      "budget": 600,
+      "sustainability": "Sehr wichtig",
+      "lifestyle": "Aktiv & sozial",
+      "profession": "Designer",
+      "interests": ["Kunst", "Sport", "Nachhaltigkeit"],
+      "matchScore": 85
+    },
+    {
+      "id": 4,
+      "name": "Tom",
+      "age": 28,
+      "budget": 650,
+      "sustainability": "Eher unwichtig",
+      "lifestyle": "Party & Freunde",
+      "profession": "Software Developer",
+      "interests": ["Musik", "Partys", "Coding"],
+      "matchScore": 65
+    },
+    {
+      "id": 5,
+      "name": "Sofia",
+      "age": 25,
+      "budget": 570,
+      "sustainability": "Sehr wichtig",
+      "lifestyle": "Balance",
+      "profession": "Architektin",
+      "interests": ["Design", "Natur", "Reisen"],
+      "matchScore": 88
+    }
+  ],
+  "reviews": [
+    {
+      "apartment_id": 1,
+      "author": "Jana",
+      "rating": 5,
+      "text": "Super transparente Vermieterin! Alle Infos waren akkurat. Wohnung ist toll, Nachbarschaft super freundlich.",
+      "verified": true
+    },
+    {
+      "apartment_id": 1,
+      "author": "Tim",
+      "rating": 5,
+      "text": "Wirklich nachhaltig wie versprochen. ÖPNV ist perfekt. Gutes Preis-Leistungs-Verhältnis!",
+      "verified": true
+    },
+    {
+      "apartment_id": 1,
+      "author": "User123",
+      "rating": 4,
+      "text": "Nebenkosten könnten unerwartet höher sein. Wichtig: Abrechnungen vorher ansehen!",
+      "verified": false,
+      "warning": true
+    },
+    {
+      "apartment_id": 2,
+      "author": "Klaus",
+      "rating": 4,
+      "text": "Modern und sauber, aber etwas laut wegen Straße.",
+      "verified": true
+    },
+    {
+      "apartment_id": 3,
+      "author": "Community",
+      "rating": 5,
+      "text": "Genossenschaft ist klasse! Faire Miete, tolle Community, echte Nachhaltigkeit.",
+      "verified": true
+    }
+  ]
+}

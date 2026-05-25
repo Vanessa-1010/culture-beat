@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Culture Beat - Tinder Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .iphone-frame {
+            width: 375px;
+            height: 812px;
+            background: #000;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 0 0 8px #1a1a1a;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .iphone-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 170px;
+            height: 28px;
+            background: #000;
+            border-radius: 0 0 35px 35px;
+            z-index: 100;
+        }
+
+        .iphone-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 35px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+
+        .content {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .card-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            perspective: 1000px;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 20px;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            animation: slideIn 0.3s ease-out;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .card:active {
+            cursor: grabbing;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideOut {
+            to {
+                opacity: 0;
+                transform: translateX(400px);
+            }
+        }
+
+        .card.like {
+            animation: slideOut 0.3s ease-in forwards;
+        }
+
+        @keyframes slideOutLeft {
+            to {
+                opacity: 0;
+                transform: translateX(-400px);
+            }
+        }
+
+        .card.pass {
+            animation: slideOutLeft 0.3s ease-in forwards;
+        }
+
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .card-location {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .card-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2ecc71;
+            margin-bottom: 8px;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .meta-badge {
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+
+        .card-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .feature {
+            background: #f9f9fa;
+            padding: 6px;
+            border-radius: 8px;
+            font-size: 10px;
+            color: #555;
+            text-align: center;
+        }
+
+        .card-scores {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 10px;
+        }
+
+        .score {
+            background: #e8f5e9;
+            padding: 4px 8px;
+            border-radius: 8px;
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-pass {
+            background: #f0f0f0;
+            color: #e74c3c;
+        }
+
+        .btn-super {
+            background: #ffd700;
+            color: white;
+            width: 55px;
+            height: 55px;
+        }
+
+        .btn-like {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .home-indicator {
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 8px;
+        }
+
+        .home-indicator::after {
+            content: '';
+            width: 120px;
+            height: 4px;
+            background: #000;
+            border-radius: 2px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .empty p {
+            margin-bottom: 10px;
+        }
+
+        .empty button {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-frame">
+        <div class="iphone-screen">
+            <div class="header">
+                <h1>🌱 CULTURE BEAT</h1>
+                <p>Finde deine perfekte Wohnung</p>
+            </div>
+
+            <div class="content">
+                <div class="card-container" id="cardContainer"></div>
+
+                <div class="controls">
+                    <button class="btn btn-pass" onclick="passCard()">✕</button>
+                    <button class="btn btn-super" onclick="superCard()">⭐</button>
+                    <button class="btn btn-like" onclick="likeCard()">❤️</button>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+
+    <script>
+        let apartments = [];
+        let currentIndex = 0;
+        let likes = [];
+        let passes = [];
+
+        // Load data
+        async function loadData() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                apartments = data.apartments;
+                renderCard();
+            } catch (error) {
+                console.log('Data.json nicht gefunden - nutze Demo-Daten');
+                // Demo-Daten fallback
+                apartments = [
+                    {
+                        id: 1,
+                        title: "Nachhaltige 2er WG - Kreuzberg",
+                        location: "Berlin, Kreuzberg",
+                        price: 580,
+                        size: 65,
+                        rooms: 2,
+                        image: "🏠",
+                        sustainability: 5,
+                        transparency: 4.5,
+                        safety: 4.2,
+                        features: ["Balkon", "Gemeinschaftsgarten", "ÖPNV", "Fahrradfreundlich"],
+                        energyClass: "A"
+                    }
+                ];
+                renderCard();
+            }
+        }
+
+        function renderCard() {
+            const container = document.getElementById('cardContainer');
+            container.innerHTML = '';
+
+            if (currentIndex >= apartments.length) {
+                container.innerHTML = `
+                    <div class="empty">
+                        <p>🎉 Alle Wohnungen gesehen!</p>
+                        <p>Deine Likes: ${likes.length}</p>
+                        <button onclick="reset()">↻ Nochmal</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const apt = apartments[currentIndex];
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="card-icon">${apt.image}</div>
+                <div class="card-title">${apt.title}</div>
+                <div class="card-location">📍 ${apt.location}</div>
+                <div class="card-price">💰 ${apt.price}€/Monat</div>
+                <div class="card-meta">
+                    <span class="meta-badge">${apt.size}m²</span>
+                    <span class="meta-badge">${apt.rooms} Zimmer</span>
+                    <span class="meta-badge">Energie: ${apt.energyClass}</span>
+                </div>
+                <div class="card-scores">
+                    <div class="score">🌱 Nach: ${apt.sustainability}/5</div>
+                    <div class="score">📊 Trans: ${apt.transparency}/5</div>
+                </div>
+                <div class="card-features">
+                    ${apt.features.map(f => `<div class="feature">${f}</div>`).join('')}
+                </div>
+                <div style="font-size: 11px; color: #666; margin-top: auto;">
+                    ✅ Verified | ⭐ ${apt.landlord?.rating || 4.5}/5
+                </div>
+            `;
+
+            // Drag functionality
+            let startX = 0;
+            card.addEventListener('mousedown', (e) => {
+                startX = e.clientX;
+            });
+
+            card.addEventListener('mousemove', (e) => {
+                if (startX === 0) return;
+                const diff = e.clientX - startX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) {
+                        likeCard();
+                    } else {
+                        passCard();
+                    }
+                    startX = 0;
+                }
+            });
+
+            container.appendChild(card);
+        }
+
+        function likeCard() {
+            const card = document.querySelector('.card');
+            if (card) {
+                card.classList.add('like');
+                likes.push(apartments[currentIndex]);
+                setTimeout(() => {
+                    currentIndex++;
+                    renderCard();
+                }, 300);
+            }
+        }
+
+        function passCard() {
+            const card = document.querySelector('.card');
+            if (card) {
+                card.classList.add('pass');
+                passes.push(apartments[currentIndex]);
+                setTimeout(() => {
+                    currentIndex++;
+                    renderCard();
+                }, 300);
+            }
+        }
+
+        function superCard() {
+            likeCard();
+        }
+
+        function reset() {
+            currentIndex = 0;
+            likes = [];
+            passes = [];
+            renderCard();
+        }
+
+        // Load on start
+        loadData();
+    </script>
+</body>
+</html>
