@@ -18,8 +18,8 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
+            align-items: flex-start;
+            padding: 24px 16px env(safe-area-inset-bottom, 16px);
         }
 
         .container {
@@ -93,11 +93,14 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 14px 20px;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            min-height: 48px;
+            width: 100%;
+            font-size: 15px;
         }
 
         .card-btn:hover {
@@ -246,11 +249,64 @@
         .ug-stat .num { font-size: 28px; font-weight: 800; }
         .ug-stat .lbl { font-size: 11px; opacity: 0.8; margin-top: 2px; }
 
+        /* Tablet */
         @media (max-width: 768px) {
-            header h1 { font-size: 32px; }
-            .prototypes { grid-template-columns: 1fr; }
+            header h1 { font-size: 34px; }
+            header { margin-bottom: 28px; }
+            .prototypes { grid-template-columns: 1fr 1fr; gap: 16px; }
+            .card { padding: 22px; }
             .ug-grid { grid-template-columns: repeat(2, 1fr); }
             .ug-stats { gap: 20px; }
+        }
+
+        /* iPhone / kleines Smartphone */
+        @media (max-width: 480px) {
+            body { padding: 16px 12px 32px; }
+            .container { width: 100%; }
+
+            header { margin-bottom: 20px; }
+            header h1 { font-size: 26px; letter-spacing: 0.5px; }
+            header p { font-size: 13px; }
+
+            .info { padding: 16px; margin-bottom: 14px; border-radius: 12px; }
+            .info h2 { font-size: 15px; margin-bottom: 8px; }
+            .info p { font-size: 13px; line-height: 1.6; }
+
+            .prototypes {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+
+            .card {
+                padding: 18px 16px;
+                border-radius: 14px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 0;
+            }
+
+            .card-icon { font-size: 32px; margin-bottom: 0; margin-right: 12px; flex-shrink: 0; }
+            .badge { font-size: 11px; padding: 4px 10px; margin-bottom: 6px; width: 100%; }
+            .card-title { font-size: 17px; width: 100%; margin-bottom: 6px; }
+            .card-desc { font-size: 12px; margin-bottom: 12px; width: 100%; }
+            .card-btn { font-size: 14px; padding: 12px; min-height: 44px; }
+
+            .urban-green { padding: 22px 16px; border-radius: 16px; margin-bottom: 20px; }
+            .urban-green h2 { font-size: 20px; }
+            .ug-sub { font-size: 12px; margin-bottom: 18px; }
+            .ug-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .ug-card { padding: 14px 10px; border-radius: 12px; }
+            .ug-icon { font-size: 26px; margin-bottom: 6px; }
+            .ug-card h3 { font-size: 12px; margin-bottom: 5px; }
+            .ug-card p { font-size: 11px; }
+
+            .ug-stats { gap: 10px; margin-top: 18px; padding-top: 16px; flex-wrap: wrap; justify-content: space-around; }
+            .ug-stat .num { font-size: 22px; }
+            .ug-stat .lbl { font-size: 10px; }
+
+            footer { margin-top: 20px; font-size: 12px; padding-bottom: 12px; }
         }
     </style>
 </head>
