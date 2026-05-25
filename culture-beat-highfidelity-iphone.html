@@ -830,6 +830,29 @@
             padding: 8px 0 12px;
         }
 
+        /* Gemeinsames Filter-Panel */
+        .shared-filter-bar {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 12px;
+            overflow: hidden;
+            border: 1px solid #eee;
+        }
+        .filter-bar-header {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .filter-bar-header:active { background: #fafafa; }
+        .filter-panel-body {
+            padding: 0 14px 12px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .filter-panel-body.collapsed { display: none; }
+
         /* Leaflet Popup Anpassung */
         .leaflet-popup-content-wrapper {
             border-radius: 10px !important;
@@ -879,24 +902,20 @@
                             <button class="view-btn" data-view="map" onclick="switchView('map')">🗺️ Kartensuche</button>
                         </div>
 
-                        <!-- Karten-Ansicht -->
-                        <div id="map-view" style="display:none">
-                            <div id="aptMap"></div>
-                            <p class="map-hint">Pins antippen für Details · Zoomen mit zwei Fingern</p>
-                        </div>
-
-                        <!-- Listen-Ansicht -->
-                        <div id="list-view">
-                            <div class="section">
-                                <div class="section-title">Filter</div>
-
-                                <div class="filter-group">
+                        <!-- Gemeinsames Filter-Panel -->
+                        <div class="shared-filter-bar">
+                            <div class="filter-bar-header" onclick="toggleFilterBar()">
+                                <span style="font-size:12px;font-weight:700;color:#2c3e50">🔧 Filter</span>
+                                <span id="filter-summary" style="font-size:11px;color:#888;flex:1;padding:0 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">bis 2.000€ · Alle · Alle</span>
+                                <span id="filter-chevron" style="font-size:10px;color:#aaa">▲</span>
+                            </div>
+                            <div id="filter-panel" class="filter-panel-body">
+                                <div class="filter-group" style="margin-top:10px">
                                     <label>Miete (€/Monat)</label>
                                     <input type="range" min="300" max="2000" value="2000" id="priceSlider"
                                         oninput="document.getElementById('priceDisplay').textContent='bis '+Number(this.value).toLocaleString('de-DE')+'€';filterListings()">
                                     <div style="font-size:11px;color:#666;text-align:right;margin-top:3px" id="priceDisplay">bis 2.000€</div>
                                 </div>
-
                                 <div class="filter-group">
                                     <label>Nachhaltigkeit</label>
                                     <select id="sustainSelect" onchange="filterListings()">
@@ -905,7 +924,6 @@
                                         <option value="mid">⭐⭐ Nachhaltig (3+)</option>
                                     </select>
                                 </div>
-
                                 <div class="filter-group">
                                     <label>Wohntyp</label>
                                     <select id="wohntypSelect" onchange="filterListings()">
@@ -915,10 +933,18 @@
                                         <option value="gen">🏢 Genossenschaft</option>
                                     </select>
                                 </div>
-
-                                <button class="primary" onclick="filterListings()">Wohnungen finden</button>
                             </div>
+                        </div>
 
+                        <!-- Karten-Ansicht -->
+                        <div id="map-view" style="display:none">
+                            <div id="map-count" style="font-size:11px;color:#27ae60;font-weight:700;text-align:right;padding:0 2px 6px"></div>
+                            <div id="aptMap"></div>
+                            <p class="map-hint">Pins antippen für Details · Zoomen mit zwei Fingern</p>
+                        </div>
+
+                        <!-- Listen-Ansicht -->
+                        <div id="list-view">
                             <div class="section">
                                 <div class="section-title">
                                     Angebote <span class="section-count" id="listing-count"></span>
@@ -1188,9 +1214,28 @@
             });
         }
 
+        function toggleFilterBar() {
+            const panel   = document.getElementById('filter-panel');
+            const chevron = document.getElementById('filter-chevron');
+            const open    = !panel.classList.contains('collapsed');
+            panel.classList.toggle('collapsed', open);
+            chevron.textContent = open ? '▼' : '▲';
+        }
+
+        function updateFilterSummary() {
+            const maxPrice = parseInt(document.getElementById('priceSlider')?.value || 2000);
+            const sustain  = document.getElementById('sustainSelect')?.value || 'all';
+            const wohntyp  = document.getElementById('wohntypSelect')?.value || 'all';
+            const sLabel   = sustain  === 'high' ? '4★+' : sustain  === 'mid' ? '3★+' : 'Alle';
+            const tLabel   = wohntyp  === 'wg'   ? 'WG'  : wohntyp  === 'single' ? 'Einzeln' : wohntyp === 'gen' ? 'Geno' : 'Alle';
+            const el = document.getElementById('filter-summary');
+            if (el) el.textContent = `bis ${maxPrice.toLocaleString('de-DE')}€ · ${sLabel} · ${tLabel}`;
+        }
+
         function filterListings() {
             const filtered = getFiltered();
             renderListings(filtered);
+            updateFilterSummary();
             if (aptMap) updateMapMarkers(filtered);
         }
 
@@ -1226,6 +1271,8 @@
             if (!aptMap || !markersLayer) return;
             markersLayer.clearLayers();
             const validApts = apartments.filter(a => aptCoords[a.id]);
+            const countEl = document.getElementById('map-count');
+            if (countEl) countEl.textContent = validApts.length > 0 ? `${validApts.length} Wohnung${validApts.length === 1 ? '' : 'en'} gefunden` : '😕 Keine Treffer – Filter anpassen';
 
             validApts.forEach(a => {
                 const coords = aptCoords[a.id];
