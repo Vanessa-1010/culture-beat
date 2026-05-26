@@ -830,6 +830,50 @@
             padding: 8px 0 12px;
         }
 
+        /* 7-Button Nav */
+        nav { gap: 3px !important; padding: 7px !important; }
+        nav button { padding: 6px 2px !important; font-size: 9px !important; }
+
+        /* Transparenz-Score */
+        .transp-widget { background:white; border-radius:12px; border:1px solid #e0e0e0; padding:12px 14px; margin-bottom:12px; }
+        .transp-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #f5f5f5; }
+        .transp-row:last-child { border-bottom:none; }
+        .transp-bar-wrap { flex:1; margin:0 8px; height:6px; background:#eee; border-radius:3px; overflow:hidden; }
+        .transp-bar { height:100%; border-radius:3px; background:linear-gradient(90deg,#2ecc71,#27ae60); transition:width 0.6s ease; }
+        .transp-val { font-size:11px; font-weight:700; color:#27ae60; min-width:24px; text-align:right; }
+        .transp-label { font-size:10px; color:#555; min-width:90px; }
+
+        /* Nachhaltigkeits-Check */
+        .nc-stat { text-align:center; flex:1; }
+        .nc-stat-num { font-size:20px; font-weight:800; color:#27ae60; display:block; }
+        .nc-stat-lbl { font-size:9px; color:#888; text-transform:uppercase; }
+        .nc-criterion { display:flex; align-items:center; gap:10px; background:white; border:1px solid #e8f5e9; border-radius:10px; padding:10px; margin-bottom:8px; }
+        .nc-icon { font-size:22px; flex-shrink:0; }
+        .nc-text { flex:1; }
+        .nc-title { font-size:12px; font-weight:700; color:#2c3e50; }
+        .nc-desc { font-size:10px; color:#888; margin-top:1px; }
+        .nc-score { font-size:12px; font-weight:700; color:#27ae60; }
+
+        /* Warteliste */
+        .wait-card { background:white; border-radius:12px; border:1.5px solid #e0e0e0; padding:13px; margin-bottom:10px; }
+        .wait-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; }
+        .wait-title { font-size:13px; font-weight:700; color:#2c3e50; }
+        .wait-chance { padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700; }
+        .wait-row { display:flex; justify-content:space-between; font-size:11px; padding:3px 0; color:#555; border-bottom:1px solid #f0f0f0; }
+        .wait-row:last-child { border-bottom:none; }
+        .wait-row strong { color:#2c3e50; }
+
+        /* Community Wohnmodell */
+        .comm-wohn-tab { flex:1; padding:6px 3px; border:none; background:#f0f0f0; border-radius:8px; font-size:9px; font-weight:700; color:#777; cursor:pointer; transition:all 0.2s; }
+        .comm-wohn-tab.active { background:#2ecc71; color:white; }
+        .activity-card { display:flex; align-items:flex-start; gap:10px; background:white; border:1px solid #e8f5e9; border-radius:12px; padding:11px; margin-bottom:8px; }
+        .activity-icon { font-size:24px; flex-shrink:0; margin-top:1px; }
+        .activity-body { flex:1; }
+        .activity-title { font-size:12px; font-weight:700; color:#2c3e50; margin-bottom:2px; }
+        .activity-desc { font-size:10px; color:#777; line-height:1.4; }
+        .activity-join { flex-shrink:0; background:#e8f5e9; color:#27ae60; border:none; border-radius:8px; padding:5px 10px; font-size:10px; font-weight:700; cursor:pointer; margin-top:2px; }
+        .activity-join:active { background:#c8e6c9; }
+
         /* Community Tabs */
         .comm-tabs { display:flex; gap:4px; margin-bottom:12px; }
         .comm-tab { flex:1; padding:6px 3px; border:none; background:#f0f0f0; border-radius:8px; font-size:9px; font-weight:700; color:#777; cursor:pointer; transition:all 0.2s; }
@@ -919,10 +963,11 @@
                     <nav>
                         <button class="nav-btn active" data-screen="screen1">🔍</button>
                         <button class="nav-btn" data-screen="screen2">🏠</button>
-                        <button class="nav-btn" data-screen="screen3">👥</button>
-                        <button class="nav-btn" data-screen="screen4">💬</button>
-                        <button class="nav-btn" data-screen="screen5">🗺️</button>
-                        <button class="nav-btn" data-screen="screen6">🔄</button>
+                        <button class="nav-btn" data-screen="screen3">🌱</button>
+                        <button class="nav-btn" data-screen="screen4">👥</button>
+                        <button class="nav-btn" data-screen="screen5">🤝</button>
+                        <button class="nav-btn" data-screen="screen6">🗺️</button>
+                        <button class="nav-btn" data-screen="screen7">🔄</button>
                     </nav>
 
                     <!-- SCREEN 1: Suche & Filter -->
@@ -930,6 +975,22 @@
                         <div class="search-box">
                             <input type="text" id="searchInput" placeholder="Stadt oder Stichwort..." oninput="filterListings()">
                             <button class="primary" style="width:40px;padding:10px;margin:0" onclick="filterListings()">🔍</button>
+                        </div>
+
+                        <!-- Transparenz-Score Widget -->
+                        <div class="transp-widget">
+                            <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+                                <span style="font-size:12px;font-weight:700;color:#2c3e50">🏅 Transparenz-Score</span>
+                                <span style="font-size:20px;font-weight:800;color:#27ae60" id="avg-transp-score">–</span>
+                            </div>
+                            <div id="transp-criteria" style="margin-top:10px">
+                                <div class="transp-row"><span class="transp-label">⚖️ Fairness</span><div class="transp-bar-wrap"><div class="transp-bar" id="tb-fair" style="width:0%"></div></div><span class="transp-val" id="tv-fair">–</span></div>
+                                <div class="transp-row"><span class="transp-label">💰 Preis-Leistung</span><div class="transp-bar-wrap"><div class="transp-bar" id="tb-price" style="width:0%"></div></div><span class="transp-val" id="tv-price">–</span></div>
+                                <div class="transp-row"><span class="transp-label">🌱 Nachhaltigkeit</span><div class="transp-bar-wrap"><div class="transp-bar" id="tb-nach" style="width:0%"></div></div><span class="transp-val" id="tv-nach">–</span></div>
+                                <div class="transp-row"><span class="transp-label">🔒 Seriosität</span><div class="transp-bar-wrap"><div class="transp-bar" id="tb-ser" style="width:0%"></div></div><span class="transp-val" id="tv-ser">–</span></div>
+                                <div class="transp-row"><span class="transp-label">⚡ Energieverbrauch</span><div class="transp-bar-wrap"><div class="transp-bar" id="tb-ener" style="width:0%"></div></div><span class="transp-val" id="tv-ener">–</span></div>
+                                <div class="transp-row"><span class="transp-label">🏪 Infrastruktur</span><div class="transp-bar-wrap"><div class="transp-bar" id="tb-infra" style="width:0%"></div></div><span class="transp-val" id="tv-infra">–</span></div>
+                            </div>
                         </div>
 
                         <!-- Liste / Karte Toggle -->
@@ -1012,11 +1073,58 @@
                         <div id="detail-content"></div>
                         <button class="primary" onclick="showToast('Interesse gesendet! Der Vermieter meldet sich ✅')">✉️ Interesse anzeigen</button>
                         <button id="detail-fav-btn" class="secondary" onclick="currentApartment && toggleFavorite(currentApartment.id)">🤍 Merken</button>
-                        <button class="secondary" onclick="switchScreen('screen3')">👥 WG-Match finden</button>
+                        <button class="secondary" onclick="switchScreen('screen4')">👥 WG-Match finden</button>
                     </div>
 
-                    <!-- SCREEN 3: WG-Matching -->
+                    <!-- SCREEN 3: Nachhaltigkeits-Check -->
                     <div id="screen3" class="screen">
+                        <div class="card" style="background:linear-gradient(135deg,#e8f5e9,#f0fff4);border:none">
+                            <div style="font-size:14px;font-weight:700;color:#1a7f4b;margin-bottom:10px">🌱 Nachhaltigkeits-Check</div>
+                            <div style="display:flex;gap:12px">
+                                <div class="nc-stat"><span class="nc-stat-num" id="nc-avg">4.1</span><span class="nc-stat-lbl">Ø Score</span></div>
+                                <div class="nc-stat"><span class="nc-stat-num" id="nc-high">–</span><span class="nc-stat-lbl">Sehr nachhaltig</span></div>
+                                <div class="nc-stat"><span class="nc-stat-num">A/B</span><span class="nc-stat-lbl">Top Energie</span></div>
+                            </div>
+                        </div>
+
+                        <div class="section-title" style="margin:10px 0 8px">Bewertungskriterien</div>
+                        <div class="nc-criterion">
+                            <span class="nc-icon">⚡</span>
+                            <div class="nc-text"><div class="nc-title">Energieeffizienz</div><div class="nc-desc">Energieklasse A–G · Verbrauch in kWh/m²/Jahr</div></div>
+                            <span class="nc-score">Klasse A = 5/5</span>
+                        </div>
+                        <div class="nc-criterion">
+                            <span class="nc-icon">🔥</span>
+                            <div class="nc-text"><div class="nc-title">Heizsystem</div><div class="nc-desc">Wärmepumpe, Fernwärme, Gas, Öl</div></div>
+                            <span class="nc-score">Wärmepumpe = 5/5</span>
+                        </div>
+                        <div class="nc-criterion">
+                            <span class="nc-icon">💧</span>
+                            <div class="nc-text"><div class="nc-title">Wasserverbrauch</div><div class="nc-desc">Niedrig (&lt;80L/Tag) bis Hoch (&gt;150L/Tag)</div></div>
+                            <span class="nc-score">Niedrig = 5/5</span>
+                        </div>
+                        <div class="nc-criterion">
+                            <span class="nc-icon">🚌</span>
+                            <div class="nc-text"><div class="nc-title">ÖPNV-Anbindung</div><div class="nc-desc">U-Bahn, S-Bahn, Bus &lt;5 Min. Fußweg</div></div>
+                            <span class="nc-score">Sehr gut = 5/5</span>
+                        </div>
+                        <div class="nc-criterion">
+                            <span class="nc-icon">☀️</span>
+                            <div class="nc-text"><div class="nc-title">Erneuerbare Energie</div><div class="nc-desc">Solar, Balkonkraftwerk, Ökostrom-Tarif</div></div>
+                            <span class="nc-score">Solar = +1 Bonus</span>
+                        </div>
+                        <div class="nc-criterion">
+                            <span class="nc-icon">🌳</span>
+                            <div class="nc-text"><div class="nc-title">Gemeinschaftsangebote</div><div class="nc-desc">Gemeinschaftsgarten, Kompost, Tauschbörse</div></div>
+                            <span class="nc-score">3+ Angebote = 5/5</span>
+                        </div>
+
+                        <div class="section-title" style="margin:12px 0 8px">🏆 Top Nachhaltige Wohnungen</div>
+                        <div id="nc-top-list"></div>
+                    </div>
+
+                    <!-- SCREEN 4: WG-Matching -->
+                    <div id="screen4" class="screen">
                         <div class="card">
                             <div class="card-title">👥 Finde dein WG-Match</div>
                             <div style="font-size:11px;color:#888;margin-bottom:12px">Menschen mit ähnlichen Wohnvorstellungen finden – basierend auf Persönlichkeit, Lebensstil & Nachhaltigkeit.</div>
@@ -1075,16 +1183,109 @@
                         </div>
                     </div>
 
-                    <!-- SCREEN 4: Community -->
-                    <div id="screen4" class="screen">
-                        <div class="comm-tabs">
-                            <button class="comm-tab active" onclick="showCommTab('tab-berichte',this)">📝 Berichte</button>
-                            <button class="comm-tab" onclick="showCommTab('tab-scam',this)">⚠️ Scam</button>
-                            <button class="comm-tab" onclick="showCommTab('tab-events',this)">🎉 Events</button>
-                            <button class="comm-tab" onclick="showCommTab('tab-projekte',this)">🌱 Projekte</button>
+                    <!-- SCREEN 5: Community-Wohnmodell -->
+                    <div id="screen5" class="screen">
+                        <div style="display:flex;gap:3px;margin-bottom:12px">
+                            <button class="comm-wohn-tab active" onclick="showCWTab('cw-wohnformen',this)">🏠 Wohnformen</button>
+                            <button class="comm-wohn-tab" onclick="showCWTab('cw-mitmachen',this)">🤝 Mitmachen</button>
+                            <button class="comm-wohn-tab" onclick="showCWTab('cw-community',this)">💬 Berichte</button>
                         </div>
 
-                        <div id="tab-berichte" class="comm-tab-pane">
+                        <!-- Tab: Wohnformen -->
+                        <div id="cw-wohnformen" class="comm-tab-pane">
+                            <div class="flex-card">
+                                <div class="flex-card-head">
+                                    <div class="flex-card-icon">🏛️</div>
+                                    <div><div class="flex-card-title">Wohnungsgenossenschaften</div><div class="flex-card-sub">Faire Miete · Demokratisch · Gemeinschaft</div></div>
+                                </div>
+                                <div style="font-size:11px;color:#555;margin-bottom:8px">Als Genossenschaftsmitglied profitierst du von fairen Mieten, Mitbestimmungsrechten und stabilen Mietverhältnissen ohne Eigenbedarfskündigungen.</div>
+                                <div><span class="flex-tag">Unkündbar</span><span class="flex-tag">Mitbestimmung</span><span class="flex-tag">Keine Spekulation</span></div>
+                                <button class="primary" style="margin-top:10px" onclick="showToast('Genossenschaftssuche gestartet 🏛️')">🔍 Genossenschaft finden</button>
+                            </div>
+                            <div class="flex-card">
+                                <div class="flex-card-head">
+                                    <div class="flex-card-icon">🤝</div>
+                                    <div><div class="flex-card-title">Co-Living</div><div class="flex-card-sub">Gemeinschaft · Events · Shared Spaces</div></div>
+                                </div>
+                                <div style="font-size:11px;color:#555;margin-bottom:8px">Modernes Co-Living verbindet private Rückzugsbereiche mit gemeinsam genutzten Flächen, regelmäßigen Community-Events und einer nachhaltigen Lebensweise.</div>
+                                <div><span class="flex-tag">Co-Working</span><span class="flex-tag">Events</span><span class="flex-tag">All-Inclusive</span></div>
+                                <button class="primary" style="margin-top:10px" onclick="showToast('5 Co-Living Spaces gefunden 🤝')">🤝 Co-Living finden</button>
+                            </div>
+                            <div class="flex-card">
+                                <div class="flex-card-head">
+                                    <div class="flex-card-icon">🏘️</div>
+                                    <div><div class="flex-card-title">Shared Housing</div><div class="flex-card-sub">Ressourcenteilung · Solidarisch</div></div>
+                                </div>
+                                <div style="font-size:11px;color:#555;margin-bottom:8px">Gemeinschaftliches Wohnen mit geteilten Ressourcen: Küche, Werkstatt, Garten, Fahrzeuge. Reduziert Kosten und ökologischen Fußabdruck.</div>
+                                <div><span class="flex-tag">Fahrrad-Sharing</span><span class="flex-tag">Gemeinschaftsgarten</span><span class="flex-tag">Carsharing</span></div>
+                                <button class="primary" style="margin-top:10px" onclick="showToast('Shared Housing entdecken 🏘️')">🏘️ Entdecken</button>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Mitmachen -->
+                        <div id="cw-mitmachen" class="comm-tab-pane" style="display:none">
+                            <div class="activity-card">
+                                <span class="activity-icon">🌱</span>
+                                <div class="activity-body"><div class="activity-title">Gartenarbeit</div><div class="activity-desc">Gemeinschaftsgärten pflegen, Pflanzen gießen, saisonale Bepflanzung und Kompostierung.</div></div>
+                                <button class="activity-join" onclick="showToast('Angemeldet: Gartenarbeit 🌱')">Mitmachen</button>
+                            </div>
+                            <div class="activity-card">
+                                <span class="activity-icon">🤝</span>
+                                <div class="activity-body"><div class="activity-title">Nachbarschaftshilfe</div><div class="activity-desc">Einkaufshilfe, Alltagshilfen, Tragehilfe für ältere Mitbewohner:innen, Arzttermine begleiten.</div></div>
+                                <button class="activity-join" onclick="showToast('Angemeldet: Nachbarschaftshilfe 🤝')">Mitmachen</button>
+                            </div>
+                            <div class="activity-card">
+                                <span class="activity-icon">🔨</span>
+                                <div class="activity-body"><div class="activity-title">Handwerk</div><div class="activity-desc">Renovierungsarbeiten, Gemeinschaftsräume streichen, Möbelaufbau und kleine Reparaturen.</div></div>
+                                <button class="activity-join" onclick="showToast('Angemeldet: Handwerk 🔨')">Mitmachen</button>
+                            </div>
+                            <div class="activity-card">
+                                <span class="activity-icon">🎪</span>
+                                <div class="activity-body"><div class="activity-title">Community Aktionen</div><div class="activity-desc">Kuchenbasare, Flohmärkte, Spendenaktionen und gemeinsame Aktionen für das Quartier.</div></div>
+                                <button class="activity-join" onclick="showToast('Angemeldet: Community Aktionen 🎪')">Mitmachen</button>
+                            </div>
+                            <div class="activity-card">
+                                <span class="activity-icon">💻</span>
+                                <div class="activity-body"><div class="activity-title">Digitale Unterstützung</div><div class="activity-desc">Community App betreuen, digitale Gruppen organisieren, Online-Abstimmungen unterstützen.</div></div>
+                                <button class="activity-join" onclick="showToast('Angemeldet: Digitale Unterstützung 💻')">Mitmachen</button>
+                            </div>
+                            <div class="activity-card">
+                                <span class="activity-icon">♻️</span>
+                                <div class="activity-body"><div class="activity-title">Nachhaltigkeitsprojekte</div><div class="activity-desc">Food Sharing, Energie- & Wassersparprojekte, Upcycling-Werkstatt.</div></div>
+                                <button class="activity-join" onclick="showToast('Angemeldet: Nachhaltigkeitsprojekte ♻️')">Mitmachen</button>
+                            </div>
+                            <div class="activity-card">
+                                <span class="activity-icon">🎉</span>
+                                <div class="activity-body"><div class="activity-title">Events organisieren</div><div class="activity-desc">Sommerfeste, Kochabende, Kennlernevents, Sport- & Kulturveranstaltungen planen und durchführen.</div></div>
+                                <button class="activity-join" onclick="showToast('Angemeldet: Events organisieren 🎉')">Mitmachen</button>
+                            </div>
+                            <div class="activity-card">
+                                <span class="activity-icon">🏠</span>
+                                <div class="activity-body"><div class="activity-title">Gemeinschaft pflegen</div><div class="activity-desc">Gemeinschaftsräume sauber halten, Müllplätze pflegen, Kehrwoche (z.B. Stuttgart-Tradition).</div></div>
+                                <button class="activity-join" onclick="showToast('Angemeldet: Gemeinschaft pflegen 🏠')">Mitmachen</button>
+                            </div>
+                            <div class="activity-card">
+                                <span class="activity-icon">🚲</span>
+                                <div class="activity-body"><div class="activity-title">Mobilitätsprojekte</div><div class="activity-desc">Lastenrad- & Carsharing-Projekte aufbauen, Fahrradreparaturstation betreiben.</div></div>
+                                <button class="activity-join" onclick="showToast('Angemeldet: Mobilitätsprojekte 🚲')">Mitmachen</button>
+                            </div>
+                            <div class="activity-card">
+                                <span class="activity-icon">📋</span>
+                                <div class="activity-body"><div class="activity-title">Organisation</div><div class="activity-desc">Kommunikation koordinieren, Abstimmungen verwalten, Community-Projekte und -Aufgaben planen.</div></div>
+                                <button class="activity-join" onclick="showToast('Angemeldet: Organisation 📋')">Mitmachen</button>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Berichte / Community -->
+                        <div id="cw-community" class="comm-tab-pane" style="display:none">
+                            <div class="comm-tabs" style="margin-bottom:10px">
+                                <button class="comm-tab active" onclick="showCommTab('tab-berichte',this)">📝 Berichte</button>
+                                <button class="comm-tab" onclick="showCommTab('tab-scam',this)">⚠️ Scam</button>
+                                <button class="comm-tab" onclick="showCommTab('tab-events',this)">🎉 Events</button>
+                                <button class="comm-tab" onclick="showCommTab('tab-projekte',this)">🌱 Projekte</button>
+                            </div>
+                            <div id="cw-comm-content">
+                                <div id="tab-berichte" class="comm-tab-pane">
                             <div class="review">
                                 <div class="review-header">⭐⭐⭐⭐⭐ Jana K. · Berlin Kreuzberg</div>
                                 <div class="review-text">"Alles wie beschrieben – Vermieter super transparent! Die WG ist wirklich nachhaltig eingerichtet."</div>
@@ -1182,29 +1383,80 @@
                         </div>
                     </div>
 
-                    <!-- SCREEN 5: Wohnungs-Map -->
-                    <div id="screen5" class="screen">
-                        <div style="font-size:13px;font-weight:700;color:#2c3e50;margin-bottom:8px">🗺️ Wohnungs-Map & Umgebung</div>
-                        <div class="layer-chips">
-                            <span class="layer-chip active" onclick="setMapLayer('all',this)">Alle</span>
-                            <span class="layer-chip" onclick="setMapLayer('transit',this)">🚌 ÖPNV</span>
-                            <span class="layer-chip" onclick="setMapLayer('infra',this)">🏪 Infra</span>
-                            <span class="layer-chip" onclick="setMapLayer('safety',this)">🔒 Sicherheit</span>
-                            <span class="layer-chip" onclick="setMapLayer('green',this)">🌱 Nachhaltig</span>
-                            <span class="layer-chip" onclick="setMapLayer('bike',this)">🚴 Fahrrad</span>
+                    <!-- SCREEN 6: Wartelisten + Wohnungs-Map -->
+                    <div id="screen6" class="screen">
+                        <!-- Sub-Toggle -->
+                        <div class="view-toggle" style="margin-bottom:12px">
+                            <button class="view-btn active" onclick="showS6Tab('s6-wait',this)">⏳ Wartelisten</button>
+                            <button class="view-btn" onclick="showS6Tab('s6-map',this)">🗺️ Karte</button>
                         </div>
-                        <div id="communityMap" style="height:360px;border-radius:12px;overflow:hidden;z-index:1;margin-bottom:6px"></div>
-                        <p class="map-hint">Ebene wählen · Pins antippen für Details · Zwei Finger zum Zoomen</p>
-                        <div class="map-legend">
-                            <span class="legend-item">🟢 Wohnungen</span>
-                            <span class="legend-item">🔵 ÖPNV</span>
-                            <span class="legend-item">🟡 Infrastruktur</span>
-                            <span class="legend-item">🟤 Fahrradwege</span>
+
+                        <!-- Wartelisten-Ansicht -->
+                        <div id="s6-wait">
+                            <div class="card" style="background:#fffde7;border:1.5px solid #ffe082;margin-bottom:12px">
+                                <div style="font-size:12px;font-weight:700;color:#f57f17">⏳ Wartelisten-Transparenz</div>
+                                <div style="font-size:10px;color:#666;margin-top:4px">Vollständige Übersicht: Chancen, Wartezeiten und Voraussetzungen auf einen Blick.</div>
+                            </div>
+                            <div class="wait-card">
+                                <div class="wait-head">
+                                    <div><div class="wait-title">🏛️ Genossenschaft Friedrichshain</div><div style="font-size:10px;color:#888">Berlin · 70m² · 2 Zi.</div></div>
+                                    <span class="wait-chance" style="background:#e8f5e9;color:#27ae60">85% Chance</span>
+                                </div>
+                                <div class="wait-row"><span>⏱️ Wartezeit</span><strong>ca. 6–9 Monate</strong></div>
+                                <div class="wait-row"><span>👥 Freie Plätze</span><strong>2 offen</strong></div>
+                                <div class="wait-row"><span>📋 Voraussetzungen</span><strong>Mitgliedschaft, Einlage 2.500€</strong></div>
+                                <div class="wait-row"><span>💰 Miete nach Aufnahme</span><strong>520€/Mo</strong></div>
+                                <button class="primary" style="margin-top:8px" onclick="showToast('Warteliste beigetreten ✅')">✅ Auf Warteliste setzen</button>
+                            </div>
+                            <div class="wait-card">
+                                <div class="wait-head">
+                                    <div><div class="wait-title">🌿 Co-Living Prenzlauer Berg</div><div style="font-size:10px;color:#888">Berlin · 60m² · 2 Zi.</div></div>
+                                    <span class="wait-chance" style="background:#fff3e0;color:#e65100">62% Chance</span>
+                                </div>
+                                <div class="wait-row"><span>⏱️ Wartezeit</span><strong>ca. 3–5 Monate</strong></div>
+                                <div class="wait-row"><span>👥 Freie Plätze</span><strong>1 offen</strong></div>
+                                <div class="wait-row"><span>📋 Voraussetzungen</span><strong>Bürgschaft, keine Haustiere</strong></div>
+                                <div class="wait-row"><span>💰 Miete nach Aufnahme</span><strong>600€/Mo</strong></div>
+                                <button class="primary" style="margin-top:8px" onclick="showToast('Warteliste beigetreten ✅')">✅ Auf Warteliste setzen</button>
+                            </div>
+                            <div class="wait-card">
+                                <div class="wait-head">
+                                    <div><div class="wait-title">🏢 Wohnprojekt Hamburg Eimsbüttel</div><div style="font-size:10px;color:#888">Hamburg · 75m² · 3 Zi.</div></div>
+                                    <span class="wait-chance" style="background:#fce4ec;color:#c62828">28% Chance</span>
+                                </div>
+                                <div class="wait-row"><span>⏱️ Wartezeit</span><strong>ca. 18–24 Monate</strong></div>
+                                <div class="wait-row"><span>👥 Freie Plätze</span><strong>0 – Warteliste</strong></div>
+                                <div class="wait-row"><span>📋 Voraussetzungen</span><strong>Einkommen &lt;3× Miete, Bonität</strong></div>
+                                <div class="wait-row"><span>💰 Miete nach Aufnahme</span><strong>720€/Mo</strong></div>
+                                <button class="secondary" style="margin-top:8px" onclick="showToast('Benachrichtigung aktiviert 🔔')">🔔 Benachrichtigung</button>
+                            </div>
+                            <div id="waitlist-more"></div>
+                        </div>
+
+                        <!-- Karten-Ansicht -->
+                        <div id="s6-map" style="display:none">
+                            <div style="font-size:12px;font-weight:700;color:#2c3e50;margin-bottom:8px">🗺️ Wohnungs-Map & Umgebung</div>
+                            <div class="layer-chips">
+                                <span class="layer-chip active" onclick="setMapLayer('all',this)">Alle</span>
+                                <span class="layer-chip" onclick="setMapLayer('transit',this)">🚌 ÖPNV</span>
+                                <span class="layer-chip" onclick="setMapLayer('infra',this)">🏪 Infra</span>
+                                <span class="layer-chip" onclick="setMapLayer('safety',this)">🔒 Sicherheit</span>
+                                <span class="layer-chip" onclick="setMapLayer('green',this)">🌱 Nachhaltig</span>
+                                <span class="layer-chip" onclick="setMapLayer('bike',this)">🚴 Fahrrad</span>
+                            </div>
+                            <div id="communityMap" style="height:310px;border-radius:12px;overflow:hidden;z-index:1;margin-bottom:6px"></div>
+                            <p class="map-hint">Ebene wählen · Pins antippen für Details · Zwei Finger zum Zoomen</p>
+                            <div class="map-legend">
+                                <span class="legend-item">🟢 Wohnungen</span>
+                                <span class="legend-item">🔵 ÖPNV</span>
+                                <span class="legend-item">🟡 Infrastruktur</span>
+                                <span class="legend-item">🟤 Fahrradwege</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- SCREEN 6: Flexibles Wohnmodell -->
-                    <div id="screen6" class="screen">
+                    <!-- SCREEN 7: Flexibles Wohnmodell -->
+                    <div id="screen7" class="screen">
                         <div class="card" style="background:linear-gradient(135deg,#e8f5e9,#f0fff4);border:none;margin-bottom:14px">
                             <div style="font-size:15px;font-weight:700;color:#1a7f4b">🔄 Flexibles Wohnen</div>
                             <div style="font-size:11px;color:#555;margin-top:4px">Kurzfristige, flexible und kreative Wohnlösungen – für jede Lebenssituation.</div>
@@ -1323,6 +1575,9 @@
             }
             renderListings(allApartments);
             renderWGList(wgProfiles);
+            updateTransparenzWidget();
+            updateNCStats();
+            renderNCTopList();
         }
 
         function renderListings(apartments) {
@@ -1670,7 +1925,7 @@
         }
 
         function submitReview() {
-            const ta = document.querySelector('#screen4 textarea');
+            const ta = document.querySelector('#tab-berichte textarea');
             if (!ta?.value.trim()) { showToast('Bitte schreibe etwas ✍️'); return; }
             ta.value = '';
             reviewCount++;
@@ -1786,7 +2041,11 @@
             document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('active'); if (b.dataset.screen === id) b.classList.add('active'); });
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            if (id === 'screen5') initCommunityMap();
+            if (id === 'screen3') { renderNCTopList(); updateNCStats(); }
+            if (id === 'screen6') {
+                const mapVisible = document.getElementById('s6-map')?.style.display !== 'none';
+                if (mapVisible) initCommunityMap();
+            }
         }
 
         /* ---- Community Map (Screen 5) ---- */
@@ -1802,12 +2061,12 @@
             communityMarkersLayer = L.layerGroup().addTo(communityMap);
             setTimeout(() => {
                 communityMap.invalidateSize();
-                setMapLayer('all', document.querySelector('#screen5 .layer-chip'));
+                setMapLayer('all', document.querySelector('#s6-map .layer-chip'));
             }, 200);
         }
 
         function setMapLayer(layer, el) {
-            document.querySelectorAll('#screen5 .layer-chip').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('#s6-map .layer-chip').forEach(c => c.classList.remove('active'));
             if (el) el.classList.add('active');
             if (!communityMap || !communityMarkersLayer) return;
             communityMarkersLayer.clearLayers();
@@ -1895,12 +2154,106 @@
             }
         }
 
-        /* ---- Community Tabs (Screen 4) ---- */
-        function showCommTab(tabId, btn) {
-            document.querySelectorAll('#screen4 .comm-tab-pane').forEach(p => p.style.display = 'none');
-            document.querySelectorAll('#screen4 .comm-tab').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).style.display = 'block';
+        /* ---- Outer CW-Tabs (Screen 5: Wohnformen / Mitmachen / Berichte) ---- */
+        function showCWTab(tabId, btn) {
+            ['cw-wohnformen','cw-mitmachen','cw-community'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+            document.querySelectorAll('#screen5 .comm-wohn-tab').forEach(b => b.classList.remove('active'));
+            const pane = document.getElementById(tabId);
+            if (pane) pane.style.display = 'block';
             if (btn) btn.classList.add('active');
+        }
+
+        /* ---- Inner Community-Tabs (Berichte / Scam / Events / Projekte) ---- */
+        function showCommTab(tabId, btn) {
+            ['tab-berichte','tab-scam','tab-events','tab-projekte'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+            document.querySelectorAll('#cw-community .comm-tab').forEach(b => b.classList.remove('active'));
+            const target = document.getElementById(tabId);
+            if (target) target.style.display = 'block';
+            if (btn) btn.classList.add('active');
+        }
+
+        /* ---- Screen 6 Sub-Toggle (Wartelisten / Karte) ---- */
+        function showS6Tab(tabId, btn) {
+            document.querySelectorAll('#screen6 > div[id^="s6"]').forEach(p => p.style.display = 'none');
+            document.querySelectorAll('#screen6 .view-btn').forEach(b => b.classList.remove('active'));
+            const pane = document.getElementById(tabId);
+            if (pane) pane.style.display = 'block';
+            if (btn) btn.classList.add('active');
+            if (tabId === 's6-map') setTimeout(() => initCommunityMap(), 100);
+        }
+
+        /* ---- Transparenz-Score (Screen 1) ---- */
+        function calcTransparenzScore(a) {
+            const fairness   = Math.min(5, (a.transparency || 3));
+            const preisLeist = Math.min(5, 5 - (a.price - 400) / 200);
+            const nach       = a.sustainability || 3;
+            const ser        = a.safety || 3;
+            const energie    = a.energyClass === 'A' ? 5 : a.energyClass === 'B' ? 3.5 : 2;
+            const infra      = parseFloat((3.8 + (a.id % 6) * 0.1).toFixed(1));
+            return { fairness, preisLeist, nach, ser, energie, infra };
+        }
+
+        function updateTransparenzWidget() {
+            if (!allApartments.length) return;
+            const totals = { fairness:0, preisLeist:0, nach:0, ser:0, energie:0, infra:0 };
+            allApartments.forEach(a => {
+                const s = calcTransparenzScore(a);
+                for (const k in totals) totals[k] += s[k];
+            });
+            const n = allApartments.length;
+            const avg = k => Math.min(5, totals[k] / n);
+            const fmt = v => v.toFixed(1);
+            const pct = v => Math.round(Math.min(100, v / 5 * 100)) + '%';
+
+            const overall = fmt((avg('fairness') + avg('preisLeist') + avg('nach') + avg('ser') + avg('energie') + avg('infra')) / 6);
+            const scoreEl = document.getElementById('avg-transp-score');
+            if (scoreEl) scoreEl.textContent = overall;
+
+            const pairs = [
+                ['fair', avg('fairness')], ['price', avg('preisLeist')], ['nach', avg('nach')],
+                ['ser',  avg('ser')],      ['ener',  avg('energie')],    ['infra', avg('infra')]
+            ];
+            pairs.forEach(([key, val]) => {
+                const bar = document.getElementById('tb-' + key);
+                const lbl = document.getElementById('tv-' + key);
+                if (bar) bar.style.width = pct(val);
+                if (lbl) lbl.textContent = fmt(val);
+            });
+        }
+
+        /* ---- Nachhaltigkeits-Check (Screen 3) ---- */
+        function updateNCStats() {
+            if (!allApartments.length) return;
+            const avg = (allApartments.reduce((s, a) => s + a.sustainability, 0) / allApartments.length).toFixed(1);
+            const high = allApartments.filter(a => a.sustainability >= 4).length;
+            const avgEl  = document.getElementById('nc-avg');
+            const highEl = document.getElementById('nc-high');
+            if (avgEl)  avgEl.textContent  = avg;
+            if (highEl) highEl.textContent = high;
+        }
+
+        function renderNCTopList() {
+            const el = document.getElementById('nc-top-list');
+            if (!el || !allApartments.length) return;
+            const top = [...allApartments].sort((a, b) => b.sustainability - a.sustainability).slice(0, 3);
+            el.innerHTML = top.map(a => `
+                <div class="card" style="display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer" onclick="showDetail(${a.id})">
+                    <img src="https://picsum.photos/seed/apt${a.id}a/56/56" style="width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0" loading="lazy" onerror="this.style.display='none'">
+                    <div style="flex:1;min-width:0">
+                        <div style="font-size:12px;font-weight:700;color:#1a7f4b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.title}</div>
+                        <div style="font-size:10px;color:#888">📍 ${a.location} · ${a.price}€/Mo</div>
+                        <div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap">
+                            ${'🌱'.repeat(Math.round(a.sustainability))} <span style="font-size:10px;color:#27ae60;font-weight:700">${a.sustainability}/5</span>
+                            ${a.energyClass === 'A' ? '<span style="background:#e8f5e9;color:#27ae60;font-size:9px;padding:2px 5px;border-radius:8px">⚡ Klasse A</span>' : ''}
+                        </div>
+                    </div>
+                </div>`).join('');
         }
 
         document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', function() { switchScreen(this.dataset.screen); }));
