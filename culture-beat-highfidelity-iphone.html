@@ -1554,41 +1554,46 @@
 
         /* ---- Apartment-Fotos (kuratierte Unsplash-IDs) ---- */
         const APT_PHOTOS = [
-            '1502672260266-1c1ef2d93688', // helles Wohnzimmer
-            '1560448204-e02f11c3d0e2',    // gemütliches Wohnzimmer
-            '1484154218962-a197022b5858', // moderne Küche hell
-            '1493809842364-78817add7ffb', // modernes Schlafzimmer
-            '1522708323590-d24dbb6b0267', // Wohnzimmer mit Pflanzen
-            '1574362848149-11496d93a7c7', // offenes Wohnzimmer
-            '1598928506311-c55ded91a20c', // Apartment-Interior
-            '1585771724684-38269d6639fd', // gemütlicher Raum
-            '1560185893-a55cbc8c57e8',    // Schlafzimmer modern
-            '1554995207-c18c203602cb',    // Küche modern
-            '1556909114-f6e7ad7d3136',    // Gebäude-Außenansicht
-            '1545324418-cc1a3fa10c00',    // Mehrfamilienhaus
-            '1600210492493-0b9f88564a28', // Wohnzimmer Design
-            '1600585154526-990dced4db0d', // minimalistisches Schlafzimmer
-            '1616137422659-6a765e2a4d5e', // weiße Küche
-            '1600566753086-00f18fb6b3ea', // modernes Interior
-            '1599427303058-f04cbcf4756f', // warmes Schlafzimmer
-            '1580587771525-78b9dba3b914', // modernes Apartment-Gebäude
+            '1560448204-e02f11c3d0e2',    // Wohnzimmer hell, Couch
+            '1522708323590-d24dbb6b0267', // Wohnzimmer grau modern
             '1600607687939-ce8a6c25bc1e', // skandinavisches Wohnzimmer
-            '1615874694520-474822394e73', // Küche Design
-            '1507089947368-19c1da9775ae', // Hausfront
-            '1631049307264-da0ec9d70304', // Apartment Stadtansicht
-            '1611892440504-42a792e24d32', // offener Wohnraum
-            '1560184897-ae75f418493e',    // gemütliches Interior
-            '1583847268964-b28dc8f51f92', // modernes Apartment
-            '1618221195710-dd6b41faaea6', // Interior Design warm
-            '1603512500383-aad2c65c4b5a', // Apartment hell
+            '1600585154526-990dced4db0d', // Schlafzimmer weiß minimalistisch
+            '1600566753086-00f18fb6b3ea', // Küche/Esszimmer modern
+            '1616137422659-6a765e2a4d5e', // weiße offene Küche
+            '1574362848149-11496d93a7c7', // Wohnzimmer Sectional-Sofa
+            '1545324418-cc1a3fa10c00',    // Mehrfamilienhaus Außenansicht
+            '1580587771525-78b9dba3b914', // modernes Wohngebäude
+            '1512917774080-9991f1c4c750', // Hausfront mit Grün
+            '1598928506311-c55ded91a20c', // Apartment Wohnraum
+            '1560185893-a55cbc8c57e8',    // Schlafzimmer aufgeräumt
+            '1493809842364-78817add7ffb', // Schlafzimmer Design
+            '1554995207-c18c203602cb',    // moderne Küche Holzakzente
+            '1556909114-f6e7ad7d3136',    // Stadtapartment Außen
+            '1583847268964-b28dc8f51f92', // helles Apartment-Interior
+            '1585771724684-38269d6639fd', // gemütliches Zimmer
+            '1567496898669-ee935f5f647a', // helle offene Wohnung
+            '1615874694520-474822394e73', // Küchen-Design warm
+            '1611892440504-42a792e24d32', // offener Wohnraum Loft
+            '1603512500383-aad2c65c4b5a', // Apartment Tageslicht
             '1595526051245-4506e0cbae00', // Küche mit Esstisch
+            '1631049307264-da0ec9d70304', // Apartment Stadtblick
+            '1618221195710-dd6b41faaea6', // Inneneinrichtung warm
             '1567767632407-8afeb46d721a', // Wohnbereich mit Balkon
-            '1513694203232-719a899e4135', // Wohnzimmer Couch
+            '1513694203232-719a899e4135', // Wohnzimmer mit Sofa
+            '1507089947368-19c1da9775ae', // Hausfront Außen
+            '1599427303058-f04cbcf4756f', // Schlafzimmer warm beleuchtet
+            '1502672260266-1c1ef2d93688', // Interior warme Töne
+            '1571508601891-ca5e7a713859', // Apartment Innenraum
         ];
+        const FALLBACK_PHOTO = 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=350&h=200&q=80';
         function getAptPhoto(id, variant, w, h) {
             const offset = variant === 'b' ? 1 : variant === 'c' ? 2 : 0;
             const idx = ((id - 1) * 3 + offset) % APT_PHOTOS.length;
             return `https://images.unsplash.com/photo-${APT_PHOTOS[idx]}?auto=format&fit=crop&w=${w}&h=${h}&q=80`;
+        }
+        function onAptImgError(el) {
+            el.onerror = null;
+            el.src = FALLBACK_PHOTO;
         }
         function getPersonPhoto(seed, w, h) {
             const people = [
@@ -1653,7 +1658,7 @@
                 const verBadge = a.landlord?.verified ? '<span class="meta-badge" style="color:#27ae60;border-color:#c8f0d8">✅ Verifiziert</span>' : '';
                 const scamBadge = a.safety >= 4 ? '<span class="meta-badge" style="color:#27ae60;border-color:#c8f0d8">🔒</span>' : '';
                 return `<div class="listing-row">
-                    <img src="${getAptPhoto(a.id,'a',80,60)}" class="listing-thumb" loading="lazy" onerror="this.style.display='none'" onclick="showDetail(${a.id})">
+                    <img src="${getAptPhoto(a.id,'a',80,60)}" class="listing-thumb" loading="lazy" onerror="onAptImgError(this)" onclick="showDetail(${a.id})">
                     <div class="listing" style="flex:1;margin-bottom:0" onclick="showDetail(${a.id})">
                         <div class="listing-title">${a.image} ${a.title}</div>
                         <div class="listing-meta">
@@ -1826,7 +1831,7 @@
             ];
             const galleryHtml = `<div class="gallery-wrap">
                    <div class="gallery-track" id="galleryTrack" onscroll="onGalleryScroll()">
-                       ${imgs.map((src, i) => `<img class="gallery-img" src="${src}" alt="Foto ${i+1}" loading="lazy">`).join('')}
+                       ${imgs.map((src, i) => `<img class="gallery-img" src="${src}" alt="Foto ${i+1}" loading="lazy" onerror="onAptImgError(this)">`).join('')}
                    </div>
                    <div class="gallery-counter" id="galleryCounter">1 / ${imgs.length}</div>
                </div>
@@ -2310,7 +2315,7 @@
             const top = [...allApartments].sort((a, b) => b.sustainability - a.sustainability).slice(0, 3);
             el.innerHTML = top.map(a => `
                 <div class="card" style="display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer" onclick="showDetail(${a.id})">
-                    <img src="${getAptPhoto(a.id,'a',56,56)}" style="width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0" loading="lazy" onerror="this.style.display='none'">
+                    <img src="${getAptPhoto(a.id,'a',56,56)}" style="width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0" loading="lazy" onerror="onAptImgError(this)">
                     <div style="flex:1;min-width:0">
                         <div style="font-size:12px;font-weight:700;color:#1a7f4b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.title}</div>
                         <div style="font-size:10px;color:#888">📍 ${a.location} · ${a.price}€/Mo</div>
