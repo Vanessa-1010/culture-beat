@@ -1081,7 +1081,7 @@
                         <div class="card" style="background:linear-gradient(135deg,#e8f5e9,#f0fff4);border:none">
                             <div style="font-size:14px;font-weight:700;color:#1a7f4b;margin-bottom:10px">🌱 Nachhaltigkeits-Check</div>
                             <div style="display:flex;gap:12px">
-                                <div class="nc-stat"><span class="nc-stat-num" id="nc-avg">4.1</span><span class="nc-stat-lbl">Ø Score</span></div>
+                                <div class="nc-stat"><span class="nc-stat-num" id="nc-avg">–</span><span class="nc-stat-lbl">Ø Score</span></div>
                                 <div class="nc-stat"><span class="nc-stat-num" id="nc-high">–</span><span class="nc-stat-lbl">Sehr nachhaltig</span></div>
                                 <div class="nc-stat"><span class="nc-stat-num">A/B</span><span class="nc-stat-lbl">Top Energie</span></div>
                             </div>
@@ -1381,7 +1381,9 @@
                                 <button class="primary" onclick="showToast('Interesse vermerkt ☀️')">Interesse bekunden</button>
                             </div>
                         </div>
-                    </div>
+                            </div><!-- /cw-comm-content -->
+                        </div><!-- /cw-community -->
+                    </div><!-- /screen5 -->
 
                     <!-- SCREEN 6: Wartelisten + Wohnungs-Map -->
                     <div id="screen6" class="screen">
@@ -1566,7 +1568,7 @@
                 const data = await res.json();
                 allApartments = data.apartments;
                 wgProfiles = data.wgProfiles || [];
-            } catch {
+            } catch (err) { console.warn('data.json nicht erreichbar, Fallback aktiv', err);
                 allApartments = [
                     {id:1,title:"2er WG - Kreuzberg",location:"Berlin, Kreuzberg",price:580,size:65,rooms:2,image:"🏠",sustainability:5,transparency:4.5,safety:4.2,energyClass:"A",features:["Balkon","Gemeinschaftsgarten","ÖPNV","Fahrradfreundlich"],landlord:{name:"Sarah M.",type:"Privat",verified:true,rating:4.8,reviews:8},description:"Schöne WG in ruhiger Lage mit grünem Hof."},
                     {id:2,title:"1er Wohnung - Neukölln",location:"Berlin, Neukölln",price:650,size:45,rooms:1,image:"🏢",sustainability:3,transparency:4.0,safety:3.8,energyClass:"B",features:["Neugebaut","Fahrstuhl","Tiefgarage"],landlord:{name:"Thomas B.",type:"Immobilienfirma",verified:true,rating:4.2,reviews:15},description:"Moderne Einzimmerwohnung mit hochwertiger Ausstattung."},
@@ -1676,7 +1678,7 @@
 
         /* ---- Kartensuche ---- */
         function switchView(view) {
-            document.querySelectorAll('.view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+            document.querySelectorAll('#screen1 .view-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view));
             const mapEl  = document.getElementById('map-view');
             const listEl = document.getElementById('list-view');
             if (view === 'map') {
@@ -2191,10 +2193,10 @@
         /* ---- Transparenz-Score (Screen 1) ---- */
         function calcTransparenzScore(a) {
             const fairness   = Math.min(5, (a.transparency || 3));
-            const preisLeist = Math.min(5, 5 - (a.price - 400) / 200);
+            const preisLeist = Math.max(0, Math.min(5, 5 - (a.price - 400) / 200));
             const nach       = a.sustainability || 3;
             const ser        = a.safety || 3;
-            const energie    = a.energyClass === 'A' ? 5 : a.energyClass === 'B' ? 3.5 : 2;
+            const energie    = (a.energyClass === 'A+' || a.energyClass === 'A') ? 5 : a.energyClass === 'B' ? 3.5 : 2;
             const infra      = parseFloat((3.8 + (a.id % 6) * 0.1).toFixed(1));
             return { fairness, preisLeist, nach, ser, energie, infra };
         }
