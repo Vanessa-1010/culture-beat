@@ -1566,17 +1566,6 @@
             el.onerror = null;
             el.src = `https://loremflickr.com/350/200/apartment,room/all?lock=99`;
         }
-        function getPersonPhoto(seed, w, h) {
-            const people = [
-                '1507003211169-0a1dd7228f2d','1494790108377-be9c29b29330',
-                '1527980965255-d3b416303d2f','1438761681033-6461ffad8d80',
-                '1500648767791-00dcc994a43e','1534528741775-53994a69daeb',
-                '1472099645785-5658abf4ff4e','1544005313-94ddf0286df2',
-            ];
-            const idx = (typeof seed === 'number' ? seed : seed.charCodeAt(0)) % people.length;
-            return `https://images.unsplash.com/photo-${people[idx]}?auto=format&fit=crop&w=${w}&h=${h}&q=80`;
-        }
-
         // Karten
         let aptMap = null;
         let markersLayer = null;
