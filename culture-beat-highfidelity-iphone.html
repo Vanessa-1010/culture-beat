@@ -1784,7 +1784,7 @@
             const stars  = '⭐'.repeat(Math.min(5, Math.round(a.sustainability)));
             const feats  = (a.features||[]).map(f => `<div class="feature-item"><div class="feature-icon">✅</div><div>${f}</div></div>`).join('');
 
-            const imgs = a.images?.length ? a.images : [
+            const imgs = [
                 getAptPhoto(a.id,'a',350,200),
                 getAptPhoto(a.id,'b',350,200),
                 getAptPhoto(a.id,'c',350,200)
