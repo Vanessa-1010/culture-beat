@@ -830,6 +830,42 @@
             padding: 8px 0 12px;
         }
 
+        /* Community Tabs */
+        .comm-tabs { display:flex; gap:4px; margin-bottom:12px; }
+        .comm-tab { flex:1; padding:6px 3px; border:none; background:#f0f0f0; border-radius:8px; font-size:9px; font-weight:700; color:#777; cursor:pointer; transition:all 0.2s; }
+        .comm-tab.active { background:#2ecc71; color:white; }
+        .comm-tab-pane { animation: fadeIn 0.2s; }
+
+        /* Layer Chips (Map Screen) */
+        .layer-chips { display:flex; gap:5px; margin-bottom:10px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; }
+        .layer-chips::-webkit-scrollbar { display:none; }
+        .layer-chip { flex-shrink:0; padding:5px 10px; border:1.5px solid #e0e0e0; background:white; border-radius:20px; font-size:10px; font-weight:700; color:#666; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+        .layer-chip.active { background:#2ecc71; color:white; border-color:#2ecc71; }
+
+        /* Map Legend */
+        .map-legend { display:flex; gap:10px; padding:4px 0 8px; flex-wrap:wrap; }
+        .legend-item { font-size:10px; color:#666; }
+
+        /* Flexible Wohnmodell */
+        .flex-card { background:white; border:1.5px solid #e8f5e9; border-radius:14px; padding:14px; margin-bottom:12px; }
+        .flex-card-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+        .flex-card-icon { width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg,#2ecc71,#27ae60); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+        .flex-card-title { font-weight:700; font-size:13px; color:#2c3e50; }
+        .flex-card-sub { font-size:10px; color:#888; margin-top:1px; }
+        .flex-tag { display:inline-block; background:#e8f5e9; color:#27ae60; padding:3px 7px; border-radius:10px; font-size:9px; font-weight:600; margin:2px 2px 0 0; }
+
+        /* Scam-Warnkarte */
+        .scam-card { background:#fff5f5; border-left:3px solid #e74c3c; border-radius:8px; padding:10px; margin-bottom:8px; }
+        .scam-card-title { font-size:11px; font-weight:700; color:#c0392b; margin-bottom:3px; }
+
+        /* Toggle-Chips für boolesche Filter */
+        .filter-chips { display:flex; gap:6px; flex-wrap:wrap; }
+        .filter-chip { padding:5px 11px; border:1.5px solid #e0e0e0; background:white; border-radius:20px; font-size:11px; font-weight:600; color:#666; cursor:pointer; transition:all 0.2s; user-select:none; }
+        .filter-chip.on { background:#e8f5e9; color:#27ae60; border-color:#2ecc71; }
+
+        /* Listing Thumbnail */
+        .listing-thumb { width:72px; height:58px; border-radius:8px; object-fit:cover; flex-shrink:0; background:#e8f5e9; }
+
         /* Gemeinsames Filter-Panel */
         .shared-filter-bar {
             background: white;
@@ -885,8 +921,8 @@
                         <button class="nav-btn" data-screen="screen2">🏠</button>
                         <button class="nav-btn" data-screen="screen3">👥</button>
                         <button class="nav-btn" data-screen="screen4">💬</button>
-                        <button class="nav-btn" data-screen="screen5">❤️</button>
-                        <button class="nav-btn" data-screen="screen6">👤</button>
+                        <button class="nav-btn" data-screen="screen5">🗺️</button>
+                        <button class="nav-btn" data-screen="screen6">🔄</button>
                     </nav>
 
                     <!-- SCREEN 1: Suche & Filter -->
@@ -930,8 +966,25 @@
                                         <option value="all">Alle Typen</option>
                                         <option value="wg">👥 WG (2+ Zimmer)</option>
                                         <option value="single">🏠 Einzelwohnung</option>
-                                        <option value="gen">🏢 Genossenschaft</option>
+                                        <option value="gen">🏛️ Genossenschaft</option>
+                                        <option value="coliving">🤝 Co-Living</option>
                                     </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Lage</label>
+                                    <select id="lageSelect" onchange="filterListings()">
+                                        <option value="all">📍 Alle Lagen</option>
+                                        <option value="city">🏙️ Stadtmitte</option>
+                                        <option value="suburb">🌳 Stadtrand / Vorort</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Schnellfilter</label>
+                                    <div class="filter-chips">
+                                        <span class="filter-chip" id="chip-scam" onclick="toggleChip('chip-scam')">🔒 Scam-Schutz</span>
+                                        <span class="filter-chip" id="chip-comm" onclick="toggleChip('chip-comm')">🤝 Community</span>
+                                        <span class="filter-chip" id="chip-verif" onclick="toggleChip('chip-verif')">✅ Verifiziert</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -966,6 +1019,7 @@
                     <div id="screen3" class="screen">
                         <div class="card">
                             <div class="card-title">👥 Finde dein WG-Match</div>
+                            <div style="font-size:11px;color:#888;margin-bottom:12px">Menschen mit ähnlichen Wohnvorstellungen finden – basierend auf Persönlichkeit, Lebensstil & Nachhaltigkeit.</div>
 
                             <div class="filter-group">
                                 <label>Mein Budget</label>
@@ -983,144 +1037,243 @@
                                 </select>
                             </div>
 
-                            <button class="primary" onclick="runWGMatching()">Matching starten 🔥</button>
+                            <div class="filter-group">
+                                <label>Lebensstil</label>
+                                <select id="wgLifeSelect">
+                                    <option value="all">🌈 Egal</option>
+                                    <option value="quiet">😌 Ruhig & entspannt</option>
+                                    <option value="active">🏃 Aktiv & sozial</option>
+                                    <option value="homeofc">💻 Homeoffice-fokussiert</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <label>Wohnvorstellung</label>
+                                <select id="wgTypeSelect">
+                                    <option value="all">🏠 Egal</option>
+                                    <option value="wg">👥 Klassische WG</option>
+                                    <option value="gen">🏛️ Genossenschaft</option>
+                                    <option value="coliving">🤝 Co-Living</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <label>Gemeinsame Ziele</label>
+                                <div class="filter-chips">
+                                    <span class="filter-chip" id="goal-green" onclick="this.classList.toggle('on')">🌱 Nachhaltigkeit</span>
+                                    <span class="filter-chip" id="goal-comm" onclick="this.classList.toggle('on')">🤝 Community</span>
+                                    <span class="filter-chip" id="goal-veg" onclick="this.classList.toggle('on')">🥦 Vegetarisch</span>
+                                </div>
+                            </div>
+
+                            <button class="primary" onclick="runWGMatching()">🔥 Matching starten</button>
                         </div>
 
                         <div class="section">
-                            <div class="section-title">Top Matches</div>
+                            <div class="section-title">Top Matches <span id="match-count" class="section-count"></span></div>
                             <div id="wg-matches-container"></div>
                         </div>
                     </div>
 
                     <!-- SCREEN 4: Community -->
                     <div id="screen4" class="screen">
-                        <div class="section">
-                            <div class="section-title">Bewertungen</div>
+                        <div class="comm-tabs">
+                            <button class="comm-tab active" onclick="showCommTab('tab-berichte',this)">📝 Berichte</button>
+                            <button class="comm-tab" onclick="showCommTab('tab-scam',this)">⚠️ Scam</button>
+                            <button class="comm-tab" onclick="showCommTab('tab-events',this)">🎉 Events</button>
+                            <button class="comm-tab" onclick="showCommTab('tab-projekte',this)">🌱 Projekte</button>
+                        </div>
 
+                        <div id="tab-berichte" class="comm-tab-pane">
                             <div class="review">
-                                <div class="review-header">⭐⭐⭐⭐⭐ Jana</div>
-                                <div class="review-text">"Super transparent! Alles wie beschrieben. Top Wohnung!"</div>
+                                <div class="review-header">⭐⭐⭐⭐⭐ Jana K. · Berlin Kreuzberg</div>
+                                <div class="review-text">"Alles wie beschrieben – Vermieter super transparent! Die WG ist wirklich nachhaltig eingerichtet."</div>
                             </div>
-
                             <div class="review">
-                                <div class="review-header">⭐⭐⭐⭐⭐ Tim</div>
-                                <div class="review-text">"Nachhaltig wie versprochen. ÖPNV perfekt!"</div>
+                                <div class="review-header">⭐⭐⭐⭐ Tim R. · Hamburg</div>
+                                <div class="review-text">"ÖPNV-Anbindung perfekt. Nachbarschaft sehr freundlich. Nachhaltig wie versprochen!"</div>
                             </div>
-
+                            <div class="review">
+                                <div class="review-header">⭐⭐⭐⭐⭐ Maria S. · München</div>
+                                <div class="review-text">"Genossenschaft hält was sie verspricht. Faire Miete, tolle Gemeinschaft, keine versteckten Kosten."</div>
+                            </div>
                             <div class="review warning">
-                                <div class="review-header">⚠️ Hinweis</div>
-                                <div class="review-text">Nebenkosten können höher sein. Vorher checken!</div>
+                                <div class="review-header">💡 Empfehlung · Nebenkosten</div>
+                                <div class="review-text">Nebenkosten immer schriftlich anfordern – können von der Schätzung abweichen!</div>
+                            </div>
+                            <div class="review warning">
+                                <div class="review-header">💡 Tipp · Vermieter-Check</div>
+                                <div class="review-text">Vor Vertragsunterzeichnung immer Vermieter-Rating + Verifizierungsstatus prüfen.</div>
+                            </div>
+                            <div class="section" style="margin-top:12px">
+                                <div class="section-title">Deine Erfahrung teilen</div>
+                                <textarea placeholder="Was hast du erlebt? Hilf anderen bei der Wohnungssuche..."></textarea>
+                                <button class="primary" onclick="submitReview()">📤 Erfahrung teilen</button>
                             </div>
                         </div>
 
-                        <div class="section">
-                            <div class="section-title">Deine Erfahrung</div>
-                            <textarea placeholder="Deine Erfahrung..."></textarea>
-                            <button class="primary" onclick="submitReview()">📤 Absenden</button>
-                        </div>
-
-                        <div class="card">
-                            <div style="font-size: 13px; color: #27ae60; font-weight: 700;">✓ Verifiziert</div>
-                            <div style="font-size: 12px; color: #666; margin-top: 5px;">Diese Wohnung ist sicher!</div>
-                        </div>
-                    </div>
-                    <!-- SCREEN 5: Merkliste -->
-                    <div id="screen5" class="screen">
-                        <div class="section">
-                            <div class="section-title">❤️ Meine Merkliste</div>
-                            <div id="favorites-container"></div>
-                        </div>
-                    </div>
-
-                    <!-- SCREEN 6: Profil -->
-                    <div id="screen6" class="screen">
-                        <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(event)">
-
-                        <div class="profile-header">
-                            <div class="profile-avatar" onclick="document.getElementById('avatarInput').click()" title="Foto hochladen">
-                                <span id="profileAvatarEmoji">👤</span>
-                                <img id="profileAvatarImg" src="" alt="Profilbild" style="display:none">
-                                <div class="avatar-overlay">📷 Ändern</div>
+                        <div id="tab-scam" class="comm-tab-pane" style="display:none">
+                            <div class="card" style="background:#fff5f5;border:1.5px solid #ffc8c8">
+                                <div style="font-size:12px;font-weight:700;color:#c0392b;margin-bottom:5px">🛡️ Culture Beat Scam-Schutz aktiv</div>
+                                <div style="font-size:11px;color:#666">Alle angezeigten Angebote wurden auf Seriosität geprüft. Verdächtige Inserate werden automatisch markiert.</div>
                             </div>
-                            <div class="profile-info">
-                                <div class="profile-name" id="profileDisplayName">Mein Profil</div>
-                                <div class="profile-sub" id="profileDisplaySub">Stadt · Beruf</div>
-                                <div class="profile-stats">
-                                    <div class="stat-item">
-                                        <span class="stat-num" id="statFavs">0</span>
-                                        <span class="stat-lbl">Gemerkt</span>
-                                    </div>
-                                    <div class="stat-item">
-                                        <span class="stat-num" id="statReviews">0</span>
-                                        <span class="stat-lbl">Bewertungen</span>
-                                    </div>
-                                    <div class="stat-item">
-                                        <span class="stat-num" id="statViews">0</span>
-                                        <span class="stat-lbl">Gesehen</span>
-                                    </div>
+                            <div class="scam-card">
+                                <div class="scam-card-title">⚠️ Vorauszahlung ohne Besichtigung</div>
+                                <div style="font-size:11px;color:#555">Vermieter verlangen Kaution vor Besichtigung – sofort melden! Niemals ohne Besichtigung zahlen.</div>
+                            </div>
+                            <div class="scam-card">
+                                <div class="scam-card-title">⚠️ Verdächtige Anzeige: Schillerstr. 14</div>
+                                <div style="font-size:11px;color:#555">Unrealistisch niedrige Miete, keine verifizierten Dokumente. Community hat gemeldet.</div>
+                            </div>
+                            <div class="scam-card">
+                                <div class="scam-card-title">⚠️ Phishing-Versuch per E-Mail</div>
+                                <div style="font-size:11px;color:#555">Gefälschte Culture-Beat-Mails im Umlauf. Kommunikation nur über die App!</div>
+                            </div>
+                            <div class="review" style="border-left-color:#27ae60">
+                                <div class="review-header">✅ Sichere Vermieter in deiner Nähe</div>
+                                <div class="review-text">14 verifizierte Vermieter in Berlin · 8 in Hamburg · 6 in München</div>
+                            </div>
+                            <button class="primary" onclick="showToast('Warnung gemeldet – Danke! 🛡️')">⚠️ Warnung melden</button>
+                        </div>
+
+                        <div id="tab-events" class="comm-tab-pane" style="display:none">
+                            <div class="card">
+                                <div style="font-size:13px;font-weight:700;color:#2c3e50">🏡 Nachbarschaftsfest Kreuzberg</div>
+                                <div style="font-size:11px;color:#888;margin:3px 0">Sa. 07. Juni · 14:00 Uhr · Görlitzer Park</div>
+                                <div style="font-size:11px;color:#555;margin-bottom:8px">Grillen, Tauschbörse und Community-Projekte – alle willkommen!</div>
+                                <button class="primary" onclick="showToast('Angemeldet! Bis Samstag 🎉')">✔ Teilnehmen</button>
+                            </div>
+                            <div class="card">
+                                <div style="font-size:13px;font-weight:700;color:#2c3e50">🗳️ Abstimmung: Gemeinschaftsraum-Konzept</div>
+                                <div style="font-size:11px;color:#888;margin:3px 0">Bis 30. Mai · Genossenschaft Friedrichshain</div>
+                                <div style="font-size:11px;color:#555;margin-bottom:8px">Nutzungskonzept für den neuen Gemeinschaftsraum – deine Stimme zählt!</div>
+                                <div style="display:flex;gap:8px">
+                                    <button class="primary" style="flex:1;margin-top:0;font-size:11px" onclick="showToast('Stimme gezählt ✅')">👍 Dafür (68%)</button>
+                                    <button class="secondary" style="flex:1;margin-top:0;font-size:11px" onclick="showToast('Stimme gezählt ✅')">👎 Dagegen (32%)</button>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="profile-badges">
-                            <span class="profile-badge">✅ Verifiziert</span>
-                            <span class="profile-badge" id="profNachBadge">🌱 Nachhaltig</span>
-                            <span class="profile-badge">⭐ Aktiv</span>
-                        </div>
-
-                        <div class="section">
-                            <div class="section-title">Persönliche Daten</div>
-                            <div class="profile-field">
-                                <label>Name</label>
-                                <input type="text" id="profName" placeholder="Dein Name">
-                            </div>
-                            <div class="profile-field">
-                                <label>Alter</label>
-                                <input type="number" id="profAge" placeholder="z.B. 24" min="18" max="99">
-                            </div>
-                            <div class="profile-field">
-                                <label>Stadt</label>
-                                <input type="text" id="profCity" placeholder="z.B. Berlin">
-                            </div>
-                            <div class="profile-field">
-                                <label>Beruf</label>
-                                <input type="text" id="profJob" placeholder="z.B. Student, Freelancer...">
-                            </div>
-                            <div class="profile-field">
-                                <label>Über mich</label>
-                                <textarea id="profBio" placeholder="Erzähl etwas über dich..."></textarea>
+                            <div class="card">
+                                <div style="font-size:13px;font-weight:700;color:#2c3e50">🌿 Nachhaltigkeits-Workshop</div>
+                                <div style="font-size:11px;color:#888;margin:3px 0">Mi. 11. Juni · 18:00 · Online via Zoom</div>
+                                <div style="font-size:11px;color:#555;margin-bottom:8px">Energie sparen im Alltag – praktische Tipps für WGs und Einzelpersonen.</div>
+                                <button class="primary" onclick="showToast('Link zugesendet! 🌿')">✔ Anmelden</button>
                             </div>
                         </div>
 
-                        <div class="section">
-                            <div class="section-title">Wohnpräferenzen</div>
-                            <div class="profile-field">
-                                <label>Max. Budget</label>
-                                <input type="range" min="300" max="2000" value="800" id="profBudget"
-                                    oninput="document.getElementById('profBudgetDisplay').textContent=Number(this.value).toLocaleString('de-DE')+'€'">
-                                <div style="font-size:11px;color:#666;text-align:right;margin-top:3px" id="profBudgetDisplay">800€</div>
+                        <div id="tab-projekte" class="comm-tab-pane" style="display:none">
+                            <div class="card">
+                                <div style="font-size:13px;font-weight:700;color:#2c3e50">🌱 Gemeinschaftsgarten Neukölln</div>
+                                <div style="font-size:11px;color:#888;margin:3px 0">12 Mitglieder aktiv · Neukölln, Berlin</div>
+                                <div style="font-size:11px;color:#555;margin-bottom:8px">Urbane Gärtnerei, Kompost und Tauschbörse für Setzlinge. Nächstes Treffen: 1. Juni.</div>
+                                <button class="primary" onclick="showToast('Beigetreten! 🌱')">Mitmachen</button>
                             </div>
-                            <div class="profile-field">
-                                <label>Wohntyp</label>
-                                <select id="profWohntyp">
-                                    <option value="all">Egal</option>
-                                    <option value="wg">👥 WG</option>
-                                    <option value="single">🏠 Einzelwohnung</option>
-                                    <option value="gen">🏢 Genossenschaft</option>
-                                </select>
+                            <div class="card">
+                                <div style="font-size:13px;font-weight:700;color:#2c3e50">🔧 Nachbarschaftshilfe-Netz</div>
+                                <div style="font-size:11px;color:#888;margin:3px 0">34 Mitglieder in deiner Nähe</div>
+                                <div style="font-size:11px;color:#555;margin-bottom:8px">Gegenseitige Hilfe bei Umzug, Reparaturen und Alltag. Kostenlos, solidarisch.</div>
+                                <button class="primary" onclick="showToast('Angemeldet! 🤝')">Mitmachen</button>
                             </div>
-                            <div class="profile-field">
-                                <label>Nachhaltigkeit</label>
-                                <select id="profNach">
-                                    <option value="all">Egal</option>
-                                    <option value="high">🌱 Sehr wichtig</option>
-                                    <option value="mid">Wichtig</option>
-                                </select>
+                            <div class="card">
+                                <div style="font-size:13px;font-weight:700;color:#2c3e50">☀️ Balkonkraftwerk-Initiative</div>
+                                <div style="font-size:11px;color:#888;margin:3px 0">8 Projekte gestartet · deutschlandweit</div>
+                                <div style="font-size:11px;color:#555;margin-bottom:8px">Gemeinsam Balkonkraftwerke anschaffen und installieren. Bis zu 60% günstiger als alleine.</div>
+                                <button class="primary" onclick="showToast('Interesse vermerkt ☀️')">Interesse bekunden</button>
                             </div>
                         </div>
+                    </div>
 
-                        <button class="primary" onclick="saveProfile()">💾 Profil speichern</button>
-                        <button class="btn-danger" onclick="logoutProfile()">🚪 Abmelden</button>
+                    <!-- SCREEN 5: Wohnungs-Map -->
+                    <div id="screen5" class="screen">
+                        <div style="font-size:13px;font-weight:700;color:#2c3e50;margin-bottom:8px">🗺️ Wohnungs-Map & Umgebung</div>
+                        <div class="layer-chips">
+                            <span class="layer-chip active" onclick="setMapLayer('all',this)">Alle</span>
+                            <span class="layer-chip" onclick="setMapLayer('transit',this)">🚌 ÖPNV</span>
+                            <span class="layer-chip" onclick="setMapLayer('infra',this)">🏪 Infra</span>
+                            <span class="layer-chip" onclick="setMapLayer('safety',this)">🔒 Sicherheit</span>
+                            <span class="layer-chip" onclick="setMapLayer('green',this)">🌱 Nachhaltig</span>
+                            <span class="layer-chip" onclick="setMapLayer('bike',this)">🚴 Fahrrad</span>
+                        </div>
+                        <div id="communityMap" style="height:360px;border-radius:12px;overflow:hidden;z-index:1;margin-bottom:6px"></div>
+                        <p class="map-hint">Ebene wählen · Pins antippen für Details · Zwei Finger zum Zoomen</p>
+                        <div class="map-legend">
+                            <span class="legend-item">🟢 Wohnungen</span>
+                            <span class="legend-item">🔵 ÖPNV</span>
+                            <span class="legend-item">🟡 Infrastruktur</span>
+                            <span class="legend-item">🟤 Fahrradwege</span>
+                        </div>
+                    </div>
+
+                    <!-- SCREEN 6: Flexibles Wohnmodell -->
+                    <div id="screen6" class="screen">
+                        <div class="card" style="background:linear-gradient(135deg,#e8f5e9,#f0fff4);border:none;margin-bottom:14px">
+                            <div style="font-size:15px;font-weight:700;color:#1a7f4b">🔄 Flexibles Wohnen</div>
+                            <div style="font-size:11px;color:#555;margin-top:4px">Kurzfristige, flexible und kreative Wohnlösungen – für jede Lebenssituation.</div>
+                        </div>
+
+                        <div class="flex-card">
+                            <div class="flex-card-head">
+                                <div class="flex-card-icon">⏳</div>
+                                <div>
+                                    <div class="flex-card-title">Temporäre WG</div>
+                                    <div class="flex-card-sub">1–6 Monate · Berlin, Hamburg, München</div>
+                                </div>
+                            </div>
+                            <div style="font-size:11px;color:#555;margin-bottom:8px">Übergangsweise in einer WG wohnen – ideal für Neuzugezogene, Praktikant:innen und Studierende.</div>
+                            <div><span class="flex-tag">1–6 Monate</span><span class="flex-tag">ab 350€</span><span class="flex-tag">Flexibel kündbar</span><span class="flex-tag">Gemeinschaft</span></div>
+                            <button class="primary" style="margin-top:10px" onclick="showToast('3 passende temporäre WGs gefunden 🏠')">🔍 Angebote finden</button>
+                        </div>
+
+                        <div class="flex-card">
+                            <div class="flex-card-head">
+                                <div class="flex-card-icon">🔁</div>
+                                <div>
+                                    <div class="flex-card-title">Wohnungstausch</div>
+                                    <div class="flex-card-sub">Tausche deine Wohnung temporär</div>
+                                </div>
+                            </div>
+                            <div style="font-size:11px;color:#555;margin-bottom:8px">Tausche deine Wohnung für 1–4 Wochen mit jemandem in einer anderen Stadt. Community-verifiziert.</div>
+                            <div><span class="flex-tag">Kostenfrei</span><span class="flex-tag">Verifiziert</span><span class="flex-tag">18+ Städte</span><span class="flex-tag">1–4 Wochen</span></div>
+                            <button class="primary" style="margin-top:10px" onclick="showToast('Tauschpartner wird gesucht... 🔁')">🔁 Tauschpartner finden</button>
+                        </div>
+
+                        <div class="flex-card">
+                            <div class="flex-card-head">
+                                <div class="flex-card-icon">📋</div>
+                                <div>
+                                    <div class="flex-card-title">Flexible Mietverträge</div>
+                                    <div class="flex-card-sub">Monatlich kündbar, ohne Bindung</div>
+                                </div>
+                            </div>
+                            <div style="font-size:11px;color:#555;margin-bottom:8px">Wohnungen mit flexiblen Vertragslaufzeiten – keine versteckten Bindungsklauseln, keine Überraschungen.</div>
+                            <div><span class="flex-tag">Monatlich kündbar</span><span class="flex-tag">Keine Kaution</span><span class="flex-tag">Transparent</span></div>
+                            <button class="primary" style="margin-top:10px" onclick="showToast('12 flexible Angebote gefunden 📋')">📋 Angebote ansehen</button>
+                        </div>
+
+                        <div class="flex-card">
+                            <div class="flex-card-head">
+                                <div class="flex-card-icon">🎓</div>
+                                <div>
+                                    <div class="flex-card-title">Übergangslösungen Studierende</div>
+                                    <div class="flex-card-sub">Sicher & schnell für den Studienstart</div>
+                                </div>
+                            </div>
+                            <div style="font-size:11px;color:#555;margin-bottom:8px">Überbrückungsangebote für Erstsemester und Wechsler – auch kurzfristig und mit Studenten-Rabatt.</div>
+                            <div><span class="flex-tag">Bis 3 Monate</span><span class="flex-tag">Studenten-Rabatt</span><span class="flex-tag">Sofort buchbar</span></div>
+                            <button class="primary" style="margin-top:10px" onclick="showToast('Studentenangebote werden geladen... 🎓')">🎓 Studentenangebote</button>
+                        </div>
+
+                        <div class="flex-card">
+                            <div class="flex-card-head">
+                                <div class="flex-card-icon">🤝</div>
+                                <div>
+                                    <div class="flex-card-title">Community-Wohnen / Co-Living</div>
+                                    <div class="flex-card-sub">Gemeinschaftliches Leben mit Fokus Nachhaltigkeit</div>
+                                </div>
+                            </div>
+                            <div style="font-size:11px;color:#555;margin-bottom:8px">Co-Living Spaces mit gemeinsamen Flächen, regelmäßigen Events und nachhaltigem Gemeinschaftskonzept.</div>
+                            <div><span class="flex-tag">Events inklusive</span><span class="flex-tag">Co-Working</span><span class="flex-tag">Nachhaltig</span><span class="flex-tag">Community</span></div>
+                            <button class="primary" style="margin-top:10px" onclick="showToast('5 Co-Living Spaces gefunden 🤝')">🤝 Co-Living finden</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1139,9 +1292,11 @@
         let viewedCount = parseInt(localStorage.getItem('cb-viewed') || '0');
         let reviewCount = parseInt(localStorage.getItem('cb-reviews') || '0');
 
-        // Karte
+        // Karten
         let aptMap = null;
         let markersLayer = null;
+        let communityMap = null;
+        let communityMarkersLayer = null;
         const aptCoords = {
             1:[52.499,13.388], 2:[52.482,13.435], 3:[52.514,13.453],
             4:[52.536,13.415], 5:[52.547,13.369], 6:[53.548,9.934],
@@ -1168,8 +1323,6 @@
             }
             renderListings(allApartments);
             renderWGList(wgProfiles);
-            updateFavorites();
-            loadProfile();
         }
 
         function renderListings(apartments) {
@@ -1184,15 +1337,18 @@
             }
             container.innerHTML = apartments.map(a => {
                 const isFav = favorites.includes(a.id);
-                const stars = '⭐'.repeat(Math.min(5, Math.round(a.sustainability)));
+                const stars = '🌱'.repeat(Math.min(5, Math.round(a.sustainability)));
+                const verBadge = a.landlord?.verified ? '<span class="meta-badge" style="color:#27ae60;border-color:#c8f0d8">✅ Verifiziert</span>' : '';
+                const scamBadge = a.safety >= 4 ? '<span class="meta-badge" style="color:#27ae60;border-color:#c8f0d8">🔒</span>' : '';
                 return `<div class="listing-row">
+                    <img src="https://picsum.photos/seed/apt${a.id}x/80/60" class="listing-thumb" loading="lazy" onerror="this.style.display='none'" onclick="showDetail(${a.id})">
                     <div class="listing" style="flex:1;margin-bottom:0" onclick="showDetail(${a.id})">
                         <div class="listing-title">${a.image} ${a.title}</div>
                         <div class="listing-meta">
-                            <span class="meta-badge">💰 ${a.price}€</span>
-                            <span class="meta-badge">${stars}</span>
-                            ${a.landlord?.verified ? '<span class="meta-badge" style="color:#27ae60;border-color:#c8f0d8">✓</span>' : ''}
+                            <span class="meta-badge">💰 ${a.price}€/Mo</span>
                             <span class="meta-badge">${a.size}m²</span>
+                            <span class="meta-badge">${stars} ${a.sustainability}/5</span>
+                            ${verBadge}${scamBadge}
                         </div>
                     </div>
                     <button class="fav-btn" onclick="toggleFavorite(${a.id})" id="fav-${a.id}">${isFav ? '❤️' : '🤍'}</button>
@@ -1205,13 +1361,32 @@
             const maxPrice = parseInt(document.getElementById('priceSlider')?.value || 2000);
             const sustain  = document.getElementById('sustainSelect')?.value || 'all';
             const wohntyp  = document.getElementById('wohntypSelect')?.value || 'all';
+            const lage     = document.getElementById('lageSelect')?.value || 'all';
+            const scam     = document.getElementById('chip-scam')?.classList.contains('on') || false;
+            const comm     = document.getElementById('chip-comm')?.classList.contains('on') || false;
+            const verif    = document.getElementById('chip-verif')?.classList.contains('on') || false;
             return allApartments.filter(a => {
                 const s = !search || a.title.toLowerCase().includes(search) || a.location.toLowerCase().includes(search);
                 const p = a.price <= maxPrice;
                 const n = sustain === 'all' || (sustain === 'high' && a.sustainability >= 4) || (sustain === 'mid' && a.sustainability >= 3);
-                const t = wohntyp === 'all' || (wohntyp === 'wg' && a.rooms >= 2) || (wohntyp === 'single' && a.rooms === 1) || (wohntyp === 'gen' && a.landlord?.type === 'Genossenschaft');
-                return s && p && n && t;
+                const t = wohntyp === 'all'
+                    || (wohntyp === 'wg' && a.rooms >= 2)
+                    || (wohntyp === 'single' && a.rooms === 1)
+                    || (wohntyp === 'gen' && a.landlord?.type === 'Genossenschaft')
+                    || (wohntyp === 'coliving' && a.rooms >= 2 && a.sustainability >= 3);
+                const la = lage === 'all'
+                    || (lage === 'city' && a.price >= 550)
+                    || (lage === 'suburb' && a.price < 550);
+                const sc = !scam || a.safety >= 4;
+                const co = !comm || (a.rooms >= 2 && a.sustainability >= 3);
+                const ve = !verif || a.landlord?.verified;
+                return s && p && n && t && la && sc && co && ve;
             });
+        }
+
+        function toggleChip(id) {
+            document.getElementById(id).classList.toggle('on');
+            filterListings();
         }
 
         function toggleFilterBar() {
@@ -1226,10 +1401,15 @@
             const maxPrice = parseInt(document.getElementById('priceSlider')?.value || 2000);
             const sustain  = document.getElementById('sustainSelect')?.value || 'all';
             const wohntyp  = document.getElementById('wohntypSelect')?.value || 'all';
-            const sLabel   = sustain  === 'high' ? '4★+' : sustain  === 'mid' ? '3★+' : 'Alle';
-            const tLabel   = wohntyp  === 'wg'   ? 'WG'  : wohntyp  === 'single' ? 'Einzeln' : wohntyp === 'gen' ? 'Geno' : 'Alle';
+            const sLabel   = sustain === 'high' ? '4★+' : sustain === 'mid' ? '3★+' : 'Alle';
+            const tLabel   = wohntyp === 'wg' ? 'WG' : wohntyp === 'single' ? 'Einzeln' : wohntyp === 'gen' ? 'Geno' : wohntyp === 'coliving' ? 'Co-Living' : 'Alle';
+            const extras   = [
+                document.getElementById('chip-scam')?.classList.contains('on') ? '🔒' : '',
+                document.getElementById('chip-comm')?.classList.contains('on') ? '🤝' : '',
+                document.getElementById('chip-verif')?.classList.contains('on') ? '✅' : ''
+            ].filter(Boolean).join(' ');
             const el = document.getElementById('filter-summary');
-            if (el) el.textContent = `bis ${maxPrice.toLocaleString('de-DE')}€ · ${sLabel} · ${tLabel}`;
+            if (el) el.textContent = `bis ${maxPrice.toLocaleString('de-DE')}€ · ${sLabel} · ${tLabel}${extras ? ' · ' + extras : ''}`;
         }
 
         function filterListings() {
@@ -1318,44 +1498,77 @@
             const stars  = '⭐'.repeat(Math.min(5, Math.round(a.sustainability)));
             const feats  = (a.features||[]).map(f => `<div class="feature-item"><div class="feature-icon">✅</div><div>${f}</div></div>`).join('');
 
-            const imgs = a.images || [];
-            const galleryHtml = imgs.length
-                ? `<div class="gallery-wrap">
-                       <div class="gallery-track" id="galleryTrack" onscroll="onGalleryScroll()">
-                           ${imgs.map((src, i) => `<img class="gallery-img" src="${src}" alt="Foto ${i+1}" loading="lazy">`).join('')}
-                       </div>
-                       <div class="gallery-counter" id="galleryCounter">1 / ${imgs.length}</div>
+            const imgs = a.images?.length ? a.images : [
+                `https://picsum.photos/seed/apt${a.id}a/350/200`,
+                `https://picsum.photos/seed/apt${a.id}b/350/200`,
+                `https://picsum.photos/seed/apt${a.id}c/350/200`
+            ];
+            const galleryHtml = `<div class="gallery-wrap">
+                   <div class="gallery-track" id="galleryTrack" onscroll="onGalleryScroll()">
+                       ${imgs.map((src, i) => `<img class="gallery-img" src="${src}" alt="Foto ${i+1}" loading="lazy">`).join('')}
                    </div>
-                   <div class="gallery-dots" id="galleryDots">
-                       ${imgs.map((_, i) => `<div class="g-dot ${i===0?'active':''}" onclick="scrollGalleryTo(${i})"></div>`).join('')}
-                   </div>`
-                : `<div class="gallery-empty">${a.image}</div>`;
+                   <div class="gallery-counter" id="galleryCounter">1 / ${imgs.length}</div>
+               </div>
+               <div class="gallery-dots" id="galleryDots">
+                   ${imgs.map((_, i) => `<div class="g-dot ${i===0?'active':''}" onclick="scrollGalleryTo(${i})"></div>`).join('')}
+               </div>`;
+
+            const locScore  = (4.0 + (a.id % 5) * 0.1).toFixed(1);
+            const infraScore = (3.8 + (a.id % 3) * 0.2).toFixed(1);
+            const bikeScore  = (3.5 + (a.id % 4) * 0.2).toFixed(1);
+            const hasOepnv   = (a.features||[]).some(f => f.toLowerCase().includes('öpnv') || f.toLowerCase().includes('bahn'));
+            const scamLabel  = a.safety >= 4.5 ? '✅ Sehr sicher' : a.safety >= 4 ? '✅ Sicher' : '⚠️ Mittel';
+            const scamColor  = a.safety >= 4 ? '' : 'background:#fff3e0;color:#e65100';
 
             document.getElementById('detail-content').innerHTML = `
                 ${galleryHtml}
                 <div class="card">
                     <div class="card-title">${a.image} ${a.title}</div>
-                    <div style="font-size:12px;color:#666">${a.location} · ${a.size}m² · ${a.rooms} Zi.</div>
-                    <div style="font-size:20px;font-weight:800;color:#27ae60;margin:6px 0">${a.price}€<span style="font-size:12px;font-weight:400;color:#888">/Monat</span></div>
-                    <div style="font-size:12px;color:#666">${a.description||''}</div>
+                    <div style="font-size:12px;color:#666">${a.location} · ${a.size}m² · ${a.rooms} Zimmer</div>
+                    <div style="font-size:22px;font-weight:800;color:#27ae60;margin:6px 0">${a.price}€<span style="font-size:12px;font-weight:400;color:#888">/Monat</span></div>
+                    <div style="font-size:12px;color:#666;line-height:1.5">${a.description||''}</div>
+                    <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+                        ${a.landlord?.verified ? '<span class="meta-badge" style="color:#27ae60;border-color:#c8f0d8;background:#f0fff4">✅ Verifiziert</span>' : '<span class="meta-badge" style="color:#e67e22;border-color:#ffe0b2">⚠️ Nicht verifiziert</span>'}
+                        <span class="meta-badge" style="color:#27ae60;border-color:#c8f0d8">🌱 Nachhaltig ${a.sustainability}/5</span>
+                        <span class="meta-badge">⚡ Klasse ${a.energyClass}</span>
+                    </div>
                 </div>
                 <div class="card">
-                    <div style="font-size:11px;font-weight:600;color:#2ecc71;margin-bottom:8px;text-transform:uppercase">Scores</div>
-                    <div class="score-row"><span class="score-label">Nachhaltigkeit</span><span class="score-badge">${a.sustainability}/5 ${stars}</span></div>
-                    <div class="score-row"><span class="score-label">Transparenz</span><span class="score-badge">${a.transparency}/5</span></div>
-                    <div class="score-row"><span class="score-label">Sicherheit</span><span class="score-badge">${a.safety}/5</span></div>
-                    <div class="score-row"><span class="score-label">Energieklasse</span><span class="score-badge">${a.energyClass}</span></div>
-                    <div class="score-row"><span class="score-label">Scam-Schutz</span><span class="score-badge">✓</span></div>
+                    <div style="font-size:11px;font-weight:600;color:#2ecc71;margin-bottom:8px;text-transform:uppercase">Scores & Bewertungen</div>
+                    <div class="score-row"><span class="score-label">🌱 Nachhaltigkeit</span><span class="score-badge">${a.sustainability}/5 ${'⭐'.repeat(Math.round(a.sustainability))}</span></div>
+                    <div class="score-row"><span class="score-label">📊 Transparenz</span><span class="score-badge">${a.transparency}/5</span></div>
+                    <div class="score-row"><span class="score-label">🔒 Scam-Sicherheit</span><span class="score-badge" style="${scamColor}">${scamLabel}</span></div>
+                    <div class="score-row"><span class="score-label">⚡ Energieklasse</span><span class="score-badge">${a.energyClass}</span></div>
+                    <div class="score-row"><span class="score-label">📍 Lagebewertung</span><span class="score-badge">${locScore}/5</span></div>
+                    <div class="score-row"><span class="score-label">🏪 Infrastruktur</span><span class="score-badge">${infraScore}/5</span></div>
+                    <div class="score-row"><span class="score-label">🚴 Fahrradfreundlichkeit</span><span class="score-badge">${bikeScore}/5</span></div>
+                    <div class="score-row"><span class="score-label">🚌 ÖPNV-Anbindung</span><span class="score-badge">${hasOepnv ? '✅ Sehr gut' : '🟡 Gut'}</span></div>
                 </div>
                 <div class="card">
-                    <div style="font-size:11px;font-weight:600;color:#2ecc71;margin-bottom:8px;text-transform:uppercase">Besonderheiten</div>
+                    <div style="font-size:11px;font-weight:600;color:#2ecc71;margin-bottom:8px;text-transform:uppercase">Energie & Verbrauch</div>
+                    <div class="score-row"><span class="score-label">🔥 Heizsystem</span><span class="score-badge" style="background:#e8f5e9;color:#27ae60">${a.heating || 'Zentralheizung'}</span></div>
+                    <div class="score-row"><span class="score-label">💧 Wasserverbrauch</span><span class="score-badge" style="background:#e3f2fd;color:#1565c0">${a.waterUsage || 'Niedrig (< 90L/Tag)'}</span></div>
+                    <div class="score-row"><span class="score-label">☀️ Solaranlage</span><span class="score-badge" style="${a.sustainability >= 4 ? 'background:#e8f5e9;color:#27ae60' : ''}">${a.sustainability >= 4 ? '✅ Vorhanden' : '❌ Nicht vorhanden'}</span></div>
+                </div>
+                <div class="card">
+                    <div style="font-size:11px;font-weight:600;color:#2ecc71;margin-bottom:8px;text-transform:uppercase">Kosten transparent</div>
+                    <div class="score-row"><span class="score-label">💰 Kaltmiete</span><span class="score-badge">${a.price}€/Mo</span></div>
+                    <div class="score-row"><span class="score-label">🔧 Nebenkosten (ca.)</span><span class="score-badge">${Math.round(a.price * 0.18)}€/Mo</span></div>
+                    <div class="score-row"><span class="score-label">🌡️ Warmmiete (ca.)</span><span class="score-badge" style="background:#fff3e0;color:#e65100">${Math.round(a.price * 1.18)}€/Mo</span></div>
+                    <div class="score-row"><span class="score-label">🏦 Kaution</span><span class="score-badge">${a.price * 2}€ (2 Monatsmieten)</span></div>
+                    ${a.waitingList ? `<div class="score-row"><span class="score-label">⏳ Warteliste</span><span class="score-badge" style="background:#fce4ec;color:#c62828">${a.waitingList} Personen</span></div>` : ''}
+                </div>
+                <div class="card">
+                    <div style="font-size:11px;font-weight:600;color:#2ecc71;margin-bottom:8px;text-transform:uppercase">Besonderheiten & Features</div>
                     <div class="features-list">${feats}</div>
                 </div>
                 <div class="card">
                     <div style="font-size:11px;font-weight:600;color:#2ecc71;margin-bottom:8px;text-transform:uppercase">Vermieter</div>
                     <div style="font-size:13px;font-weight:700">${a.landlord?.name||'–'}</div>
-                    <div style="font-size:11px;color:#666">${a.landlord?.type||''} · ⭐ ${a.landlord?.rating||'–'} (${a.landlord?.reviews||0} Bew.)</div>
-                    ${a.landlord?.verified ? '<div style="font-size:11px;color:#27ae60;margin-top:4px">✅ Verifiziert</div>' : ''}
+                    <div style="font-size:11px;color:#666;margin:3px 0">${a.landlord?.type||''} · ⭐ ${a.landlord?.rating||'–'} (${a.landlord?.reviews||0} Bewertungen)</div>
+                    ${a.landlord?.verified
+                        ? '<div style="font-size:11px;color:#27ae60;margin-top:5px;background:#f0fff4;padding:6px 10px;border-radius:8px">✅ Verifiziert – Kein Scam-Risiko erkannt</div>'
+                        : '<div style="font-size:11px;color:#e67e22;margin-top:5px;background:#fff8f0;padding:6px 10px;border-radius:8px">⚠️ Noch nicht verifiziert – mit Vorsicht vorgehen</div>'}
                 </div>`;
 
             const favBtn = document.getElementById('detail-fav-btn');
@@ -1406,20 +1619,42 @@
 
         function renderWGList(profiles) {
             const container = document.getElementById('wg-matches-container');
-            if (!container || !profiles.length) return;
-            container.innerHTML = profiles.map(p => `
-                <div class="user-card">
+            if (!container) return;
+            const countEl = document.getElementById('match-count');
+            if (countEl) countEl.textContent = '(' + profiles.length + ')';
+            if (!profiles.length) {
+                container.innerHTML = '<div style="text-align:center;padding:20px;color:#aaa;font-size:12px">😕 Keine Matches – Filter anpassen</div>';
+                return;
+            }
+            container.innerHTML = profiles.map(p => {
+                const nachLabel = p.sustainability === 'Sehr wichtig' ? '🌱 Sehr nachhaltig' : p.sustainability === 'Wichtig' ? '🌿 Nachhaltig' : '♻️ Offen';
+                const scoreColor = p.matchScore >= 80 ? '#27ae60' : p.matchScore >= 60 ? '#f39c12' : '#999';
+                return `<div class="user-card">
                     <div class="user-header">
-                        <div class="user-name">👤 ${p.name}, ${p.age}</div>
-                        <span class="match-score">${p.matchScore}%</span>
+                        <div style="display:flex;align-items:center;gap:8px">
+                            <img src="https://picsum.photos/seed/wg${p.id||p.name}/40/40" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #e8f5e9" onerror="this.style.display='none'">
+                            <div>
+                                <div class="user-name">${p.name}, ${p.age}</div>
+                                <div style="font-size:10px;color:#888">${p.city||'–'} · ${p.profession||'–'}</div>
+                            </div>
+                        </div>
+                        <div style="text-align:center">
+                            <span class="match-score" style="background:${scoreColor}">${p.matchScore}%</span>
+                            <div style="font-size:9px;color:#aaa;margin-top:2px">Match</div>
+                        </div>
                     </div>
-                    <div class="user-info">
-                        <div><strong>Budget:</strong> ${p.budget}€ · <strong>Stadt:</strong> ${p.city||'–'}</div>
-                        <div><strong>Stil:</strong> ${p.lifestyle}</div>
-                        <div><strong>Beruf:</strong> ${p.profession||'–'}</div>
+                    <div class="user-info" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+                        <span style="background:#f0f0f0;padding:3px 7px;border-radius:10px;font-size:10px">💰 ${p.budget}€/Mo</span>
+                        <span style="background:#f0f0f0;padding:3px 7px;border-radius:10px;font-size:10px">😊 ${p.lifestyle||'–'}</span>
+                        <span style="background:#e8f5e9;color:#27ae60;padding:3px 7px;border-radius:10px;font-size:10px">${nachLabel}</span>
                     </div>
-                    <button class="primary" style="margin-top:8px" onclick="showToast('Nachricht an ${p.name} gesendet! 💬')">💬 Nachricht senden</button>
-                </div>`).join('');
+                    <div style="font-size:11px;color:#555;margin-bottom:8px;line-height:1.4">${p.bio||'Suche nette Mitbewohner für nachhaltige WG.'}</div>
+                    <div style="display:flex;gap:8px">
+                        <button class="primary" style="flex:1;margin-top:0;font-size:11px" onclick="showToast('Nachricht an ${p.name} gesendet! 💬')">💬 Schreiben</button>
+                        <button class="secondary" style="flex:1;margin-top:0;font-size:11px" onclick="showToast('Profil von ${p.name} gemerkt ❤️')">🤍 Merken</button>
+                    </div>
+                </div>`;
+            }).join('');
         }
 
         function runWGMatching() {
@@ -1551,8 +1786,121 @@
             document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('active'); if (b.dataset.screen === id) b.classList.add('active'); });
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            if (id === 'screen5') updateFavorites();
-            if (id === 'screen6') refreshProfileHeader();
+            if (id === 'screen5') initCommunityMap();
+        }
+
+        /* ---- Community Map (Screen 5) ---- */
+        function initCommunityMap() {
+            if (communityMap) {
+                setTimeout(() => communityMap.invalidateSize(), 100);
+                return;
+            }
+            communityMap = L.map('communityMap', { zoomControl: true }).setView([52.52, 13.41], 11);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>'
+            }).addTo(communityMap);
+            communityMarkersLayer = L.layerGroup().addTo(communityMap);
+            setTimeout(() => {
+                communityMap.invalidateSize();
+                setMapLayer('all', document.querySelector('#screen5 .layer-chip'));
+            }, 200);
+        }
+
+        function setMapLayer(layer, el) {
+            document.querySelectorAll('#screen5 .layer-chip').forEach(c => c.classList.remove('active'));
+            if (el) el.classList.add('active');
+            if (!communityMap || !communityMarkersLayer) return;
+            communityMarkersLayer.clearLayers();
+
+            allApartments.filter(a => aptCoords[a.id]).forEach(a => {
+                const pinW = Math.max(60, (a.price.toString().length * 8) + 30);
+                const icon = L.divIcon({
+                    html: `<div style="background:#15803d;color:#fff;border-radius:20px;padding:5px 10px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.25)">${a.price}€</div>`,
+                    className: 'price-pin-icon', iconSize: [pinW, 28], iconAnchor: [pinW/2, 14]
+                });
+                L.marker(aptCoords[a.id], { icon })
+                    .bindPopup(`<b>${a.title}</b><br>📍 ${a.location}<br><b style="color:#27ae60">${a.price}€/Mo</b><br>🌱 ${a.sustainability}/5`)
+                    .addTo(communityMarkersLayer);
+            });
+
+            if (layer === 'transit' || layer === 'all') {
+                [
+                    [52.499, 13.370, 'U8 Kottbusser Tor'],
+                    [52.514, 13.469, 'S3 Ostbahnhof'],
+                    [52.521, 13.413, 'U2/U5 Alexanderplatz'],
+                    [52.508, 13.332, 'U1/U4 Nollendorfplatz'],
+                    [53.553, 9.992,  'U3 Altona Hamburg'],
+                    [48.140, 11.558, 'U4/U5 Hauptbahnhof München']
+                ].forEach(([lat, lng, name]) => {
+                    const icon = L.divIcon({
+                        html: `<div style="background:#2980b9;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,0.3)">🚌</div>`,
+                        className: '', iconSize: [28, 28], iconAnchor: [14, 14]
+                    });
+                    L.marker([lat, lng], { icon }).bindPopup(`<b>${name}</b>`).addTo(communityMarkersLayer);
+                });
+            }
+
+            if (layer === 'infra' || layer === 'all') {
+                [
+                    [52.502, 13.410, '🏪', 'REWE Kreuzberg'],
+                    [52.520, 13.380, '🏥', 'Charité Berlin'],
+                    [52.535, 13.425, '🎓', 'Humboldt-Universität'],
+                    [48.150, 11.575, '🏪', 'Edeka München-Mitte'],
+                ].forEach(([lat, lng, em, name]) => {
+                    const icon = L.divIcon({
+                        html: `<div style="background:#f39c12;color:white;border-radius:8px;padding:3px 7px;font-size:10px;font-weight:700;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.2)">${em} ${name}</div>`,
+                        className: '', iconSize: [100, 22], iconAnchor: [50, 11]
+                    });
+                    L.marker([lat, lng], { icon }).bindPopup(`<b>${name}</b>`).addTo(communityMarkersLayer);
+                });
+            }
+
+            if (layer === 'bike' || layer === 'all') {
+                [
+                    [52.496, 13.355, 'Gneisenaustr. Radweg'],
+                    [52.525, 13.445, 'Frankfurter Allee'],
+                    [48.162, 11.560, 'Isar-Radweg München'],
+                ].forEach(([lat, lng, name]) => {
+                    const icon = L.divIcon({
+                        html: `<div style="background:#27ae60;color:white;border-radius:8px;padding:3px 7px;font-size:10px;font-weight:700;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.2)">🚴 ${name}</div>`,
+                        className: '', iconSize: [110, 22], iconAnchor: [55, 11]
+                    });
+                    L.marker([lat, lng], { icon }).bindPopup(`<b>🚴 ${name}</b>`).addTo(communityMarkersLayer);
+                });
+            }
+
+            if (layer === 'safety') {
+                allApartments.filter(a => aptCoords[a.id]).forEach(a => {
+                    const safe  = a.safety >= 4;
+                    const icon = L.divIcon({
+                        html: `<div style="background:${safe ? '#27ae60' : '#e67e22'};color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,0.3)">${safe ? '🔒' : '⚠️'}</div>`,
+                        className: '', iconSize: [32, 32], iconAnchor: [16, 16]
+                    });
+                    L.marker(aptCoords[a.id], { icon })
+                        .bindPopup(`<b>${a.title}</b><br>Sicherheit: ${a.safety}/5`)
+                        .addTo(communityMarkersLayer);
+                });
+            }
+
+            if (layer === 'green') {
+                allApartments.filter(a => aptCoords[a.id] && a.sustainability >= 4).forEach(a => {
+                    const icon = L.divIcon({
+                        html: `<div style="background:#1a7f4b;color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,0.3)">🌱</div>`,
+                        className: '', iconSize: [32, 32], iconAnchor: [16, 16]
+                    });
+                    L.marker(aptCoords[a.id], { icon })
+                        .bindPopup(`<b>${a.title}</b><br>🌱 Nachhaltigkeit: ${a.sustainability}/5`)
+                        .addTo(communityMarkersLayer);
+                });
+            }
+        }
+
+        /* ---- Community Tabs (Screen 4) ---- */
+        function showCommTab(tabId, btn) {
+            document.querySelectorAll('#screen4 .comm-tab-pane').forEach(p => p.style.display = 'none');
+            document.querySelectorAll('#screen4 .comm-tab').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).style.display = 'block';
+            if (btn) btn.classList.add('active');
         }
 
         document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', function() { switchScreen(this.dataset.screen); }));
