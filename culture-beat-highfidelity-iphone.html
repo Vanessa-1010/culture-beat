@@ -1552,48 +1552,19 @@
         let viewedCount = parseInt(localStorage.getItem('cb-viewed') || '0');
         let reviewCount = parseInt(localStorage.getItem('cb-reviews') || '0');
 
-        /* ---- Apartment-Fotos (kuratierte Unsplash-IDs) ---- */
-        const APT_PHOTOS = [
-            '1560448204-e02f11c3d0e2',    // Wohnzimmer hell, Couch
-            '1522708323590-d24dbb6b0267', // Wohnzimmer grau modern
-            '1600607687939-ce8a6c25bc1e', // skandinavisches Wohnzimmer
-            '1600585154526-990dced4db0d', // Schlafzimmer weiß minimalistisch
-            '1600566753086-00f18fb6b3ea', // Küche/Esszimmer modern
-            '1616137422659-6a765e2a4d5e', // weiße offene Küche
-            '1574362848149-11496d93a7c7', // Wohnzimmer Sectional-Sofa
-            '1545324418-cc1a3fa10c00',    // Mehrfamilienhaus Außenansicht
-            '1580587771525-78b9dba3b914', // modernes Wohngebäude
-            '1512917774080-9991f1c4c750', // Hausfront mit Grün
-            '1598928506311-c55ded91a20c', // Apartment Wohnraum
-            '1560185893-a55cbc8c57e8',    // Schlafzimmer aufgeräumt
-            '1493809842364-78817add7ffb', // Schlafzimmer Design
-            '1554995207-c18c203602cb',    // moderne Küche Holzakzente
-            '1556909114-f6e7ad7d3136',    // Stadtapartment Außen
-            '1583847268964-b28dc8f51f92', // helles Apartment-Interior
-            '1585771724684-38269d6639fd', // gemütliches Zimmer
-            '1567496898669-ee935f5f647a', // helle offene Wohnung
-            '1615874694520-474822394e73', // Küchen-Design warm
-            '1611892440504-42a792e24d32', // offener Wohnraum Loft
-            '1603512500383-aad2c65c4b5a', // Apartment Tageslicht
-            '1595526051245-4506e0cbae00', // Küche mit Esstisch
-            '1631049307264-da0ec9d70304', // Apartment Stadtblick
-            '1618221195710-dd6b41faaea6', // Inneneinrichtung warm
-            '1567767632407-8afeb46d721a', // Wohnbereich mit Balkon
-            '1513694203232-719a899e4135', // Wohnzimmer mit Sofa
-            '1507089947368-19c1da9775ae', // Hausfront Außen
-            '1599427303058-f04cbcf4756f', // Schlafzimmer warm beleuchtet
-            '1502672260266-1c1ef2d93688', // Interior warme Töne
-            '1571508601891-ca5e7a713859', // Apartment Innenraum
-        ];
-        const FALLBACK_PHOTO = 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=350&h=200&q=80';
+        /* ---- Apartment-Fotos via loremflickr (garantiert Wohnungs-Kategorie) ---- */
         function getAptPhoto(id, variant, w, h) {
             const offset = variant === 'b' ? 1 : variant === 'c' ? 2 : 0;
-            const idx = ((id - 1) * 3 + offset) % APT_PHOTOS.length;
-            return `https://images.unsplash.com/photo-${APT_PHOTOS[idx]}?auto=format&fit=crop&w=${w}&h=${h}&q=80`;
+            const seed = (id - 1) * 3 + offset + 1;
+            return `https://loremflickr.com/${w}/${h}/apartment,interior,room/all?lock=${seed}`;
+        }
+        function getPersonPhoto(seed, w, h) {
+            const s = typeof seed === 'number' ? seed + 100 : seed.toString().charCodeAt(0) + 100;
+            return `https://loremflickr.com/${w}/${h}/portrait,person/all?lock=${s}`;
         }
         function onAptImgError(el) {
             el.onerror = null;
-            el.src = FALLBACK_PHOTO;
+            el.src = `https://loremflickr.com/350/200/apartment,room/all?lock=99`;
         }
         function getPersonPhoto(seed, w, h) {
             const people = [
