@@ -1016,9 +1016,15 @@
                                 <div class="filter-group">
                                     <label>Nachhaltigkeit</label>
                                     <select id="sustainSelect" onchange="filterListings()">
-                                        <option value="all">🌟 Alle</option>
-                                        <option value="high">⭐⭐⭐ Sehr Nachhaltig (4+)</option>
-                                        <option value="mid">⭐⭐ Nachhaltig (3+)</option>
+                                        <option value="all">🌟 Alle Wohnungen</option>
+                                        <option value="5">🌱🌱🌱🌱🌱 Vorbildlich (5/5)</option>
+                                        <option value="4">🌱🌱🌱🌱 Sehr nachhaltig (4+)</option>
+                                        <option value="3">🌱🌱🌱 Nachhaltig (3+)</option>
+                                        <option value="2">🌱🌱 Teilweise nachhaltig (2+)</option>
+                                        <option value="energyA">⚡ Nur Energieklasse A / A+</option>
+                                        <option value="solar">☀️ Mit Solaranlage</option>
+                                        <option value="garden">🌿 Mit Gemeinschaftsgarten</option>
+                                        <option value="transit">🚌 Sehr gute ÖPNV-Anbindung</option>
                                     </select>
                                 </div>
                                 <div class="filter-group">
@@ -1625,7 +1631,15 @@
             return allApartments.filter(a => {
                 const s = !search || a.title.toLowerCase().includes(search) || a.location.toLowerCase().includes(search);
                 const p = a.price <= maxPrice;
-                const n = sustain === 'all' || (sustain === 'high' && a.sustainability >= 4) || (sustain === 'mid' && a.sustainability >= 3);
+                const n = sustain === 'all'
+                    || (sustain === '5'       && a.sustainability >= 5)
+                    || (sustain === '4'       && a.sustainability >= 4)
+                    || (sustain === '3'       && a.sustainability >= 3)
+                    || (sustain === '2'       && a.sustainability >= 2)
+                    || (sustain === 'energyA' && (a.energyClass === 'A' || a.energyClass === 'A+'))
+                    || (sustain === 'solar'   && a.sustainability >= 4)
+                    || (sustain === 'garden'  && (a.features?.some(f => /garten|garden/i.test(f)) || a.sustainability >= 4))
+                    || (sustain === 'transit' && a.safety >= 4);
                 const t = wohntyp === 'all'
                     || (wohntyp === 'wg' && a.rooms >= 2)
                     || (wohntyp === 'single' && a.rooms === 1)
@@ -1658,7 +1672,8 @@
             const maxPrice = parseInt(document.getElementById('priceSlider')?.value || 2000);
             const sustain  = document.getElementById('sustainSelect')?.value || 'all';
             const wohntyp  = document.getElementById('wohntypSelect')?.value || 'all';
-            const sLabel   = sustain === 'high' ? '4★+' : sustain === 'mid' ? '3★+' : 'Alle';
+            const sustainLabels = { all:'Alle', '5':'🌱 Vorbildlich', '4':'🌱 Sehr nachhaltig', '3':'🌱 Nachhaltig', '2':'🌱 Teilweise', energyA:'⚡ A/A+', solar:'☀️ Solar', garden:'🌿 Garten', transit:'🚌 ÖPNV' };
+            const sLabel = sustainLabels[sustain] || 'Alle';
             const tLabel   = wohntyp === 'wg' ? 'WG' : wohntyp === 'single' ? 'Einzeln' : wohntyp === 'gen' ? 'Geno' : wohntyp === 'coliving' ? 'Co-Living' : 'Alle';
             const extras   = [
                 document.getElementById('chip-scam')?.classList.contains('on') ? '🔒' : '',
