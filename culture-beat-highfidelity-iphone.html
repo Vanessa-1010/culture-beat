@@ -1552,19 +1552,36 @@
         let viewedCount = parseInt(localStorage.getItem('cb-viewed') || '0');
         let reviewCount = parseInt(localStorage.getItem('cb-reviews') || '0');
 
-        /* ---- Apartment-Fotos via loremflickr (garantiert Wohnungs-Kategorie) ---- */
+        /* ---- Apartment-Fotos (visuell verifizierte Unsplash-IDs) ---- */
+        const APT_PHOTOS = [
+            '1560448204-e02f11c3d0e2', '1522708323590-d24dbb6b0267',
+            '1600585154526-990dced4db0d','1574362848149-11496d93a7c7',
+            '1580587771525-78b9dba3b914','1545324418-cc1a3fa10c00',
+            '1512917774080-9991f1c4c750','1598928506311-c55ded91a20c',
+            '1560185893-a55cbc8c57e8',  '1554995207-c18c203602cb',
+            '1583847268964-b28dc8f51f92','1567496898669-ee935f5f647a',
+            '1493809842364-78817add7ffb','1507089947368-19c1da9775ae',
+            '1615874694520-474822394e73','1611892440504-42a792e24d32',
+            '1631049307264-da0ec9d70304','1618221195710-dd6b41faaea6',
+            '1571508601891-ca5e7a713859','1600566753086-00f18fb6b3ea',
+            '1599427303058-f04cbcf4756f','1502672260266-1c1ef2d93688',
+            '1558618666-fcd25c85cd64',  '1486304873000-235643847519',
+        ];
         function getAptPhoto(id, variant, w, h) {
             const offset = variant === 'b' ? 1 : variant === 'c' ? 2 : 0;
-            const seed = (id - 1) * 3 + offset + 1;
-            return `https://loremflickr.com/${w}/${h}/apartment,interior,room/all?lock=${seed}`;
+            const idx = ((id - 1) * 3 + offset) % APT_PHOTOS.length;
+            return `https://images.unsplash.com/photo-${APT_PHOTOS[idx]}?auto=format&fit=crop&w=${w}&h=${h}&q=80`;
         }
         function getPersonPhoto(seed, w, h) {
-            const s = typeof seed === 'number' ? seed + 100 : seed.toString().charCodeAt(0) + 100;
-            return `https://loremflickr.com/${w}/${h}/portrait,person/all?lock=${s}`;
+            const people = ['1507003211169-0a1dd7228f2d','1494790108377-be9c29b29330',
+                '1527980965255-d3b416303d2f','1438761681033-6461ffad8d80',
+                '1500648767791-00dcc994a43e','1534528741775-53994a69daeb'];
+            const idx = (typeof seed === 'number' ? seed : seed.toString().charCodeAt(0)) % people.length;
+            return `https://images.unsplash.com/photo-${people[idx]}?auto=format&fit=crop&w=${w}&h=${h}&q=80`;
         }
         function onAptImgError(el) {
             el.onerror = null;
-            el.src = `https://loremflickr.com/350/200/apartment,room/all?lock=99`;
+            el.src = `https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=350&h=200&q=80`;
         }
         // Karten
         let aptMap = null;
